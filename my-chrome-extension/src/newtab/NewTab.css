@@ -1,0 +1,136 @@
+section::before {
+  content: '';
+  position: fixed;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('https://source.unsplash.com/random');
+  background-size: cover;
+  filter: blur(10px);
+}
+
+section {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+}
+
+h1 {
+  color: #61dafb;
+  text-transform: uppercase;
+  font-size: 6rem;
+  margin: 2rem auto 1rem auto;
+}
+
+h2 {
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin: 0 0 2rem 0;
+  text-align: center;
+}
+
+.search-container {
+  margin: 2rem 0;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: center;
+}
+
+.search-form {
+  width: 100%;
+  max-width: 500px;
+}
+
+.search-box {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.search-box:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.search-box:focus-within {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+  margin-left: 16px;
+  fill: #9aa0a6;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  padding: 16px 20px 16px 12px;
+  color: #202124;
+  font-family: inherit;
+}
+
+.search-input::placeholder {
+  color: #9aa0a6;
+}
+
+a {
+  font-size: 0.5rem;
+  margin: 0.5rem;
+  color: #cccccc;
+  text-decoration: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 4rem;
+    margin: 1rem auto 0.5rem auto;
+  }
+  
+  h2 {
+    font-size: 1.2rem;
+    margin: 0 0 1.5rem 0;
+  }
+  
+  .search-container {
+    margin: 1.5rem 0;
+    padding: 0 20px;
+  }
+  
+  .search-box {
+    border-radius: 20px;
+  }
+  
+  .search-input {
+    font-size: 16px;
+    padding: 14px 16px 14px 10px;
+  }
+}
