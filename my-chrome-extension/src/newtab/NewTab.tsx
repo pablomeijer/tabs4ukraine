@@ -3,6 +3,18 @@ import AdComponent from './AdComponent'
 
 import './NewTab.css'
 import logo from '../assets/tabs4palestine_transparent_logo_25.png'
+import watermelonLogo from '../assets/nobackground_watermelon.png'
+// Remove SVG imports and use URLs instead
+const gmailIcon = 'img/icons/gmail.svg';
+const driveIcon = 'img/icons/drive.svg';
+const sheetsIcon = 'img/icons/sheets.svg';
+const classroomIcon = 'img/icons/classroom.svg';
+const sitesIcon = 'img/icons/sites.svg';
+const moreIcon = 'img/icons/more.svg';
+const classicsIcon = 'img/icons/classics.svg';
+const instagramIcon = 'img/icons/instagram.svg';
+const xIcon = 'img/icons/x.svg';
+const youtubeIcon = 'img/icons/youtube.svg';
 
 function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void }) {
   const [activeTab, setActiveTab] = useState('General');
@@ -109,6 +121,7 @@ export const NewTab = () => {
   const [backgroundMode, setBackgroundMode] = useState('gallery');
   const [customBg, setCustomBg] = useState<string | null>(null);
   const [galleryBg, setGalleryBg] = useState(galleryImages[0]);
+  const [appsOpen, setAppsOpen] = useState(false);
 
   useEffect(() => {
     const updateClock = () => {
@@ -170,6 +183,34 @@ export const NewTab = () => {
         setBackgroundMode={setBackgroundMode}
         onUploadBackground={handleUploadBackground}
       />
+      {/* Apps Bubble */}
+      {appsOpen && (
+        <div className="t4p-modal-bubble-overlay" onClick={() => setAppsOpen(false)}>
+          <div className="t4p-modal-bubble t4p-apps-bubble" onClick={e => e.stopPropagation()}>
+            <button className="t4p-modal-close" onClick={() => setAppsOpen(false)} style={{position: 'absolute', top: 16, right: 18}}>×</button>
+            <div className="t4p-apps-section">
+              <div className="t4p-apps-title">Google Apps</div>
+              <div className="t4p-apps-grid">
+                <a href="https://www.google.com" target="_blank" className="t4p-apps-item"><img src={classicsIcon} alt="Classics" /><span>Classics</span></a>
+                <a href="https://mail.google.com" target="_blank" className="t4p-apps-item"><img src={gmailIcon} alt="Gmail" /><span>Gmail</span></a>
+                <a href="https://drive.google.com" target="_blank" className="t4p-apps-item"><img src={driveIcon} alt="Drive" /><span>Drive</span></a>
+                <a href="https://sheets.google.com" target="_blank" className="t4p-apps-item"><img src={sheetsIcon} alt="Sheets" /><span>Sheets</span></a>
+                <a href="https://classroom.google.com" target="_blank" className="t4p-apps-item"><img src={classroomIcon} alt="Classroom" /><span>Classroom</span></a>
+                <a href="https://sites.google.com" target="_blank" className="t4p-apps-item"><img src={sitesIcon} alt="Sites" /><span>Sites</span></a>
+                <a href="#" className="t4p-apps-item"><img src={moreIcon} alt="More" /><span>More</span></a>
+              </div>
+            </div>
+            <div className="t4p-apps-section t4p-apps-socials">
+              <div className="t4p-apps-title">Socials</div>
+              <div className="t4p-apps-grid">
+                <a href="https://instagram.com" target="_blank" className="t4p-apps-item"><img src={instagramIcon} alt="Instagram" /><span>Instagram</span></a>
+                <a href="https://x.com" target="_blank" className="t4p-apps-item"><img src={xIcon} alt="X" /><span>X</span></a>
+                <a href="https://youtube.com" target="_blank" className="t4p-apps-item"><img src={youtubeIcon} alt="YouTube" /><span>YouTube</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Top left clock */}
       {toggles.clock && (
         <div className="t4p-clock">
@@ -179,9 +220,14 @@ export const NewTab = () => {
       )}
       {/* Top right icons */}
       <div className="t4p-top-right-icons">
+        <div className="t4p-pill">
+          <img src={watermelonLogo} alt="watermelon logo" className="t4p-pill-logo" />
+          <span className="t4p-pill-amount">12,349,249$</span>
+        </div>
         {toggles.apps && (
-          <button className="t4p-icon-btn" title="Announcements">
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M3 17h18M12 3v14m0 0l-4-4m4 4l4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <button className="t4p-icon-btn" title="Apps" onClick={() => setAppsOpen(v => !v)}>
+            {/* 9-dot grid icon */}
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><g fill="#fff"><circle cx="5" cy="5" r="2"/><circle cx="14" cy="5" r="2"/><circle cx="23" cy="5" r="2"/><circle cx="5" cy="14" r="2"/><circle cx="14" cy="14" r="2"/><circle cx="23" cy="14" r="2"/><circle cx="5" cy="23" r="2"/><circle cx="14" cy="23" r="2"/><circle cx="23" cy="23" r="2"/></g></svg>
           </button>
         )}
         {toggles.apps && (
@@ -223,6 +269,40 @@ export const NewTab = () => {
             </form>
           </div>
         )}
+        <div className="quick-access-grid">
+          <a href="https://www.sep.com" target="_blank" className="quick-access-item">
+            <img src="img/8_icons/white-sep_icon_512x512.png" alt="SEP" />
+            <span>SEP</span>
+          </a>
+          <a href="https://www.nolcollective.com" target="_blank" className="quick-access-item">
+            <img src="img/8_icons/white-nol-collective.png" alt="NOL Collective" />
+            <span>NOL Collective</span>
+          </a>
+          <a href="https://www.darzah.org" target="_blank" className="quick-access-item">
+            <img src="img/8_icons/white-darzah_logo.png" alt="Darzah" />
+            <span>Darzah</span>
+          </a>
+          <a href="https://www.wearthepeace.com" target="_blank" className="quick-access-item">
+            <img src="img/8_icons/wear_the_peacelogo.png" alt="Wear The Peace" />
+            <span>Wear The Peace</span>
+          </a>
+          <a href="https://www.ben-jekats.com" target="_blank" className="quick-access-item">
+            <img src="img/8_icons/white-Ben-and-Jerrys-Logo-1990s-500x281.png" alt="Ben & Jekats" />
+            <span>Ben & Jekats</span>
+          </a>
+          <a href="https://www.baytoun.uk" target="_blank" className="quick-access-item">
+            <img src="img/8_icons/white-sep_icon_512x512.png" alt="Baytoun" />
+            <span>Baytoun</span>
+          </a>
+          <a href="https://www.watanapparel.com" target="_blank" className="quick-access-item">
+            <img src="img/8_icons/watan.png" alt="Watan Apparel" />
+            <span>Watan Apparel</span>
+          </a>
+          <a href="https://www.farsali.com" target="_blank" className="quick-access-item">
+            <img src="img/8_icons/farsali.png" alt="Farsali" />
+            <span>Farsali</span>
+          </a>
+        </div>
       </div>
       <AdComponent />
     </section>
