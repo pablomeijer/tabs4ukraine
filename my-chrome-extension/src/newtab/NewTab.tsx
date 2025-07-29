@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import AdComponent from './AdComponent'
+import EmbeddedAdComponent from './EmbeddedAdComponent'
+import AdvertisementsUpgrade from './AdvertisementsUpgrade'
 
 import './NewTab.css'
 import logo from '../assets/tabs4palestine_transparent_logo_25.png'
@@ -16,7 +18,7 @@ const instagramIcon = 'img/icons/instagram.svg';
 const xIcon = 'img/icons/x.svg';
 const youtubeIcon = 'img/icons/youtube.svg';
 
-function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void }) {
+function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground, adCount, onAdUpgrade }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void, adCount: number, onAdUpgrade: (count: number) => void }) {
   const [activeTab, setActiveTab] = useState('General');
   const fileInputRef = useRef<HTMLInputElement>(null);
   if (!open) return null;
@@ -85,7 +87,12 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
               </button>
             </div>
           )}
-          {activeTab === 'Advertisements' && <div>Advertisements settings coming soon.</div>}
+          {activeTab === 'Advertisements' && (
+            <AdvertisementsUpgrade 
+              currentAdCount={adCount} 
+              onUpgrade={onAdUpgrade} 
+            />
+          )}
           {activeTab === 'About' && <div>About page coming soon.</div>}
         </div>
       </div>
@@ -122,6 +129,22 @@ export const NewTab = () => {
   const [customBg, setCustomBg] = useState<string | null>(null);
   const [galleryBg, setGalleryBg] = useState(galleryImages[0]);
   const [appsOpen, setAppsOpen] = useState(false);
+  const [adCount, setAdCount] = useState(1);
+
+  // Load ad count from storage on mount
+  useEffect(() => {
+    chrome.storage.sync.get(['adCount'], (result: { adCount?: number }) => {
+      if (result.adCount) {
+        setAdCount(result.adCount);
+      }
+    });
+  }, []);
+
+  // Save ad count to storage when it changes
+  const handleAdUpgrade = (count: number) => {
+    setAdCount(count);
+    chrome.storage.sync.set({ adCount: count });
+  };
 
   useEffect(() => {
     const updateClock = () => {
@@ -182,6 +205,8 @@ export const NewTab = () => {
         backgroundMode={backgroundMode}
         setBackgroundMode={setBackgroundMode}
         onUploadBackground={handleUploadBackground}
+        adCount={adCount}
+        onAdUpgrade={handleAdUpgrade}
       />
       {/* Apps Bubble */}
       {appsOpen && (
@@ -304,7 +329,17 @@ export const NewTab = () => {
           </a>
         </div>
       </div>
-      <AdComponent />
+      
+      {/* Embedded Advertisements */}
+      {adCount >= 1 && (
+        <EmbeddedAdComponent position="bottom" adIndex={0} />
+      )}
+      {adCount >= 2 && (
+        <EmbeddedAdComponent position="top" adIndex={1} />
+      )}
+      {adCount >= 3 && (
+        <EmbeddedAdComponent position="side" adIndex={2} />
+      )}
     </section>
   )
 }

@@ -1,0 +1,147 @@
+.embedded-ad-container {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: white;
+  border: 1px solid #e8eaed;
+}
+
+.embedded-ad-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.embedded-ad-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.embedded-ad-image {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.embedded-ad-text {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.embedded-ad-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #202124;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.embedded-ad-description {
+  font-size: 0.85rem;
+  color: #5f6368;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.embedded-ad-organization {
+  font-size: 0.8rem;
+  color: #9aa0a6;
+  margin: 0 0 12px 0;
+  font-style: italic;
+}
+
+.embedded-ad-cta {
+  background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.embedded-ad-container:hover .embedded-ad-cta {
+  background: linear-gradient(135deg, #1557b0 0%, #0f3d7a 100%);
+}
+
+/* Position-specific styles */
+.embedded-ad-top {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  height: 280px;
+}
+
+.embedded-ad-side {
+  width: 280px;
+  height: 320px;
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+}
+
+.embedded-ad-bottom {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  height: 280px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .embedded-ad-side {
+    position: static;
+    width: 100%;
+    max-width: 350px;
+    margin: 20px auto;
+    transform: none;
+  }
+  
+  .embedded-ad-top,
+  .embedded-ad-bottom {
+    max-width: 350px;
+    height: 260px;
+  }
+  
+  .embedded-ad-image {
+    height: 100px;
+  }
+  
+  .embedded-ad-text {
+    padding: 12px;
+  }
+  
+  .embedded-ad-title {
+    font-size: 0.9rem;
+  }
+  
+  .embedded-ad-description {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .embedded-ad-top,
+  .embedded-ad-bottom,
+  .embedded-ad-side {
+    max-width: 300px;
+    height: 240px;
+  }
+  
+  .embedded-ad-image {
+    height: 90px;
+  }
+  
+  .embedded-ad-text {
+    padding: 10px;
+  }
+} 

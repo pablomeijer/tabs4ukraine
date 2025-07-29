@@ -319,7 +319,7 @@ a {
   content: '';
   position: absolute;
   left: -24px;
-  bottom: 24px;
+  bottom: 48px;
   width: 0;
   height: 0;
   border-top: 20px solid transparent;
