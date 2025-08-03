@@ -15,21 +15,21 @@ export const AdvertisementsUpgrade = ({ currentAdCount, onUpgrade }: AdUpgradePr
       title: '1 Advertisement',
       description: 'Basic impact level',
       price: '$3',
-      rate: 'per 1000 tabs'
+      rate: 'raised per 1000 tabs'
     },
     {
       id: 2,
       title: '2 Advertisements',
       description: 'Enhanced impact level',
       price: '$6',
-      rate: 'per 1000 tabs'
+      rate: 'raised per 1000 tabs'
     },
     {
       id: 3,
       title: '3 Advertisements',
       description: 'Maximum impact level',
       price: '$9',
-      rate: 'per 1000 tabs'
+      rate: 'raised per 1000 tabs'
     }
   ]
 
@@ -77,14 +77,15 @@ export const AdvertisementsUpgrade = ({ currentAdCount, onUpgrade }: AdUpgradePr
           onClick={handleUpgrade}
           disabled={selectedPlan === currentAdCount}
         >
-          {selectedPlan === currentAdCount ? 'Current Level' : `Set to ${selectedPlan} Advertisement${selectedPlan > 1 ? 's' : ''}`}
+          {selectedPlan === currentAdCount ? 'Current Level' : `Raise More with ${selectedPlan} Advertisement${selectedPlan > 1 ? 's' : ''}`}
         </button>
       </div>
 
       <div className="ad-upgrade-info">
         <p className="ad-upgrade-info-text">
           💡 <strong>How it works:</strong> Each time you open a new tab, embedded advertisements will appear on your new tab page. 
-          The more advertisements you choose, the more opportunities to support Palestinian causes with every tab you open.
+          The revenue from these ads is automatically donated to Palestinian causes. The more advertisements you choose, 
+          the more money we can raise for Palestinian communities with every tab you open.
         </p>
       </div>
     </div>

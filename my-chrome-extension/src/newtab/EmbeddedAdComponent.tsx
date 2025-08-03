@@ -11,11 +11,12 @@ interface EmbeddedAdData {
 }
 
 interface EmbeddedAdComponentProps {
-  position: 'top' | 'side' | 'bottom'
+  position: 'top' | 'side' | 'bottom' | 'bottom-right' | 'bottom-right-top' | 'bottom-middle'
   adIndex: number
+  onClose?: () => void
 }
 
-export const EmbeddedAdComponent = ({ position, adIndex }: EmbeddedAdComponentProps) => {
+export const EmbeddedAdComponent = ({ position, adIndex, onClose }: EmbeddedAdComponentProps) => {
   const [currentAd, setCurrentAd] = useState<EmbeddedAdData | null>(null)
 
   // Sample Palestine-related ads - you can expand this list
@@ -83,18 +84,57 @@ export const EmbeddedAdComponent = ({ position, adIndex }: EmbeddedAdComponentPr
       imageUrl: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&h=200&fit=crop',
       link: 'https://www.msf.org/palestine',
       organization: 'Doctors Without Borders'
+    },
+    {
+      id: '9',
+      title: 'Emergency Response',
+      description: 'Support rapid emergency response teams',
+      imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=200&fit=crop',
+      link: 'https://www.icrc.org/en/where-we-work/middle-east/israel-and-occupied-territories',
+      organization: 'International Red Cross'
+    },
+    {
+      id: '10',
+      title: 'Children\'s Rights',
+      description: 'Protect and support Palestinian children',
+      imageUrl: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=300&h=200&fit=crop',
+      link: 'https://www.unicef.org/emergencies/occupied-palestinian-territory',
+      organization: 'UNICEF'
+    },
+    {
+      id: '11',
+      title: 'Women\'s Empowerment',
+      description: 'Support women and girls in Palestine',
+      imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=300&h=200&fit=crop',
+      link: 'https://www.unwomen.org/en/where-we-are/arab-states/palestine',
+      organization: 'UN Women'
+    },
+    {
+      id: '12',
+      title: 'Cultural Preservation',
+      description: 'Help preserve Palestinian culture and heritage',
+      imageUrl: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=300&h=200&fit=crop',
+      link: 'https://www.unesco.org/en/fieldoffice/ramallah',
+      organization: 'UNESCO'
     }
   ]
 
   useEffect(() => {
-    // Select a different ad based on the adIndex to ensure variety
-    const adIndexToUse = (adIndex % ads.length)
-    setCurrentAd(ads[adIndexToUse])
+    // Select a random ad instead of using adIndex
+    const randomAd = ads[Math.floor(Math.random() * ads.length)]
+    setCurrentAd(randomAd)
   }, [adIndex])
 
   const handleAdClick = () => {
     if (currentAd) {
       window.open(currentAd.link, '_blank')
+    }
+  }
+
+  const handleClose = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (onClose) {
+      onClose()
     }
   }
 
@@ -107,6 +147,15 @@ export const EmbeddedAdComponent = ({ position, adIndex }: EmbeddedAdComponentPr
       className={`embedded-ad-container embedded-ad-${position}`}
       onClick={handleAdClick}
     >
+      {onClose && (
+        <button 
+          className="embedded-ad-close" 
+          onClick={handleClose}
+          title="Close ad"
+        >
+          ×
+        </button>
+      )}
       <div className="embedded-ad-content">
         <img 
           src={currentAd.imageUrl} 

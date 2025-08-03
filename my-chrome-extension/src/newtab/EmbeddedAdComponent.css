@@ -6,6 +6,32 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   background: white;
   border: 1px solid #e8eaed;
+  position: relative;
+}
+
+.embedded-ad-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.embedded-ad-close:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
 }
 
 .embedded-ad-container:hover {
@@ -24,6 +50,45 @@
   height: 120px;
   object-fit: cover;
   border-bottom: 1px solid #f1f3f4;
+}
+
+/* Special styling for bottom-middle ad to make it more horizontal */
+.embedded-ad-bottom-middle .embedded-ad-content {
+  flex-direction: row;
+  height: 100px;
+}
+
+.embedded-ad-bottom-middle .embedded-ad-image {
+  width: 120px;
+  height: 100px;
+  border-bottom: none;
+  border-right: 1px solid #f1f3f4;
+}
+
+.embedded-ad-bottom-middle .embedded-ad-text {
+  flex: 1;
+  padding: 12px;
+  justify-content: center;
+}
+
+.embedded-ad-bottom-middle .embedded-ad-title {
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.embedded-ad-bottom-middle .embedded-ad-description {
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+
+.embedded-ad-bottom-middle .embedded-ad-organization {
+  font-size: 0.7rem;
+  margin-bottom: 8px;
+}
+
+.embedded-ad-bottom-middle .embedded-ad-cta {
+  padding: 6px 10px;
+  font-size: 0.8rem;
 }
 
 .embedded-ad-text {
@@ -96,6 +161,34 @@
   height: 280px;
 }
 
+/* New positioning styles for the three ads */
+.embedded-ad-bottom-right {
+  width: 280px;
+  height: 280px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.embedded-ad-bottom-right-top {
+  width: 280px;
+  height: 280px;
+  position: fixed;
+  bottom: 320px; /* 280px height + 20px bottom margin + 20px gap */
+  right: 20px;
+  z-index: 1000;
+}
+
+.embedded-ad-bottom-middle {
+  width: 500px;
+  height: 100px;
+  position: fixed;
+  bottom: 20px;
+  right: 320px; /* Position to the left of the bottom-right ad (280px width + 20px margin + 20px gap) */
+  z-index: 1000;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .embedded-ad-side {
@@ -110,6 +203,25 @@
   .embedded-ad-bottom {
     max-width: 350px;
     height: 260px;
+  }
+
+  /* Mobile responsive for new positions */
+  .embedded-ad-bottom-right,
+  .embedded-ad-bottom-right-top {
+    position: static;
+    width: 100%;
+    max-width: 300px;
+    height: 240px;
+    margin: 10px auto;
+  }
+
+  .embedded-ad-bottom-middle {
+    position: static;
+    width: 100%;
+    max-width: 400px;
+    height: 80px;
+    margin: 10px auto;
+    transform: none;
   }
   
   .embedded-ad-image {
@@ -131,10 +243,20 @@
 
 @media (max-width: 480px) {
   .embedded-ad-top,
-  .embedded-ad-bottom,
-  .embedded-ad-side {
+  .embedded-ad-bottom {
     max-width: 300px;
     height: 240px;
+  }
+
+  .embedded-ad-bottom-right,
+  .embedded-ad-bottom-right-top {
+    max-width: 280px;
+    height: 220px;
+  }
+
+  .embedded-ad-bottom-middle {
+    max-width: 350px;
+    height: 70px;
   }
   
   .embedded-ad-image {
