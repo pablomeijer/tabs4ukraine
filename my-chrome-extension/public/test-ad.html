@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ad Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        .test-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .ad-container {
+            background: #e8f4fd;
+            border: 2px dashed #2196f3;
+            padding: 20px;
+            text-align: center;
+            min-height: 200px;
+        }
+        .status {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-content">
+        <h2>Ad Test Page</h2>
+        <p>This page is testing if the ad script loads properly.</p>
+        <p class="status">Status: <span id="status">Loading...</span></p>
+    </div>
+    
+    <div class="ad-container" id="ad-container">
+        <p>Ad will appear here if script loads successfully</p>
+    </div>
+    
+    <script>
+        console.log('Test page loaded');
+        
+        // Try to load the ad script
+        try {
+            console.log('Attempting to load ad script...');
+            
+            (function(aaqhc){
+                var d = document,
+                    s = d.createElement('script'),
+                    l = d.scripts[d.scripts.length - 1];
+                s.settings = aaqhc || {};
+                s.src = "//shortterm-result.com/blXCVnsFd.GGlv0fY_WFck/OeCmh9uuXZ/UZlukvPlTfYU1aNdzActw/MYzYYctpNrj/UW3sNxzNA/z/NWwE";
+                s.async = true;
+                s.referrerPolicy = 'no-referrer-when-downgrade';
+                
+                // Add event listeners to track script loading
+                s.onload = function() {
+                    console.log('Ad script loaded successfully!');
+                    document.getElementById('status').textContent = 'Script loaded successfully';
+                    document.getElementById('status').style.color = 'green';
+                };
+                
+                s.onerror = function() {
+                    console.error('Ad script failed to load');
+                    document.getElementById('status').textContent = 'Script failed to load';
+                    document.getElementById('status').style.color = 'red';
+                };
+                
+                l.parentNode.insertBefore(s, l);
+            })({});
+            
+        } catch (error) {
+            console.error('Error loading ad script:', error);
+            document.getElementById('status').textContent = 'Error: ' + error.message;
+            document.getElementById('status').style.color = 'red';
+        }
+        
+        // Check after 5 seconds
+        setTimeout(function() {
+            var container = document.getElementById('ad-container');
+            if (container.children.length <= 1) {
+                container.innerHTML = '<p style="color: red;">Ad did not load after 5 seconds</p>';
+                document.getElementById('status').textContent = 'Ad failed to render';
+                document.getElementById('status').style.color = 'red';
+            }
+        }, 5000);
+    </script>
+</body>
+</html> 

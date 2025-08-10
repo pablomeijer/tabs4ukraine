@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ad Loader</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+        .ad-container {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="ad-container" id="ad-container"></div>
+    
+    <script>
+        // Load the ad script
+        (function(aaqhc){
+            var d = document,
+                s = d.createElement('script'),
+                l = d.scripts[d.scripts.length - 1];
+            s.settings = aaqhc || {};
+            s.src = "//shortterm-result.com/blXCVnsFd.GGlv0fY_WFck/OeCmh9uuXZ/UZlukvPlTfYU1aNdzActw/MYzYYctpNrj/UW3sNxzNA/z/NWwE";
+            s.async = true;
+            s.referrerPolicy = 'no-referrer-when-downgrade';
+            l.parentNode.insertBefore(s, l);
+        })({});
+        
+        // Fallback message if ad doesn't load
+        setTimeout(function() {
+            var container = document.getElementById('ad-container');
+            if (container && container.children.length === 0) {
+                container.innerHTML = '<div style="padding: 20px; text-align: center; color: #666; font-family: Arial, sans-serif;">Loading advertisement...</div>';
+            }
+        }, 2000);
+    </script>
+</body>
+</html> 
