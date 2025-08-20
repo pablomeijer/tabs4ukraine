@@ -7,24 +7,11 @@ import AuthComponent from './AuthComponent'
 import { auth, userProfile } from '../lib/supabase'
 
 import './NewTab.css'
-import logo from '/img/tabs4_palestine_black_logo-removebg-preview.png'
-import watermelonLogo from '../assets/nobackground_watermelon.png'
-// Remove SVG imports and use URLs instead
-const gmailIcon = 'img/icons/gmail.svg';
-const driveIcon = 'img/icons/drive.svg';
-const sheetsIcon = 'img/icons/sheets.svg';
-const classroomIcon = 'img/icons/classroom.svg';
-const sitesIcon = 'img/icons/sites.svg';
-const moreIcon = 'img/icons/more.svg';
-const classicsIcon = 'img/icons/classics.svg';
-const instagramIcon = 'img/icons/instagram.svg';
-const xIcon = 'img/icons/x.svg';
-const youtubeIcon = 'img/icons/youtube.svg';
-const photosIcon = 'img/icons/photos.svg';
-const keepIcon = 'img/icons/keep.svg';
-const musicIcon = 'img/icons/music.svg';
-const playIcon = 'img/icons/play.svg';
-const facebookIcon = 'img/icons/facebook.svg';
+import logo from '../assets/tabs4_palestine_black_logo-removebg-preview.png'
+import watermelonIcon from '../assets/original_watermelon.png'
+
+
+
 
 function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground, adCount, onAdUpgrade }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void, adCount: number, onAdUpgrade: (count: number) => void }) {
   const [activeTab, setActiveTab] = useState('General');
@@ -88,10 +75,7 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
                 <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" stroke="#222" strokeWidth="2"/><circle cx="8" cy="10" r="2" fill="#188038"/><path d="M21 19l-5.5-7-4.5 6-3-4-4 5" stroke="#188038" strokeWidth="2"/></svg>
                 <span>Gallery</span>
               </button>
-              <button className={`t4p-bg-btn${backgroundMode === 'classic' ? ' t4p-bg-btn-active' : ''}`} onClick={() => setBackgroundMode('classic')}>
-                <svg width="24" height="24" fill="#fff" stroke="#222" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/></svg>
-                <span>Classic Mode</span>
-              </button>
+
               <button className={`t4p-bg-btn${backgroundMode === 'upload' ? ' t4p-bg-btn-active' : ''}`} onClick={() => fileInputRef.current?.click()}>
                 <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4" stroke="#188038" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="4" y="16" width="16" height="4" rx="2" fill="#188038"/></svg>
                 <span>Upload</span>
@@ -188,6 +172,37 @@ export const NewTab = () => {
   const [showLogo, setShowLogo] = useState(true);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [adCount, setAdCount] = useState(1);
+  const [clockHovered, setClockHovered] = useState(false);
+  const [shortcuts, setShortcuts] = useState([
+    { name: 'SEP', url: 'https://www.sep.com', icon: '/img/8_icons/white-sep_icon_512x512.png' },
+    { name: 'NOL Collective', url: 'https://www.nolcollective.com', icon: '/img/8_icons/white-nol-collective.png' },
+    { name: 'Darzah', url: 'https://www.darzah.org', icon: '/img/8_icons/white-darzah_logo.png' },
+    { name: 'Wear The Peace', url: 'https://www.wearthepeace.com', icon: '/img/8_icons/wear_the_peacelogo.png' },
+    { name: 'Ben & Jekats', url: 'https://www.ben-jekats.com', icon: '/img/8_icons/white-Ben-and-Jerrys-Logo-1990s-500x281.png' },
+    { name: 'Baytoun', url: 'https://www.baytoun.uk', icon: '/img/8_icons/white-sep_icon_512x512.png' },
+    { name: 'Watan Apparel', url: 'https://www.watanapparel.com', icon: '/img/8_icons/watan.png' },
+    { name: 'Farsali', url: 'https://www.farsali.com', icon: '/img/8_icons/farsali.png' }
+  ]);
+  const [showShortcutModal, setShowShortcutModal] = useState(false);
+  const [newShortcut, setNewShortcut] = useState({ name: '', url: '' });
+  const [shortcutError, setShortcutError] = useState('');
+
+  // Function to add new shortcut
+  const addShortcut = () => {
+    if (!newShortcut.name || !newShortcut.url) {
+      setShortcutError('Name and URL are required.');
+      return;
+    }
+    
+    // Create a default icon (you can replace this with a generic icon)
+    const defaultIcon = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMiA3VjIwSDEwVjE0SDE0VjIwSDIyVjdMMTIgMloiIGZpbGw9IiMxODgwMzgiLz4KPC9zdmc+';
+    
+    const shortcutWithIcon = { ...newShortcut, icon: defaultIcon };
+    setShortcuts([...shortcuts, shortcutWithIcon]);
+    setShowShortcutModal(false);
+    setNewShortcut({ name: '', url: '' });
+    setShortcutError('');
+  };
 
   // Load settings from storage on mount
   useEffect(() => {
@@ -359,39 +374,36 @@ export const NewTab = () => {
         <div className="t4p-apps-bubble">
           <button className="t4p-modal-close" onClick={() => setAppsOpen(false)}>×</button>
           <div className="t4p-apps-section">
-            <div className="t4p-apps-title">Google</div>
+            <div className="t4p-apps-title">Google Services</div>
             <div className="t4p-apps-grid">
-              <a href="https://www.google.com" target="_blank" className="t4p-apps-item"><img src={classicsIcon} alt="Classics" /><span>Classics</span></a>
-              <a href="https://mail.google.com" target="_blank" className="t4p-apps-item"><img src={gmailIcon} alt="Gmail" /><span>Gmail</span></a>
-              <a href="https://drive.google.com" target="_blank" className="t4p-apps-item"><img src={driveIcon} alt="Drive" /><span>Drive</span></a>
-              <a href="https://sheets.google.com" target="_blank" className="t4p-apps-item"><img src={sheetsIcon} alt="Sheets" /><span>Sheets</span></a>
-              <a href="https://classroom.google.com" target="_blank" className="t4p-apps-item"><img src={classroomIcon} alt="Classroom" /><span>Classroom</span></a>
-              <a href="https://sites.google.com" target="_blank" className="t4p-apps-item"><img src={sitesIcon} alt="Sites" /><span>Sites</span></a>
-              <a href="#" className="t4p-apps-item"><img src={moreIcon} alt="More" /><span>More</span></a>
+                              <a href="https://www.google.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-google.svg" alt="Google" /><span>Google</span></a>
+                <a href="https://mail.google.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-gmail.svg" alt="Gmail" /><span>Gmail</span></a>
+                <a href="https://drive.google.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-google-drive.svg" alt="Drive" /><span>Drive</span></a>
+                <a href="https://calendar.google.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-google-calendar.svg" alt="Calendar" /><span>Calendar</span></a>
+                <a href="https://meet.google.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-google-meet.svg" alt="Meet" /><span>Meet</span></a>
+                <a href="https://maps.google.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-google-maps.svg" alt="Maps" /><span>Maps</span></a>
             </div>
           </div>
           <div className="t4p-apps-section">
-            <div className="t4p-apps-title">Cloud Storage</div>
+            <div className="t4p-apps-title">Social Media</div>
             <div className="t4p-apps-grid">
-              <a href="https://drive.google.com" target="_blank" className="t4p-apps-item"><img src={driveIcon} alt="Drive" /><span>Drive</span></a>
-              <a href="https://photos.google.com" target="_blank" className="t4p-apps-item"><img src={photosIcon} alt="Photos" /><span>Photos</span></a>
-              <a href="https://keep.google.com" target="_blank" className="t4p-apps-item"><img src={keepIcon} alt="Keep" /><span>Keep</span></a>
+              <a href="https://instagram.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-instagram.svg" alt="Instagram" /><span>Instagram</span></a>
+              <a href="https://facebook.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-facebook.svg" alt="Facebook" /><span>Facebook</span></a>
+              <a href="https://x.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-x.svg" alt="X" /><span>X</span></a>
+              <a href="https://linkedin.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-linkedin.svg" alt="LinkedIn" /><span>LinkedIn</span></a>
+              <a href="https://tiktok.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-tiktok.svg" alt="TikTok" /><span>TikTok</span></a>
+              <a href="https://youtube.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-youtube.svg" alt="YouTube" /><span>YouTube</span></a>
             </div>
           </div>
           <div className="t4p-apps-section">
-            <div className="t4p-apps-title">Streaming</div>
+            <div className="t4p-apps-title">Development & Media</div>
             <div className="t4p-apps-grid">
-              <a href="https://youtube.com" target="_blank" className="t4p-apps-item"><img src={youtubeIcon} alt="YouTube" /><span>YouTube</span></a>
-              <a href="https://music.youtube.com" target="_blank" className="t4p-apps-item"><img src={musicIcon} alt="Music" /><span>Music</span></a>
-              <a href="https://play.google.com" target="_blank" className="t4p-apps-item"><img src={playIcon} alt="Play" /><span>Play</span></a>
-            </div>
-          </div>
-          <div className="t4p-apps-section t4p-apps-socials">
-            <div className="t4p-apps-title">Social Networks</div>
-            <div className="t4p-apps-grid">
-              <a href="https://instagram.com" target="_blank" className="t4p-apps-item"><img src={instagramIcon} alt="Instagram" /><span>Instagram</span></a>
-              <a href="https://x.com" target="_blank" className="t4p-apps-item"><img src={xIcon} alt="X" /><span>X</span></a>
-              <a href="https://facebook.com" target="_blank" className="t4p-apps-item"><img src={facebookIcon} alt="Facebook" /><span>Facebook</span></a>
+              <a href="https://github.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-github.svg" alt="GitHub" /><span>GitHub</span></a>
+              <a href="https://medium.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-medium.svg" alt="Medium" /><span>Medium</span></a>
+              <a href="https://spotify.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-spotify.svg" alt="Spotify" /><span>Spotify</span></a>
+              <a href="https://soundcloud.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-soundcloud.svg" alt="SoundCloud" /><span>SoundCloud</span></a>
+              <a href="https://zoom.us" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-zoom.svg" alt="Zoom" /><span>Zoom</span></a>
+              <a href="https://wechat.com" target="_blank" className="t4p-apps-item"><img src="../assets/icons/icons8-wechat.svg" alt="WeChat" /><span>WeChat</span></a>
             </div>
           </div>
         </div>
@@ -548,23 +560,25 @@ export const NewTab = () => {
       
       {/* Top left clock */}
       {toggles.clock && (
-        <div className="t4p-clock">
+        <div className="t4p-clock" onMouseEnter={() => setClockHovered(true)} onMouseLeave={() => setClockHovered(false)}>
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#fff" strokeWidth="2"/><path d="M12 7v5l3 3" stroke="#fff" strokeWidth="2" strokeLinecap="round"/></svg>
           <span>{time}</span>
+          {clockHovered && (
+            <button 
+              className="t4p-clock-close" 
+              onClick={() => setToggles({...toggles, clock: false})}
+              title="Hide clock"
+            >
+              ×
+            </button>
+          )}
         </div>
       )}
       {/* Top right icons */}
       <div className="t4p-top-right-icons">
-        <div className="t4p-pill">
-          <img src={watermelonLogo} alt="watermelon logo" className="t4p-pill-logo" />
-          <span className="t4p-pill-amount">12,349,249$</span>
-        </div>
-        {toggles.apps && (
-          <button className="t4p-icon-btn" title="Apps" onClick={() => setAppsOpen(v => !v)}>
-            {/* 9-dot grid icon */}
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><g fill="#fff"><circle cx="5" cy="5" r="2"/><circle cx="14" cy="5" r="2"/><circle cx="23" cy="5" r="2"/><circle cx="5" cy="14" r="2"/><circle cx="14" cy="14" r="2"/><circle cx="23" cy="14" r="2"/><circle cx="5" cy="23" r="2"/><circle cx="14" cy="23" r="2"/><circle cx="23" cy="23" r="2"/></g></svg>
-          </button>
-        )}
+        <button className="t4p-signup-btn" onClick={() => setProfileOpen(true)}>
+          Sign Up
+        </button>
         {toggles.apps && (
           <button className="t4p-icon-btn" title="Notifications" onClick={() => setNotificationsOpen(v => !v)}>
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M13.73 21a2 2 0 01-3.46 0" stroke="#fff" strokeWidth="2" strokeLinecap="round"/></svg>
@@ -576,6 +590,12 @@ export const NewTab = () => {
             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#fff"/>
           </svg>
         </button>
+        {toggles.apps && (
+          <button className="t4p-icon-btn" title="Apps" onClick={() => setAppsOpen(v => !v)}>
+            {/* 9-dot grid icon */}
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><g fill="#fff"><circle cx="5" cy="5" r="2"/><circle cx="14" cy="5" r="2"/><circle cx="23" cy="5" r="2"/><circle cx="5" cy="14" r="2"/><circle cx="14" cy="14" r="2"/><circle cx="23" cy="14" r="2"/><circle cx="5" cy="23" r="2"/><circle cx="14" cy="23" r="2"/><circle cx="23" cy="23" r="2"/></g></svg>
+          </button>
+        )}
       </div>
       {/* Bottom left settings */}
       <div className="t4p-settings">
@@ -620,39 +640,27 @@ export const NewTab = () => {
             </form>
           </div>
         )}
+        
+        {/* Donation Box */}
+        <div className="donation-box">
+          <img src={watermelonIcon} alt="Watermelon" className="donation-watermelon" />
+          <div className="donation-divider"></div>
+          <div className="donation-text">
+            <span className="donation-amount">340,234$</span> has been donated to the Palestinian cause
+          </div>
+        </div>
         <div className="quick-access-grid">
-          <a href="https://www.sep.com" target="_blank" className="quick-access-item">
-            <img src="img/8_icons/white-sep_icon_512x512.png" alt="SEP" />
-            <span>SEP</span>
-          </a>
-          <a href="https://www.nolcollective.com" target="_blank" className="quick-access-item">
-            <img src="img/8_icons/white-nol-collective.png" alt="NOL Collective" />
-            <span>NOL Collective</span>
-          </a>
-          <a href="https://www.darzah.org" target="_blank" className="quick-access-item">
-            <img src="img/8_icons/white-darzah_logo.png" alt="Darzah" />
-            <span>Darzah</span>
-          </a>
-          <a href="https://www.wearthepeace.com" target="_blank" className="quick-access-item">
-            <img src="img/8_icons/wear_the_peacelogo.png" alt="Wear The Peace" />
-            <span>Wear The Peace</span>
-          </a>
-          <a href="https://www.ben-jekats.com" target="_blank" className="quick-access-item">
-            <img src="img/8_icons/white-Ben-and-Jerrys-Logo-1990s-500x281.png" alt="Ben & Jekats" />
-            <span>Ben & Jekats</span>
-          </a>
-          <a href="https://www.baytoun.uk" target="_blank" className="quick-access-item">
-            <img src="img/8_icons/white-sep_icon_512x512.png" alt="Baytoun" />
-            <span>Baytoun</span>
-          </a>
-          <a href="https://www.watanapparel.com" target="_blank" className="quick-access-item">
-            <img src="img/8_icons/watan.png" alt="Watan Apparel" />
-            <span>Watan Apparel</span>
-          </a>
-          <a href="https://www.farsali.com" target="_blank" className="quick-access-item">
-            <img src="img/8_icons/farsali.png" alt="Farsali" />
-            <span>Farsali</span>
-          </a>
+          {shortcuts.map((shortcut, index) => (
+            <a key={index} href={shortcut.url} target="_blank" rel="noopener noreferrer" className="quick-access-item">
+              <img src={shortcut.icon} alt={shortcut.name} />
+              <span>{shortcut.name}</span>
+            </a>
+          ))}
+          <button className="t4p-add-shortcut-btn" onClick={() => setShowShortcutModal(true)}>
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#188038"/>
+            </svg>
+          </button>
         </div>
       </div>
       
@@ -674,6 +682,54 @@ export const NewTab = () => {
             chrome.storage.sync.set({ adCount: 2 })
           }}
         />
+      )}
+
+      {/* Shortcut Modal */}
+      {showShortcutModal && (
+        <div className="t4p-shortcut-modal-overlay" onClick={() => setShowShortcutModal(false)}>
+          <div className="t4p-shortcut-modal" onClick={e => e.stopPropagation()}>
+            <h2>Add New Shortcut</h2>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              addShortcut();
+            }}>
+              <div className="t4p-shortcut-form-group">
+                <label htmlFor="shortcutName">Name:</label>
+                <input
+                  type="text"
+                  id="shortcutName"
+                  value={newShortcut.name}
+                  onChange={(e) => setNewShortcut({ ...newShortcut, name: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="t4p-shortcut-form-group">
+                <label htmlFor="shortcutUrl">URL:</label>
+                <input
+                  type="url"
+                  id="shortcutUrl"
+                  value={newShortcut.url}
+                  onChange={(e) => setNewShortcut({ ...newShortcut, url: e.target.value })}
+                  required
+                />
+              </div>
+              {shortcutError && <p style={{ color: 'red' }}>{shortcutError}</p>}
+              <button type="submit" className="t4p-profile-btn t4p-profile-btn-primary">Add Shortcut</button>
+              <button type="button" className="t4p-profile-btn t4p-profile-btn-link" onClick={() => setShowShortcutModal(false)}>Cancel</button>
+            </form>
+            <h3>Current Shortcuts:</h3>
+            <div className="t4p-shortcut-list">
+              {shortcuts.map((shortcut, index) => (
+                <div key={index} className="t4p-shortcut-item">
+                  <a href={shortcut.url} target="_blank" rel="noopener noreferrer">
+                    <img src={shortcut.icon} alt={shortcut.name} />
+                    <span>{shortcut.name}</span>
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       )}
     </section>
   )

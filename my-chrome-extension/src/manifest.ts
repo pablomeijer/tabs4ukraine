@@ -11,18 +11,18 @@ export default defineManifest({
   version: packageData.version,
   manifest_version: 3,
   icons: {
-    16: 'img/nobackground_watermelon.png',
-    32: 'img/nobackground_watermelon.png',
-    48: 'img/nobackground_watermelon.png',
-    128: 'img/nobackground_watermelon.png',
+    16: 'img/original_watermelon.png',
+    32: 'img/original_watermelon.png',
+    48: 'img/original_watermelon.png',
+    128: 'img/original_watermelon.png',
   },
   action: {
     default_popup: 'popup.html',
     default_icon: {
-      16: 'img/nobackground_watermelon.png',
-      32: 'img/nobackground_watermelon.png',
-      48: 'img/nobackground_watermelon.png',
-      128: 'img/nobackground_watermelon.png',
+      16: 'img/original_watermelon.png',
+      32: 'img/original_watermelon.png',
+      48: 'img/original_watermelon.png',
+      128: 'img/original_watermelon.png',
     },
   },
   options_page: 'options.html',
@@ -42,7 +42,7 @@ export default defineManifest({
   },
   web_accessible_resources: [
     {
-      resources: ['img/nobackground_watermelon.png'],
+      resources: ['img/original_watermelon.png'],
       matches: ['<all_urls>'],
     },
   ],
