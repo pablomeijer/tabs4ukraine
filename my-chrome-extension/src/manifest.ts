@@ -42,7 +42,7 @@ export default defineManifest({
   },
   web_accessible_resources: [
     {
-      resources: ['img/original_watermelon.png'],
+      resources: ['img/original_watermelon.png', 'img/icons/*'],
       matches: ['<all_urls>'],
     },
   ],

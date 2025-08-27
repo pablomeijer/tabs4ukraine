@@ -1,9 +1,25 @@
+/* Import Coustard fonts */
+@font-face {
+  font-family: 'Coustard';
+  src: url('../assets/fonts/Coustard-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Coustard';
+  src: url('../assets/fonts/Coustard-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
   box-sizing: border-box;
+  font-family: 'Coustard', serif;
 }
 
 section {
@@ -16,7 +32,7 @@ section {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background: #FFFCF0;
+  background: #f8f8f2;
   z-index: 1;
 }
 
@@ -28,9 +44,9 @@ section {
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   z-index: 1500;
 }
 
@@ -40,46 +56,32 @@ section {
   display: block;
 }
 
-.t4p-clock-logo {
-  width: 272px;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.t4p-clock-display {
-  font-family: 'Poppins', 'Arial', sans-serif;
-  font-size: 4rem;
-  font-weight: 700;
-  color: #fff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  letter-spacing: 0.1em;
-}
 
 .t4p-logo-toggle {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #e0e0e0;
+  background: rgba(24, 128, 56, 0.1);
+  border: 1px solid #188038;
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(24, 128, 56, 0.15);
+  margin-left: 16px;
 }
 
 .t4p-logo-toggle:hover {
-  background: rgba(255, 255, 255, 1);
-  border-color: #188038;
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: rgba(24, 128, 56, 0.2);
+  border-color: #0f5a28;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(24, 128, 56, 0.25);
 }
 
 .t4p-title {
-  font-family: 'Poppins', 'Arial', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   font-size: 3rem;
   font-weight: 700;
   color: #188038;
@@ -164,49 +166,69 @@ h1, h2 {
   color: #9aa0a6;
 }
 
-.donation-box {
-  position: absolute;
-  top: 75%;
-  left: 50%;
-  transform: translateX(-50%);
+.donation-box-bottom-left {
+  position: fixed;
+  bottom: 24px;
+  left: 32px;
   display: flex;
   align-items: center;
   background: white;
-  border-radius: 20px;
-  padding: 16px 24px;
+  border-radius: 16px;
+  padding: 16px 20px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
-  gap: 20px;
-  max-width: 500px;
-  width: 100%;
+  gap: 16px;
+  z-index: 2000;
 }
 
-.donation-watermelon {
+.donation-icon {
   width: 40px;
   height: 40px;
   object-fit: contain;
   flex-shrink: 0;
 }
 
-.donation-divider {
-  width: 1px;
-  height: 30px;
-  background: #000;
-  flex-shrink: 0;
-}
-
-.donation-text {
-  font-family: 'Poppins', 'Arial', sans-serif;
-  font-size: 18px;
-  color: #333;
-  line-height: 1.4;
-  flex: 1;
+.donation-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .donation-amount {
+  font-family: 'Coustard', serif;
   font-weight: 700;
-  color: #188038;
+  color: #333;
   font-size: 20px;
+  line-height: 1.2;
+}
+
+.donation-label {
+  font-family: 'Coustard', serif;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.3;
+}
+
+.donation-refresh-btn {
+  background: rgba(24, 128, 56, 0.1);
+  border: 1px solid #188038;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(24, 128, 56, 0.15);
+  margin-left: 12px;
+  flex-shrink: 0;
+}
+
+.donation-refresh-btn:hover {
+  background: rgba(24, 128, 56, 0.2);
+  border-color: #0f5a28;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(24, 128, 56, 0.25);
 }
 
 a {
@@ -216,48 +238,7 @@ a {
   text-decoration: none;
 }
 
-.t4p-clock {
-  position: fixed;
-  top: 24px;
-  left: 32px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #fff;
-  font-size: 1.3rem;
-  font-weight: 500;
-  z-index: 2000;
-  background: rgba(0,0,0,0.25);
-  border-radius: 16px;
-  padding: 4px 14px 4px 8px;
-}
 
-.t4p-clock-close {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.t4p-clock-close:hover {
-  background: rgba(0, 0, 0, 1);
-  transform: scale(1.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-}
 
 .t4p-top-right-icons {
   position: fixed;
@@ -275,7 +256,7 @@ a {
   border: none;
   border-radius: 20px;
   padding: 8px 16px;
-  font-family: 'Poppins', 'Arial', sans-serif;
+  font-family: 'Coustard', serif;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -299,12 +280,7 @@ a {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.t4p-settings {
-  position: fixed;
-  bottom: 24px;
-  left: 32px;
-  z-index: 2000;
-}
+
 
 .t4p-icon-btn {
   background: rgba(0,0,0,0.25);
@@ -553,18 +529,35 @@ a {
     flex-direction: column;
     gap: 10px;
   }
+  
+     .t4p-apps-bubble,
+   .t4p-profile-bubble,
+   .t4p-notifications-bubble,
+   .t4p-gamification-bubble {
+     top: 60px;
+     right: 16px;
+   }
 }
 
 /* Responsive design for logo/title */
 @media (max-width: 768px) {
   .t4p-logo-container {
     top: 20%;
+    gap: 12px;
   }
   .t4p-logo {
     width: 200px;
   }
   .t4p-clock-logo {
     width: 200px;
+  }
+  .t4p-logo-toggle {
+    width: 32px;
+    height: 32px;
+  }
+  .t4p-logo-toggle svg {
+    width: 18px;
+    height: 18px;
   }
   .t4p-title {
     font-size: 2rem;
@@ -584,46 +577,45 @@ a {
     padding: 14px 16px 14px 10px;
   }
   
-  .donation-box {
-    top: 75%;
-    margin-top: 30px;
-    padding: 12px 20px;
-    gap: 16px;
-    max-width: 90%;
-  }
   
-  .donation-watermelon {
-    width: 32px;
-    height: 32px;
-  }
-  
-  .donation-text {
-    font-size: 16px;
-  }
-  
-  .donation-amount {
-    font-size: 18px;
-  }
   
   .quick-access-grid {
     top: 65%;
   }
   
-  .t4p-clock {
-    top: 12px;
-    left: 12px;
-    font-size: 1rem;
-    padding: 2px 8px 2px 4px;
-  }
+  
   .t4p-top-right-icons {
     top: 12px;
     right: 12px;
     gap: 10px;
   }
-  .t4p-settings {
-    bottom: 12px;
-    left: 12px;
-  }
+  
+   
+   .donation-box-bottom-left {
+     bottom: 12px;
+     left: 12px;
+     padding: 12px 16px;
+     gap: 12px;
+   }
+   
+   .donation-box-bottom-left .donation-icon {
+     width: 32px;
+     height: 32px;
+   }
+   
+   .donation-box-bottom-left .donation-amount {
+     font-size: 18px;
+   }
+   
+   .donation-box-bottom-left .donation-label {
+     font-size: 11px;
+   }
+   
+   .donation-box-bottom-left .donation-refresh-btn {
+     width: 24px;
+     height: 24px;
+     margin-left: 8px;
+   }
   .t4p-icon-btn {
     padding: 6px;
   }
@@ -677,13 +669,13 @@ a {
 
 .quick-access-grid {
   position: absolute;
-  top: 65%;
+  top: 50%;
   left: 50%;
   transform: translateX(-50%);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 12px;
-  max-width: 584px;
+  max-width: 500px;
   width: 100%;
   padding: 0 20px;
 }
@@ -691,20 +683,20 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(255, 255, 255, 0.9);
+  background: transparent;
   border-radius: 8px;
   padding: 8px 4px;
   text-decoration: none;
   color: #333;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+  backdrop-filter: none;
+  border: none;
 }
 .quick-access-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(128, 128, 128, 0.1);
+  border-radius: 8px;
 }
 .quick-access-item img {
   width: 36px;
@@ -720,14 +712,27 @@ a {
   line-height: 1.1;
   color: #333;
 }
+
+/* When background is gallery mode (images), make shortcut text white */
+section[style*="backgroundImage"] .quick-access-item span {
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
 @media (max-width: 768px) {
   .quick-access-grid {
-    top: 50%;
+    top: 45%;
     gap: 10px;
     padding: 0 16px;
+    max-width: 420px;
   }
   .quick-access-item {
     padding: 6px 3px;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+  }
+  .quick-access-item:hover {
+    background: rgba(128, 128, 128, 0.1);
   }
   .quick-access-item img {
     width: 28px;
@@ -737,10 +742,26 @@ a {
   .quick-access-item span {
     font-size: 0.6rem;
   }
+  
+  /* When background is gallery mode (images), make shortcut text white on mobile */
+  section[style*="backgroundImage"] .quick-access-item span {
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  }
+  
+  .t4p-add-shortcut-btn {
+    width: 50px;
+    min-height: 50px;
+  }
+  
+  .t4p-add-shortcut-btn::after {
+    font-size: 0.6rem;
+  }
 }
 @media (max-width: 480px) {
   .t4p-logo-container {
     top: 15%;
+    gap: 8px;
   }
   .t4p-logo {
     width: 160px;
@@ -748,39 +769,61 @@ a {
   .t4p-clock-logo {
     width: 160px;
   }
-  .t4p-clock-display {
-    font-size: 2.5rem;
+  .t4p-logo-toggle {
+    width: 28px;
+    height: 28px;
   }
+  .t4p-logo-toggle svg {
+    width: 16px;
+    height: 16px;
+  }
+  
   .search-container {
     top: 30%;
   }
   .quick-access-grid {
-    top: 45%;
+    top: 40%;
     gap: 8px;
     padding: 0 12px;
+    max-width: 360px;
   }
   
-  .donation-box {
-    top: 70%;
-    padding: 10px 16px;
-    gap: 12px;
-  }
+     .donation-box-bottom-left {
+     bottom: 8px;
+     left: 8px;
+     padding: 10px 14px;
+     gap: 10px;
+   }
+   
+   .donation-box-bottom-left .donation-icon {
+     width: 28px;
+     height: 28px;
+   }
+   
+   .donation-box-bottom-left .donation-amount {
+     font-size: 16px;
+   }
+   
+       .donation-box-bottom-left .donation-label {
+      font-size: 10px;
+    }
+    
+    .donation-box-bottom-left .donation-refresh-btn {
+      width: 20px;
+      height: 20px;
+      margin-left: 6px;
+    }
   
-  .donation-watermelon {
-    width: 28px;
-    height: 28px;
-  }
-  
-  .donation-text {
-    font-size: 14px;
-  }
-  
-  .donation-amount {
-    font-size: 16px;
-  }
+
   
   .quick-access-item {
     padding: 5px 2px;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+  }
+  .quick-access-item:hover {
+    background: rgba(128, 128, 128, 0.1);
   }
   
   .quick-access-item img {
@@ -792,13 +835,37 @@ a {
   .quick-access-item span {
     font-size: 0.55rem;
   }
+  
+  /* When background is gallery mode (images), make shortcut text white on small mobile */
+  section[style*="backgroundImage"] .quick-access-item span {
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  }
+  
+  .t4p-add-shortcut-btn {
+    width: 45px;
+    min-height: 45px;
+  }
+  
+     .t4p-apps-bubble,
+   .t4p-profile-bubble,
+   .t4p-notifications-bubble,
+   .t4p-gamification-bubble {
+     top: 50px;
+     right: 12px;
+     min-width: 85vw;
+   }
+  
+  .t4p-add-shortcut-btn::after {
+    font-size: 0.55rem;
+  }
 }
 
 .t4p-apps-bubble {
   position: fixed;
   left: auto;
   right: 32px;
-  bottom: 72px;
+  top: 72px;
   min-width: 320px;
   max-width: 95vw;
   padding: 28px 20px 18px 20px;
@@ -813,7 +880,7 @@ a {
   position: fixed;
   left: auto;
   right: 32px;
-  bottom: 72px;
+  top: 72px;
   min-width: 280px;
   max-width: 95vw;
   padding: 24px 20px 20px 20px;
@@ -828,11 +895,11 @@ a {
   position: fixed;
   left: auto;
   right: 32px;
-  bottom: 72px;
-  min-width: 320px;
+  top: 72px;
+  min-width: 280px;
   max-width: 95vw;
-  max-height: 400px;
-  padding: 24px 20px 20px 20px;
+  max-height: 300px;
+  padding: 20px 16px 16px 16px;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
@@ -905,13 +972,13 @@ a {
 @media (max-width: 600px) {
   .t4p-apps-bubble {
     right: 10px;
-    bottom: 10px;
+    top: 60px;
     min-width: 90vw;
     padding: 14px 4px 10px 4px;
   }
   .t4p-apps-bubble:after {
     right: 12px;
-    bottom: 12px;
+    top: 60px;
     border-top: 12px solid transparent;
     border-bottom: 12px solid transparent;
     border-left: 12px solid #fff;
@@ -1041,6 +1108,83 @@ a {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+/* Gamification Bubble Styles */
+.t4p-gamification-bubble {
+  position: fixed;
+  left: auto;
+  right: 32px;
+  top: 72px;
+  min-width: 320px;
+  max-width: 95vw;
+  padding: 28px 20px 18px 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  z-index: 2000;
+  animation: fadeInBubble 0.3s ease-out;
+}
+
+.t4p-gamification-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.t4p-gamification-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #188038;
+  margin-bottom: 8px;
+}
+
+.t4p-gamification-title img {
+  width: 24px;
+  height: 24px;
+}
+
+.t4p-gamification-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.t4p-gamification-item {
+  padding: 16px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.t4p-gamification-headline {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.t4p-gamification-summary {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.t4p-gamification-placeholder {
+  font-size: 12px;
+  color: #188038;
+  font-weight: 500;
+  font-style: italic;
+  text-align: center;
+  padding: 8px;
+  background: rgba(24, 128, 56, 0.1);
+  border-radius: 6px;
+  border: 1px dashed #188038;
 }
 
 .t4p-notifications-title {
@@ -1207,16 +1351,18 @@ a {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.9);
+  background: transparent;
   border: 2px dashed #188038;
   border-radius: 8px;
   padding: 8px 4px;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+  backdrop-filter: none;
   min-height: 60px;
+  width: 60px;
+  transform: translateY(0);
+  color: #188038;
 }
 
 .t4p-add-shortcut-btn:hover {
@@ -1224,6 +1370,16 @@ a {
   border-color: #188038;
   transform: translateY(-1px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.t4p-add-shortcut-btn::after {
+  content: 'Add Shortcut';
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.1;
+  color: #188038;
+  margin-top: 4px;
 }
 
 .t4p-add-shortcut-btn svg {
