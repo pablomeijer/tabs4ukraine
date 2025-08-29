@@ -32,7 +32,7 @@ section {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background: #f8f8f2;
+  background: #F8F8F0;
   z-index: 1;
 }
 
@@ -56,7 +56,26 @@ section {
   display: block;
 }
 
+.t4p-digital-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #188038;
+  font-family: 'Coustard', serif;
+}
 
+.t4p-clock-time {
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.t4p-clock-date {
+  font-size: 1.2rem;
+  font-weight: 400;
+  opacity: 0.8;
+}
 
 .t4p-logo-toggle {
   background: rgba(24, 128, 56, 0.1);
@@ -64,7 +83,7 @@ section {
   border-radius: 50%;
   width: 36px;
   height: 36px;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -73,11 +92,67 @@ section {
   margin-left: 16px;
 }
 
+.t4p-logo-container:hover .t4p-logo-toggle {
+  display: flex;
+}
+
 .t4p-logo-toggle:hover {
   background: rgba(24, 128, 56, 0.2);
   border-color: #0f5a28;
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(24, 128, 56, 0.25);
+}
+
+.t4p-logo-toggle-options {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: 1px solid #188038;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1501;
+  margin-top: 8px;
+}
+
+.t4p-logo-toggle-options:before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #188038;
+}
+
+.t4p-logo-toggle-option {
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.t4p-logo-toggle-option:hover {
+  background: rgba(24, 128, 56, 0.1);
+  border-color: #188038;
+}
+
+.t4p-logo-toggle-option.active {
+  background: #188038;
+  border-color: #188038;
+  color: #fff;
 }
 
 .t4p-title {
@@ -551,6 +626,14 @@ a {
   .t4p-clock-logo {
     width: 200px;
   }
+  
+  .t4p-digital-clock .t4p-clock-time {
+    font-size: 2.5rem;
+  }
+  
+  .t4p-digital-clock .t4p-clock-date {
+    font-size: 1rem;
+  }
   .t4p-logo-toggle {
     width: 32px;
     height: 32px;
@@ -750,12 +833,17 @@ section[style*="backgroundImage"] .quick-access-item span {
   }
   
   .t4p-add-shortcut-btn {
-    width: 50px;
-    min-height: 50px;
+    width: auto;
+    min-height: auto;
   }
   
   .t4p-add-shortcut-btn::after {
     font-size: 0.6rem;
+  }
+  
+  .t4p-add-shortcut-btn svg {
+    width: 28px;
+    height: 28px;
   }
 }
 @media (max-width: 480px) {
@@ -768,6 +856,14 @@ section[style*="backgroundImage"] .quick-access-item span {
   }
   .t4p-clock-logo {
     width: 160px;
+  }
+  
+  .t4p-digital-clock .t4p-clock-time {
+    font-size: 2rem;
+  }
+  
+  .t4p-digital-clock .t4p-clock-date {
+    font-size: 0.9rem;
   }
   .t4p-logo-toggle {
     width: 28px;
@@ -843,8 +939,8 @@ section[style*="backgroundImage"] .quick-access-item span {
   }
   
   .t4p-add-shortcut-btn {
-    width: 45px;
-    min-height: 45px;
+    width: auto;
+    min-height: auto;
   }
   
      .t4p-apps-bubble,
@@ -858,6 +954,11 @@ section[style*="backgroundImage"] .quick-access-item span {
   
   .t4p-add-shortcut-btn::after {
     font-size: 0.55rem;
+  }
+  
+  .t4p-add-shortcut-btn svg {
+    width: 24px;
+    height: 24px;
   }
 }
 
@@ -906,6 +1007,11 @@ section[style*="backgroundImage"] .quick-access-item span {
   z-index: 2000;
   animation: fadeInBubble 0.3s ease-out;
   overflow-y: auto;
+}
+
+.t4p-notifications-bubble-half-width {
+  min-width: 140px;
+  max-width: 47.5vw;
 }
 .t4p-apps-bubble:after {
   content: '';
@@ -1101,6 +1207,27 @@ section[style*="backgroundImage"] .quick-access-item span {
   outline: none;
   border-color: #188038;
   box-shadow: 0 0 0 2px rgba(24, 128, 56, 0.1);
+}
+
+.t4p-profile-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.t4p-profile-link {
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 0;
+  transition: color 0.2s ease;
+}
+
+.t4p-profile-link:hover {
+  color: #188038;
 }
 
 /* Notifications Bubble Styles */
@@ -1359,8 +1486,8 @@ section[style*="backgroundImage"] .quick-access-item span {
   transition: all 0.2s ease;
   box-shadow: none;
   backdrop-filter: none;
-  min-height: 60px;
-  width: 60px;
+  width: auto;
+  min-height: auto;
   transform: translateY(0);
   color: #188038;
 }
@@ -1383,12 +1510,86 @@ section[style*="backgroundImage"] .quick-access-item span {
 }
 
 .t4p-add-shortcut-btn svg {
+  width: 36px;
+  height: 36px;
   margin-bottom: 4px;
   transition: transform 0.2s ease;
 }
 
 .t4p-add-shortcut-btn:hover svg {
   transform: scale(1.1);
+}
+
+/* Logo Toggle Modal */
+.t4p-logo-toggle-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.t4p-logo-toggle-modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 400px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.t4p-logo-toggle-modal h2 {
+  margin: 0 0 24px 0;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.t4p-logo-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.t4p-logo-option {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.t4p-logo-option:hover {
+  border-color: #188038;
+  background: rgba(24, 128, 56, 0.05);
+}
+
+.t4p-logo-option.active {
+  border-color: #188038;
+  background: rgba(24, 128, 56, 0.1);
+}
+
+.t4p-logo-option span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
 }
 
 /* Responsive Shortcut Modal */
@@ -1449,3 +1650,4 @@ section[style*="backgroundImage"] .quick-access-item span {
     font-size: 0.65rem;
   }
 }
+

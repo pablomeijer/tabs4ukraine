@@ -20,6 +20,10 @@ import RefreshIcon from '../assets/icons/refresh_24dp_FFFFFF_FILL0_wght400_GRAD0
 import RefreshIconBlack from '../assets/icons/refresh_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg'
 import TrophyIcon from '../assets/icons/trophy_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg'
 
+// Import new cached icons
+import CachedIconBlack from '../assets/icons/cached_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg'
+import CachedIconWhite from '../assets/icons/cached_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg'
+
 function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground, adCount, onAdUpgrade }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void, adCount: number, onAdUpgrade: (count: number) => void }) {
   const [activeTab, setActiveTab] = useState('General');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -134,8 +138,8 @@ const backgroundImageNames = [
   'pexels-leon-natan-2996182-6850831.jpg'
 ]
 
-// Gallery images array using dynamic imports
-const galleryImages = backgroundImageNames.map(name => `/src/assets/backgrounds/${name}`)
+// Gallery images array using public directory
+const galleryImages = backgroundImageNames.map(name => `/img/backgrounds/${name}`)
 
 // Function to get available background images
 const getAvailableBackgroundImages = () => {
@@ -156,6 +160,7 @@ export const NewTab = () => {
   const [backgroundMode, setBackgroundMode] = useState('default');
   const [customBg, setCustomBg] = useState<string | null>(null);
   const [galleryBg, setGalleryBg] = useState(galleryImages[0]);
+  const [logoType, setLogoType] = useState<'logo' | 'clock' | 'watermelon'>('logo');
   const [appsOpen, setAppsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -180,6 +185,7 @@ export const NewTab = () => {
   const [showShortcutModal, setShowShortcutModal] = useState(false);
   const [newShortcut, setNewShortcut] = useState({ name: '', url: '' });
   const [shortcutError, setShortcutError] = useState('');
+  const [showLogoToggle, setShowLogoToggle] = useState(false);
 
   // Function to add new shortcut
   const addShortcut = () => {
@@ -201,11 +207,16 @@ export const NewTab = () => {
   // Load settings from storage on mount
   useEffect(() => {
     chrome.storage.sync.get(['adCount', 'backgroundMode'], (result: { adCount?: number, backgroundMode?: string }) => {
+      console.log('Loading settings from storage:', result);
       if (result.adCount) {
         setAdCount(result.adCount);
       }
       if (result.backgroundMode) {
+        console.log('Setting background mode from storage:', result.backgroundMode);
         setBackgroundMode(result.backgroundMode);
+      } else {
+        console.log('No background mode in storage, using default');
+        setBackgroundMode('default');
       }
     });
   }, []);
@@ -225,11 +236,14 @@ export const NewTab = () => {
     // If switching to gallery mode, immediately pick a random image
     if (mode === 'gallery') {
       const availableImages = getAvailableBackgroundImages();
+      console.log('Available gallery images:', availableImages);
       if (availableImages.length > 0) {
         const randomIndex = Math.floor(Math.random() * availableImages.length);
         const selectedImage = availableImages[randomIndex];
         console.log('Setting gallery background to:', selectedImage);
         setGalleryBg(selectedImage);
+      } else {
+        console.warn('No gallery images available');
       }
     }
   };
@@ -315,6 +329,7 @@ export const NewTab = () => {
     // Pick a random gallery image when gallery mode is selected
     if (backgroundMode === 'gallery') {
       const availableImages = getAvailableBackgroundImages();
+      console.log('Gallery mode selected, available images:', availableImages);
       if (availableImages.length === 0) {
         console.warn('No background images available, falling back to default mode');
         setBackgroundMode('default');
@@ -323,10 +338,14 @@ export const NewTab = () => {
       
       const idx = Math.floor(Math.random() * availableImages.length);
       const selectedImage = availableImages[idx];
+      console.log('Selected gallery image:', selectedImage);
       
       // Test if image loads successfully, fallback to default if it fails
       const img = new Image();
-      img.onload = () => setGalleryBg(selectedImage);
+      img.onload = () => {
+        console.log('Gallery image loaded successfully:', selectedImage);
+        setGalleryBg(selectedImage);
+      };
       img.onerror = () => {
         console.warn(`Failed to load background image: ${selectedImage}`);
         // Fallback to default background
@@ -340,18 +359,23 @@ export const NewTab = () => {
   useEffect(() => {
     if (backgroundMode === 'gallery' && !galleryBg) {
       const availableImages = getAvailableBackgroundImages();
+      console.log('Initial gallery load, available images:', availableImages);
       if (availableImages.length === 0) {
         console.warn('No background images available, falling back to default mode');
         setBackgroundMode('default');
         return;
       }
       
-      const idx = Math.floor(Math.random() * galleryImages.length);
+      const idx = Math.floor(Math.random() * availableImages.length);
       const selectedImage = availableImages[idx];
+      console.log('Initial gallery image selected:', selectedImage);
       
       // Test if image loads successfully, fallback to default if it fails
       const img = new Image();
-      img.onload = () => setGalleryBg(selectedImage);
+      img.onload = () => {
+        console.log('Initial gallery image loaded successfully:', selectedImage);
+        setGalleryBg(selectedImage);
+      };
       img.onerror = () => {
         console.warn(`Failed to load initial background image: ${selectedImage}`);
         // Fallback to default background
@@ -362,19 +386,19 @@ export const NewTab = () => {
   }, [backgroundMode, galleryBg]);
 
   const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (searchQuery.trim()) {
-      const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery.trim())}`
-      window.open(searchUrl, '_blank')
-      setSearchQuery('')
+      const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery.trim())}`;
+      window.open(searchUrl, '_blank');
+      setSearchQuery('');
     }
-  }
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      handleSearch(e)
+      handleSearch(e);
     }
-  }
+  };
 
   const handleUploadBackground = (file: File) => {
     const reader = new FileReader();
@@ -382,32 +406,53 @@ export const NewTab = () => {
     reader.readAsDataURL(file);
   };
 
+
+
   const handleRefreshBackground = () => {
     if (backgroundMode === 'gallery') {
       const availableImages = getAvailableBackgroundImages();
+      console.log('Refreshing gallery, available images:', availableImages);
       if (availableImages.length > 0) {
         const randomIndex = Math.floor(Math.random() * availableImages.length);
         const selectedImage = availableImages[randomIndex];
         console.log('Refreshing gallery background to:', selectedImage);
         setGalleryBg(selectedImage);
+      } else {
+        console.warn('No images available for refresh');
       }
+    } else {
+      console.log('Refresh called but not in gallery mode, current mode:', backgroundMode);
     }
   };
 
+  const handleLogoToggle = () => {
+    setShowLogoToggle(!showLogoToggle);
+  };
+
+  const handleLogoTypeChange = (type: 'logo' | 'clock' | 'watermelon') => {
+    setLogoType(type);
+    setShowLogoToggle(false);
+  };
+
+  // Debug logging for background mode
+  console.log('Current background mode:', backgroundMode);
+  console.log('Gallery background:', galleryBg);
+  console.log('Custom background:', customBg);
+  
+  const sectionStyle = backgroundMode === 'default'
+    ? { background: '#F8F8F0' }
+    : backgroundMode === 'classic'
+    ? { background: '#fff' }
+    : backgroundMode === 'upload' && customBg
+    ? { backgroundImage: `url(${customBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+    : backgroundMode === 'gallery'
+    ? { backgroundImage: `url(${galleryBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+    : { background: '#F8F8F0' };
+  
+  console.log('Applied section style:', sectionStyle);
+  
   return (
-    <section
-      style={
-        backgroundMode === 'default'
-          ? { background: 'transparent' }
-          : backgroundMode === 'classic'
-          ? { background: '#fff' }
-          : backgroundMode === 'upload' && customBg
-          ? { backgroundImage: `url(${customBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-          : backgroundMode === 'gallery'
-          ? { backgroundImage: `url(${galleryBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-          : { background: 'transparent' }
-      }
-    >
+    <section style={sectionStyle}>
               <SettingsModal
           open={settingsOpen}
           onClose={() => setSettingsOpen(false)}
@@ -519,6 +564,19 @@ export const NewTab = () => {
                   </>
                 )}
               </div>
+              
+              {/* Additional Profile Links */}
+              <div className="t4p-profile-links">
+                <a href="#" className="t4p-profile-link">Use Tabs4Palestine</a>
+                <a href="#" className="t4p-profile-link">Tabs4Palestine Browser</a>
+                <a href="#" className="t4p-profile-link">Tabs4Palestine Search</a>
+                <a href="#" className="t4p-profile-link">Tabs4Palestine for Companies</a>
+                <a href="#" className="t4p-profile-link">Search</a>
+                <a href="#" className="t4p-profile-link">Settings</a>
+                <a href="#" className="t4p-profile-link">Privacy Policy</a>
+                <a href="#" className="t4p-profile-link">Help</a>
+                <a href="#" className="t4p-profile-link">Feedback</a>
+              </div>
             </div>
           ) : (
             <div className="t4p-profile-section">
@@ -583,7 +641,7 @@ export const NewTab = () => {
       
       {/* Notifications Bubble */}
       {notificationsOpen && (
-        <div className="t4p-notifications-bubble">
+        <div className="t4p-notifications-bubble t4p-notifications-bubble-half-width">
           <button className="t4p-modal-close" onClick={() => setNotificationsOpen(false)}>×</button>
           <div className="t4p-notifications-section">
             <div className="t4p-notifications-title">Palestine News</div>
@@ -668,14 +726,55 @@ export const NewTab = () => {
       <div className="center-content">
                  {toggles.logo && (
            <div className="t4p-logo-container">
-             <img 
-               src={backgroundMode === 'gallery' ? logoWhite : logoGreen} 
-               alt="tabs4palestine logo" 
-               className="t4p-logo" 
-             />
-                           <button className="t4p-logo-toggle" title="Refresh" onClick={handleRefreshBackground}>
-                <img src={backgroundMode === 'gallery' ? RefreshIcon : RefreshIconBlack} width="20" height="20" alt="Refresh" />
-              </button>
+             {logoType === 'logo' && (
+               <img 
+                 src={backgroundMode === 'gallery' ? logoWhite : logoGreen} 
+                 alt="tabs4palestine logo" 
+                 className="t4p-logo" 
+               />
+             )}
+             {logoType === 'clock' && (
+               <div className="t4p-digital-clock">
+                 <div className="t4p-clock-time">{time}</div>
+                 <div className="t4p-clock-date">{new Date().toLocaleDateString()}</div>
+               </div>
+             )}
+             {logoType === 'watermelon' && (
+               <img 
+                 src="/img/original_watermelon.png" 
+                 alt="Watermelon" 
+                 className="t4p-logo" 
+               />
+             )}
+             <button className="t4p-logo-toggle" title="Toggle Logo" onClick={handleLogoToggle}>
+               <img 
+                 src={backgroundMode === 'gallery' ? CachedIconWhite : CachedIconBlack} 
+                 width="20" 
+                 height="20" 
+                 alt="Toggle" 
+               />
+             </button>
+             {showLogoToggle && (
+               <div className="t4p-logo-toggle-options">
+                 <button 
+                   className={`t4p-logo-toggle-option ${logoType === 'clock' ? 'active' : ''}`}
+                   onClick={() => handleLogoTypeChange('clock')}
+                   title="Show Clock"
+                 >
+                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                     <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                     <polyline points="12,6 12,12 16,14" stroke="currentColor" strokeWidth="2"/>
+                   </svg>
+                 </button>
+                 <button 
+                   className={`t4p-logo-toggle-option ${logoType === 'watermelon' ? 'active' : ''}`}
+                   onClick={() => handleLogoTypeChange('watermelon')}
+                   title="Show Watermelon"
+                 >
+                   <img src="/img/original_watermelon.png" width="16" height="16" alt="Watermelon" />
+                 </button>
+               </div>
+             )}
            </div>
          )}
         {toggles.search && (
@@ -749,6 +848,8 @@ export const NewTab = () => {
       {adCount >= 2 && (
         <EmbeddedAdComponent position="bottom-right-top" adIndex={1} />
       )}
+
+
 
       {/* Shortcut Modal */}
       {showShortcutModal && (
