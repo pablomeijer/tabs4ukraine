@@ -4,7 +4,7 @@ import EmbeddedAdComponent from './EmbeddedAdComponent'
 import AdvertisementsUpgrade from './AdvertisementsUpgrade'
 import AboutPage from './AboutPage'
 import AuthComponent from './AuthComponent'
-import { auth, userProfile } from '../lib/supabase'
+import { auth, userProfile, donationTracker, sponsoredTracker } from '../lib/supabase'
 
 import './NewTab.css'
 import logoWhite from '../assets/logo_white_transparent.png'
@@ -24,7 +24,7 @@ import TrophyIcon from '../assets/icons/trophy_24dp_FFFFFF_FILL0_wght400_GRAD0_o
 import CachedIconBlack from '../assets/icons/cached_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg'
 import CachedIconWhite from '../assets/icons/cached_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg'
 
-function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground, adCount, onAdUpgrade }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void, adCount: number, onAdUpgrade: (count: number) => void }) {
+function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground, adCount, onAdUpgrade, sponsoredShortcutsCount, setSponsoredShortcutsCount, showMoneyRaised, setShowMoneyRaised, showShortcuts, setShowShortcuts, shortcutsType, setShortcutsType }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void, adCount: number, onAdUpgrade: (count: number) => void, sponsoredShortcutsCount: number, setSponsoredShortcutsCount: (count: number) => void, showMoneyRaised: boolean, setShowMoneyRaised: (show: boolean) => void, showShortcuts: boolean, setShowShortcuts: (show: boolean) => void, shortcutsType: 'advertisements' | 'most-visited' | 'favorites', setShortcutsType: (type: 'advertisements' | 'most-visited' | 'favorites') => void }) {
   const [activeTab, setActiveTab] = useState('General');
   const fileInputRef = useRef<HTMLInputElement>(null);
   if (!open) return null;
@@ -33,7 +33,7 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
       <div className="t4p-modal-bubble" onClick={e => e.stopPropagation()}>
         <button className="t4p-modal-close" onClick={onClose} style={{position: 'absolute', top: 16, right: 18}}>×</button>
         <div className="t4p-modal-tabs">
-          {['General', 'Background', 'Advertisements', 'Account', 'About'].map(tab => (
+          {['General', 'Background', 'Advertisements', 'Shortcuts', 'Account', 'About'].map(tab => (
             <button
               key={tab}
               className={`t4p-modal-tab${activeTab === tab ? ' t4p-modal-tab-active' : ''}`}
@@ -74,6 +74,13 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
                   <span className="t4p-slider"></span>
                 </label>
               </div>
+              <div className="t4p-toggle-row">
+                <span className="t4p-toggle-label">Show Money Raised</span>
+                <label className="t4p-switch">
+                  <input type="checkbox" checked={showMoneyRaised} onChange={e => setShowMoneyRaised(e.target.checked)} />
+                  <span className="t4p-slider"></span>
+                </label>
+              </div>
             </div>
           )}
           {activeTab === 'Background' && (
@@ -95,16 +102,130 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
             </div>
           )}
           {activeTab === 'Advertisements' && (
-            <AdvertisementsUpgrade 
-              currentAdCount={adCount} 
-              onUpgrade={onAdUpgrade} 
-            />
+            <div>
+              <AdvertisementsUpgrade 
+                currentAdCount={adCount} 
+                onUpgrade={onAdUpgrade} 
+              />
+              
+              <div className="t4p-sponsored-shortcuts-section">
+                <div className="t4p-sponsored-header">
+                  <h3>Sponsored Shortcuts</h3>
+                  <div className="t4p-sponsored-earnings">
+                    <span className="t4p-earnings-text">10 clicks = $5 (max 10/day)</span>
+                  </div>
+                </div>
+                
+                <div className="t4p-sponsored-control-box">
+                  <div className="t4p-sponsored-controls">
+                    <label className="t4p-sponsored-label">
+                      Show {sponsoredShortcutsCount} shortcuts
+                    </label>
+                    <div className="t4p-slider-container">
+                      <input
+                        type="range"
+                        min="0"
+                        max="10"
+                        value={sponsoredShortcutsCount}
+                        onChange={(e) => setSponsoredShortcutsCount(parseInt(e.target.value))}
+                        className="t4p-sponsored-slider"
+                      />
+                      <div className="t4p-slider-labels">
+                        <span>0</span>
+                        <span>10</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="t4p-sponsored-explanation">
+                    <div className="t4p-explanation-title">💡 How Sponsored Shortcuts Work</div>
+                    <div className="t4p-explanation-text">
+                      Sponsored shortcuts are carefully selected websites that support Palestinian causes. 
+                      Each click on a sponsored shortcut generates $0.50 in donations. You can choose how many 
+                      sponsored shortcuts to display (0-10), and you can earn up to $5 per day through clicks. 
+                      These shortcuts appear alongside your regular shortcuts and help fund Palestinian relief efforts.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
           {activeTab === 'Account' && (
             <AuthComponent onAuthChange={(user) => {
               // Handle user auth state change
               console.log('User auth changed:', user)
             }} />
+          )}
+          {activeTab === 'Shortcuts' && (
+            <div className="t4p-shortcuts-section">
+              <div className="t4p-shortcuts-header">
+                <h3>Shortcuts Settings</h3>
+                <div className="t4p-shortcuts-toggle">
+                  <span className="t4p-toggle-label">Show Shortcuts</span>
+                  <label className="t4p-switch">
+                    <input 
+                      type="checkbox" 
+                      checked={showShortcuts} 
+                      onChange={e => setShowShortcuts(e.target.checked)} 
+                    />
+                    <span className="t4p-slider"></span>
+                  </label>
+                </div>
+              </div>
+              
+              {showShortcuts && (
+                <div className="t4p-shortcuts-type-section">
+                  <div className="t4p-shortcuts-type-header">
+                    <h4>Shortcut Type</h4>
+                    <p>Choose what type of shortcuts to display</p>
+                  </div>
+                  
+                  <div className="t4p-shortcuts-type-options">
+                    <label className="t4p-shortcuts-type-option">
+                      <input
+                        type="radio"
+                        name="shortcutsType"
+                        value="advertisements"
+                        checked={shortcutsType === 'advertisements'}
+                        onChange={e => setShortcutsType(e.target.value as 'advertisements' | 'most-visited' | 'favorites')}
+                      />
+                      <div className="t4p-option-content">
+                        <div className="t4p-option-title">Sponsored Advertisements</div>
+                        <div className="t4p-option-description">Show sponsored shortcuts that support Palestinian causes</div>
+                      </div>
+                    </label>
+                    
+                    <label className="t4p-shortcuts-type-option">
+                      <input
+                        type="radio"
+                        name="shortcutsType"
+                        value="most-visited"
+                        checked={shortcutsType === 'most-visited'}
+                        onChange={e => setShortcutsType(e.target.value as 'advertisements' | 'most-visited' | 'favorites')}
+                      />
+                      <div className="t4p-option-content">
+                        <div className="t4p-option-title">Most Visited</div>
+                        <div className="t4p-option-description">Show your most frequently visited websites</div>
+                      </div>
+                    </label>
+                    
+                    <label className="t4p-shortcuts-type-option">
+                      <input
+                        type="radio"
+                        name="shortcutsType"
+                        value="favorites"
+                        checked={shortcutsType === 'favorites'}
+                        onChange={e => setShortcutsType(e.target.value as 'advertisements' | 'most-visited' | 'favorites')}
+                      />
+                      <div className="t4p-option-content">
+                        <div className="t4p-option-title">Favorites</div>
+                        <div className="t4p-option-description">Show your bookmarked favorite websites</div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
           {activeTab === 'About' && <AboutPage />}
         </div>
@@ -172,6 +293,7 @@ export const NewTab = () => {
   const [authUsername, setAuthUsername] = useState('');
      const [currentUser, setCurrentUser] = useState<any>(null);
    const [adCount, setAdCount] = useState(1);
+   const [totalDonations, setTotalDonations] = useState(0);
   const [shortcuts, setShortcuts] = useState([
     { name: 'Huda Beauty', url: 'https://www.hudabeauty.com', icon: '/img/8_icons/huda-beauty.png' },
     { name: 'Watan Apparel', url: 'https://www.watanapparel.com', icon: '/img/8_icons/watan.png' },
@@ -180,12 +302,18 @@ export const NewTab = () => {
     { name: 'Ben & Jerry\'s', url: 'https://www.benjerry.com', icon: '/img/8_icons/white-Ben-and-Jerrys-Logo-1990s-500x281.png' },
     { name: 'Darzah', url: 'https://www.darzah.org', icon: '/img/8_icons/white-darzah_logo.png' },
     { name: 'NOL Collective', url: 'https://www.nolcollective.com', icon: '/img/8_icons/white-nol-collective.png' },
-    { name: 'SEP', url: 'https://www.sep.com', icon: '/img/8_icons/white-sep_icon_512x512.png' }
+    { name: 'SEP', url: 'https://www.sep.com', icon: '/img/8_icons/white-sep_icon_512x512.png' },
+    { name: 'Palestine Store', url: 'https://www.palestinestore.com', icon: '/img/8_icons/01-scaled-2.jpg' },
+    { name: 'Paliroots', url: 'https://www.paliroots.com', icon: '/img/8_icons/paliroots-logo.png' }
   ]);
   const [showShortcutModal, setShowShortcutModal] = useState(false);
   const [newShortcut, setNewShortcut] = useState({ name: '', url: '' });
   const [shortcutError, setShortcutError] = useState('');
   const [showLogoToggle, setShowLogoToggle] = useState(false);
+  const [sponsoredShortcutsCount, setSponsoredShortcutsCount] = useState(8);
+  const [showMoneyRaised, setShowMoneyRaised] = useState(true);
+  const [showShortcuts, setShowShortcuts] = useState(true);
+  const [shortcutsType, setShortcutsType] = useState<'advertisements' | 'most-visited' | 'favorites'>('advertisements');
 
   // Function to add new shortcut
   const addShortcut = () => {
@@ -206,7 +334,7 @@ export const NewTab = () => {
 
   // Load settings from storage on mount
   useEffect(() => {
-    chrome.storage.sync.get(['adCount', 'backgroundMode'], (result: { adCount?: number, backgroundMode?: string }) => {
+    chrome.storage.sync.get(['adCount', 'backgroundMode', 'sponsoredShortcutsCount'], (result: { adCount?: number, backgroundMode?: string, sponsoredShortcutsCount?: number }) => {
       console.log('Loading settings from storage:', result);
       if (result.adCount) {
         setAdCount(result.adCount);
@@ -218,13 +346,68 @@ export const NewTab = () => {
         console.log('No background mode in storage, using default');
         setBackgroundMode('default');
       }
+      if (result.sponsoredShortcutsCount !== undefined) {
+        setSponsoredShortcutsCount(result.sponsoredShortcutsCount);
+      }
     });
+
+    // Load total donations
+    loadTotalDonations();
+    
+    // Track tab open when component mounts (new tab opened)
+    trackTabOpen();
   }, []);
 
+  // Load total donations from database
+  const loadTotalDonations = async () => {
+    try {
+      console.log('Loading total donations from database...');
+      const { data, error } = await donationTracker.getTotalDonations();
+      console.log('Database response:', { data, error });
+      
+      if (error) {
+        console.error('Error loading total donations:', error);
+        // Keep current value if there's an error
+        return;
+      } else {
+        console.log('Setting total donations to:', data);
+        setTotalDonations(data || 0);
+      }
+    } catch (error) {
+      console.error('Error loading total donations:', error);
+    }
+  };
+
+  // Track tab open
+  const trackTabOpen = async () => {
+    try {
+      await donationTracker.trackTabOpen(currentUser?.id || null, adCount);
+      // Reload total donations after tracking
+      loadTotalDonations();
+    } catch (error) {
+      console.error('Error tracking tab open:', error);
+    }
+  };
+
   // Save ad count to storage when it changes
-  const handleAdUpgrade = (count: number) => {
+  const handleAdUpgrade = async (count: number) => {
     setAdCount(count);
     chrome.storage.sync.set({ adCount: count });
+    
+    // Update user's ad count in database if logged in
+    if (currentUser?.id) {
+      try {
+        await userProfile.updateProfile(currentUser.id, { ad_count: count });
+      } catch (error) {
+        console.error('Error updating ad count in database:', error);
+      }
+    }
+  };
+
+  // Save sponsored shortcuts count to storage when it changes
+  const handleSponsoredShortcutsChange = (count: number) => {
+    setSponsoredShortcutsCount(count);
+    chrome.storage.sync.set({ sponsoredShortcutsCount: count });
   };
 
   // Save background mode to storage when it changes
@@ -324,6 +507,17 @@ export const NewTab = () => {
     // Check for current user on component mount
     checkCurrentUser()
   }, [])
+
+  // Subscribe to real-time donation updates
+  useEffect(() => {
+    const subscription = donationTracker.subscribeToDonationUpdates((total) => {
+      setTotalDonations(total);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     // Pick a random gallery image when gallery mode is selected
@@ -425,6 +619,21 @@ export const NewTab = () => {
     }
   };
 
+  const handleRefreshDonations = async () => {
+    // Only reload total donations, don't track tab opens
+    loadTotalDonations();
+  };
+
+  const handleSponsoredShortcutClick = async (shortcut: { name: string, url: string }) => {
+    try {
+      await sponsoredTracker.trackSponsoredClick(currentUser?.id || null, shortcut.name, shortcut.url);
+      // Reload total donations after tracking
+      loadTotalDonations();
+    } catch (error) {
+      console.error('Error tracking sponsored click:', error);
+    }
+  };
+
   const handleLogoToggle = () => {
     setShowLogoToggle(!showLogoToggle);
   };
@@ -463,6 +672,14 @@ export const NewTab = () => {
           onUploadBackground={handleUploadBackground}
           adCount={adCount}
           onAdUpgrade={handleAdUpgrade}
+          sponsoredShortcutsCount={sponsoredShortcutsCount}
+          setSponsoredShortcutsCount={handleSponsoredShortcutsChange}
+          showMoneyRaised={showMoneyRaised}
+          setShowMoneyRaised={setShowMoneyRaised}
+          showShortcuts={showShortcuts}
+          setShowShortcuts={setShowShortcuts}
+          shortcutsType={shortcutsType}
+          setShortcutsType={setShortcutsType}
         />
       {/* Apps Bubble */}
       {appsOpen && (
@@ -710,17 +927,17 @@ export const NewTab = () => {
          <button className="t4p-icon-btn" title="Profile" onClick={() => setProfileOpen(v => !v)}>
            <img src={ProfileIcon} width="24" height="24" alt="Profile" />
          </button>
+         <button className="t4p-icon-btn" title="Settings" onClick={() => setSettingsOpen(true)}>
+           <img src={SettingsIcon} width="24" height="24" alt="Settings" />
+         </button>
+         <button className="t4p-icon-btn" title="Gamification" onClick={() => setGamificationOpen(v => !v)}>
+           <img src={TrophyIcon} width="24" height="24" alt="Gamification" />
+         </button>
          {toggles.apps && (
            <button className="t4p-icon-btn" title="Apps" onClick={() => setAppsOpen(v => !v)}>
              <img src={AppsIcon} width="24" height="24" alt="Apps" />
            </button>
          )}
-         <button className="t4p-icon-btn" title="Gamification" onClick={() => setGamificationOpen(v => !v)}>
-           <img src={TrophyIcon} width="24" height="24" alt="Gamification" />
-         </button>
-         <button className="t4p-icon-btn" title="Settings" onClick={() => setSettingsOpen(true)}>
-           <img src={SettingsIcon} width="24" height="24" alt="Settings" />
-         </button>
        </div>
       
       <div className="center-content">
@@ -728,22 +945,24 @@ export const NewTab = () => {
            <div className="t4p-logo-container">
              {logoType === 'logo' && (
                <img 
-                 src={backgroundMode === 'gallery' ? logoWhite : logoGreen} 
+                 src={backgroundMode === 'gallery' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : '/img/logo_green_transparent.png'} 
                  alt="tabs4palestine logo" 
                  className="t4p-logo" 
+                 style={{ transform: 'scale(1.2)' }}
                />
              )}
              {logoType === 'clock' && (
-               <div className="t4p-digital-clock">
+               <div className="t4p-digital-clock" style={{ color: backgroundMode === 'gallery' ? 'white' : '#188038' }}>
                  <div className="t4p-clock-time">{time}</div>
                  <div className="t4p-clock-date">{new Date().toLocaleDateString()}</div>
                </div>
              )}
              {logoType === 'watermelon' && (
                <img 
-                 src="/img/original_watermelon.png" 
-                 alt="Watermelon" 
+                 src={backgroundMode === 'gallery' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : '/img/logo_green_transparent.png'} 
+                 alt="Tabs4Palestine Logo" 
                  className="t4p-logo" 
+                 style={{ transform: 'scale(1.2)' }}
                />
              )}
              <button className="t4p-logo-toggle" title="Toggle Logo" onClick={handleLogoToggle}>
@@ -799,57 +1018,95 @@ export const NewTab = () => {
         )}
         
                                               {/* Donation Box - Bottom Left */}
-           <div className="donation-box-bottom-left">
-             <img src={oliveIcon} alt="Olive" className="donation-icon" />
-             <div className="donation-info">
-               <div className="donation-amount">1,236,346$</div>
-               <div className="donation-label">raised so far</div>
+           {showMoneyRaised && (
+             <div className="donation-box-bottom-left">
+               <button className="donation-close-btn" title="Hide" onClick={() => setShowMoneyRaised(false)}>
+                 ×
+               </button>
+               <img src={oliveIcon} alt="Olive" className="donation-icon" />
+               <div className="donation-info">
+                 <div className="donation-amount">{totalDonations.toLocaleString()}$</div>
+                 <div className="donation-label">raised so far</div>
+               </div>
+               <button className="donation-refresh-btn" title="Refresh" onClick={handleRefreshDonations}>
+                 <img src={RefreshIconBlack} width="16" height="16" alt="Refresh" />
+               </button>
              </div>
-                           <button className="donation-refresh-btn" title="Refresh" onClick={handleRefreshBackground}>
-                <img src={RefreshIconBlack} width="16" height="16" alt="Refresh" />
-              </button>
-           </div>
-         
-         {/* 3rd Advertisement - Below Donations Box */}
-         {adCount >= 3 && (
-           <div style={{ position: 'relative' }}>
-             <EmbeddedAdComponent 
-               position="bottom-middle" 
-               adIndex={2} 
-               onClose={() => {
-                 // Reduce ad count to 2 when middle ad is closed
-                 setAdCount(2)
-                 // Save to storage
-                 chrome.storage.sync.set({ adCount: 2 })
-               }}
-             />
-           </div>
-         )}
+           )}
          
          <div className="quick-access-grid">
-           {shortcuts.map((shortcut, index) => (
-             <a key={index} href={shortcut.url} target="_blank" rel="noopener noreferrer" className="quick-access-item">
+           {shortcuts.slice(0, sponsoredShortcutsCount).map((shortcut, index) => (
+             <a 
+               key={index} 
+               href={shortcut.url} 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               className="quick-access-item" 
+               style={{ color: backgroundMode === 'gallery' ? 'white' : 'black' }}
+               onClick={() => handleSponsoredShortcutClick(shortcut)}
+             >
                <img src={shortcut.icon} alt={shortcut.name} />
                <span>{shortcut.name}</span>
              </a>
            ))}
-           <button className="t4p-add-shortcut-btn" onClick={() => setShowShortcutModal(true)}>
+           <button className="t4p-add-shortcut-btn" onClick={() => setShowShortcutModal(true)} style={{ 
+             borderColor: backgroundMode === 'gallery' ? 'white' : '#188038', 
+             color: backgroundMode === 'gallery' ? 'black' : '#188038',
+             backgroundColor: backgroundMode === 'gallery' ? 'rgba(255, 255, 255, 0.2)' : 'transparent'
+           }}>
              <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-               <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#188038"/>
+               <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill={backgroundMode === 'gallery' ? 'black' : '#188038'}/>
              </svg>
            </button>
          </div>
+         
+         {/* 3rd Advertisement - Below Shortcuts, Near Bottom */}
+         {adCount >= 3 && (
+           <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
+             <img 
+               src="/img/ads/3rd_ad.png" 
+               alt="Advertisement" 
+               style={{ 
+                 width: '400px', 
+                 height: '150px', 
+                 objectFit: 'contain',
+                 borderRadius: '8px',
+                 boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+               }} 
+             />
+           </div>
+         )}
       </div>
       
       {/* Embedded Advertisements - Side Ads */}
       {adCount >= 1 && (
-        <EmbeddedAdComponent position="bottom-right" adIndex={0} />
+        <div style={{ position: 'absolute', bottom: '20px', right: '20px', zIndex: 10 }}>
+          <img 
+            src="/img/ads/1st_ad.png" 
+            alt="Advertisement" 
+            style={{ 
+              width: '200px', 
+              height: 'auto', 
+              borderRadius: '8px',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+            }} 
+          />
+        </div>
       )}
       {adCount >= 2 && (
-        <EmbeddedAdComponent position="bottom-right-top" adIndex={1} />
+        <div style={{ position: 'absolute', bottom: '280px', right: '20px', zIndex: 10 }}>
+          <img 
+            src="/img/ads/2nd_ad.png" 
+            alt="Advertisement" 
+            style={{ 
+              width: '200px', 
+              height: 'auto', 
+              borderRadius: '8px',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+            }} 
+          />
+        </div>
       )}
-
-
 
       {/* Shortcut Modal */}
       {showShortcutModal && (

@@ -255,6 +255,10 @@ h1, h2 {
   z-index: 2000;
 }
 
+.donation-box-bottom-left:hover .donation-close-btn {
+  display: flex;
+}
+
 .donation-icon {
   width: 40px;
   height: 40px;
@@ -304,6 +308,31 @@ h1, h2 {
   border-color: #0f5a28;
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(24, 128, 56, 0.25);
+}
+
+.donation-close-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #333;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  z-index: 2001;
+}
+
+.donation-close-btn:hover {
+  background: #555;
+  transform: scale(1.1);
 }
 
 a {
@@ -797,9 +826,26 @@ a {
 }
 
 /* When background is gallery mode (images), make shortcut text white */
-section[style*="backgroundImage"] .quick-access-item span {
-  color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+section[style*="backgroundImage"] .quick-access-item span,
+.gallery-mode .quick-access-item span {
+  color: white !important;
+  text-shadow: none;
+}
+
+/* Gallery mode shortcut background */
+section[style*="backgroundImage"] .quick-access-item,
+.gallery-mode .quick-access-item {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 12px !important;
+  padding: 12px 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  backdrop-filter: blur(10px);
+}
+
+section[style*="backgroundImage"] .quick-access-item span,
+.gallery-mode .quick-access-item span {
+  color: #333 !important;
+  text-shadow: none;
 }
 @media (max-width: 768px) {
   .quick-access-grid {
@@ -826,10 +872,20 @@ section[style*="backgroundImage"] .quick-access-item span {
     font-size: 0.6rem;
   }
   
-  /* When background is gallery mode (images), make shortcut text white on mobile */
-  section[style*="backgroundImage"] .quick-access-item span {
-    color: white;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  /* Gallery mode shortcut background on mobile */
+  section[style*="backgroundImage"] .quick-access-item,
+  .gallery-mode .quick-access-item {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 10px !important;
+    padding: 10px 6px !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important;
+    backdrop-filter: blur(8px);
+  }
+  
+  section[style*="backgroundImage"] .quick-access-item span,
+  .gallery-mode .quick-access-item span {
+    color: #333 !important;
+    text-shadow: none;
   }
   
   .t4p-add-shortcut-btn {
@@ -932,10 +988,20 @@ section[style*="backgroundImage"] .quick-access-item span {
     font-size: 0.55rem;
   }
   
-  /* When background is gallery mode (images), make shortcut text white on small mobile */
-  section[style*="backgroundImage"] .quick-access-item span {
-    color: white;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  /* Gallery mode shortcut background on small mobile */
+  section[style*="backgroundImage"] .quick-access-item,
+  .gallery-mode .quick-access-item {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 8px !important;
+    padding: 8px 4px !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+    backdrop-filter: blur(6px);
+  }
+  
+  section[style*="backgroundImage"] .quick-access-item span,
+  .gallery-mode .quick-access-item span {
+    color: #333 !important;
+    text-shadow: none;
   }
   
   .t4p-add-shortcut-btn {
@@ -1509,6 +1575,19 @@ section[style*="backgroundImage"] .quick-access-item span {
   margin-top: 4px;
 }
 
+/* Gallery mode add shortcut button styling */
+section[style*="backgroundImage"] .t4p-add-shortcut-btn,
+.gallery-mode .t4p-add-shortcut-btn {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 2px dashed white !important;
+  backdrop-filter: blur(10px);
+}
+
+section[style*="backgroundImage"] .t4p-add-shortcut-btn::after,
+.gallery-mode .t4p-add-shortcut-btn::after {
+  color: #333 !important;
+}
+
 .t4p-add-shortcut-btn svg {
   width: 36px;
   height: 36px;
@@ -1649,5 +1728,237 @@ section[style*="backgroundImage"] .quick-access-item span {
   .t4p-shortcut-item span {
     font-size: 0.65rem;
   }
+}
+
+/* Sponsored Shortcuts Section */
+.t4p-sponsored-shortcuts-section {
+  margin-top: 24px;
+  padding: 24px;
+  background: linear-gradient(135deg, #f0f8f0 0%, #e8f5e8 100%);
+  border-radius: 16px;
+  border: 2px solid #188038;
+  box-shadow: 0 4px 20px rgba(24, 128, 56, 0.1);
+  overflow: hidden;
+}
+
+.t4p-sponsored-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.t4p-sponsored-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #188038;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.t4p-sponsored-earnings {
+  background: #188038;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.t4p-sponsored-control-box {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid #188038;
+  box-shadow: 0 2px 8px rgba(24, 128, 56, 0.15);
+  max-height: none;
+  overflow: visible;
+}
+
+.t4p-sponsored-controls {
+  margin-bottom: 16px;
+}
+
+.t4p-sponsored-label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #188038;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.t4p-slider-container {
+  position: relative;
+}
+
+.t4p-sponsored-slider {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #e8f5e8 0%, #188038 100%);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.t4p-sponsored-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #188038;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.t4p-sponsored-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #188038;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.t4p-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.t4p-sponsored-explanation {
+  border-top: 2px solid #188038;
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+.t4p-explanation-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #188038;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.t4p-explanation-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555;
+  text-align: center;
+  padding: 16px;
+  background: rgba(24, 128, 56, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(24, 128, 56, 0.2);
+}
+
+/* Shortcuts Section */
+.t4p-shortcuts-section {
+  padding: 24px;
+  background: linear-gradient(135deg, #f0f8f0 0%, #e8f5e8 100%);
+  border-radius: 16px;
+  border: 2px solid #188038;
+  box-shadow: 0 4px 20px rgba(24, 128, 56, 0.1);
+}
+
+.t4p-shortcuts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.t4p-shortcuts-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #188038;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.t4p-shortcuts-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.t4p-shortcuts-type-section {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid #188038;
+  box-shadow: 0 2px 8px rgba(24, 128, 56, 0.15);
+}
+
+.t4p-shortcuts-type-header {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.t4p-shortcuts-type-header h4 {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #188038;
+}
+
+.t4p-shortcuts-type-header p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.t4p-shortcuts-type-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.t4p-shortcuts-type-option {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: linear-gradient(135deg, #f0f8f0 0%, #e8f5e8 100%);
+  border-radius: 12px;
+  border: 2px solid #188038;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(24, 128, 56, 0.1);
+}
+
+.t4p-shortcuts-type-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(24, 128, 56, 0.2);
+}
+
+.t4p-shortcuts-type-option input[type="radio"] {
+  margin-right: 16px;
+  width: 20px;
+  height: 20px;
+  accent-color: #188038;
+}
+
+.t4p-option-content {
+  flex: 1;
+}
+
+.t4p-option-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #188038;
+  margin-bottom: 4px;
+}
+
+.t4p-option-description {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.4;
 }
 
