@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { auth, userProfile, User } from '../lib/supabase'
+import { auth, userProfile, User, supabase } from '../lib/supabase'
 import './AuthComponent.css'
 
 interface AuthComponentProps {
@@ -14,6 +14,7 @@ export const AuthComponent = ({ onAuthChange }: AuthComponentProps) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [user, setUser] = useState<User | null>(null)
+  const [signupSuccess, setSignupSuccess] = useState(false)
 
   useEffect(() => {
     // Check for existing session
@@ -68,7 +69,13 @@ export const AuthComponent = ({ onAuthChange }: AuthComponentProps) => {
         username: profile?.username,
         created_at: supabaseUser.created_at,
         ad_count: profile?.ad_count || 1,
-        total_donations: profile?.total_donations || 0
+        total_donations: profile?.total_donations || 0,
+        sponsored_donations: profile?.sponsored_donations || 0,
+        total_raised: profile?.total_raised || 0,
+        rank: profile?.rank || 0,
+        tier: profile?.tier || 'beginner',
+        invite_code: profile?.invite_code,
+        daily_streak: profile?.daily_streak || 0
       }
 
       setUser(userData)
@@ -92,7 +99,36 @@ export const AuthComponent = ({ onAuthChange }: AuthComponentProps) => {
         
         console.log('Signup successful:', data)
         
-        // If signup successful, create profile manually
+        // Check if user needs email confirmation
+        if (data.user && !data.session) {
+          console.log('User created but needs email confirmation')
+          setSignupSuccess(true)
+          setError('Account created! Please check your email and click the confirmation link to activate your account. You can then sign in.')
+          
+          // Still create the profile even without session
+          if (data.user && data.user.email) {
+            console.log('Creating profile for unconfirmed user...', {
+              userId: data.user.id,
+              email: data.user.email,
+              username: username || data.user.email.split('@')[0]
+            })
+            
+            const { data: profileData, error: profileError } = await userProfile.createProfile(
+              data.user.id,
+              data.user.email,
+              username || data.user.email.split('@')[0]
+            )
+            
+            console.log('Profile creation result for unconfirmed user:', { profileData, profileError })
+            
+            if (profileError) {
+              console.error('Profile creation error for unconfirmed user:', profileError)
+            }
+          }
+          return
+        }
+        
+        // If signup successful and user is immediately signed in, create profile
         if (data.user && data.user.email) {
           console.log('User created, creating profile...', {
             userId: data.user.id,
@@ -116,11 +152,18 @@ export const AuthComponent = ({ onAuthChange }: AuthComponentProps) => {
               hint: profileError.hint,
               code: profileError.code
             })
-            // Don't throw here, user was created successfully
+            setError(`Account created but profile setup failed: ${profileError.message}`)
+            return
           }
+          
+          // If profile created successfully, handle the login
+          if (profileData) {
+            await handleUserLogin(data.user)
+            setError('') // Clear any previous errors
+          }
+        } else {
+          setError('Account creation failed - please try again')
         }
-        
-        setError('Check your email to confirm your account!')
       } else {
         const { error } = await auth.signIn(email, password)
         if (error) throw error
@@ -243,19 +286,79 @@ export const AuthComponent = ({ onAuthChange }: AuthComponentProps) => {
         </button>
       </form>
 
-      <div className="auth-switch">
-        <p>
-          {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+      {signupSuccess ? (
+        <div className="auth-success">
+          <p>Account created successfully! You can now sign in:</p>
           <button 
-            className="auth-switch-button"
+            className="auth-button primary"
             onClick={() => {
-              setIsSignUp(!isSignUp)
+              setSignupSuccess(false)
+              setIsSignUp(false)
               setError('')
             }}
           >
-            {isSignUp ? 'Sign In' : 'Sign Up'}
+            Sign In Now
           </button>
-        </p>
+        </div>
+      ) : (
+        <div className="auth-switch">
+          <p>
+            {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+            <button 
+              className="auth-switch-button"
+              onClick={() => {
+                setIsSignUp(!isSignUp)
+                setError('')
+              }}
+            >
+              {isSignUp ? 'Sign In' : 'Sign Up'}
+            </button>
+          </p>
+        </div>
+      )}
+      
+      {/* Debug section - remove in production */}
+      <div style={{ marginTop: '20px', padding: '10px', background: '#f0f0f0', borderRadius: '5px' }}>
+        <h4>Debug Info:</h4>
+        <p>Current user: {user ? `${user.username} (${user.email})` : 'Not logged in'}</p>
+        <button 
+          onClick={async () => {
+            console.log('Testing profile creation...')
+            try {
+              const testUuid = crypto.randomUUID()
+              console.log('Using test UUID:', testUuid)
+              const testResult = await userProfile.createProfile(testUuid, 'test@example.com', 'testuser')
+              console.log('Test profile creation result:', testResult)
+            } catch (error) {
+              console.error('Test profile creation error:', error)
+            }
+          }}
+          style={{ padding: '5px 10px', marginTop: '5px' }}
+        >
+          Test Profile Creation
+        </button>
+        <button 
+          onClick={async () => {
+            console.log('Testing Supabase function...')
+            try {
+              // Generate a proper UUID for testing
+              const testUuid = crypto.randomUUID()
+              console.log('Using test UUID:', testUuid)
+              
+              const { data, error } = await supabase.rpc('create_user_profile', {
+                user_id: testUuid,
+                user_email: 'test2@example.com',
+                user_username: 'testuser2'
+              })
+              console.log('Direct function test result:', { data, error })
+            } catch (error) {
+              console.error('Direct function test error:', error)
+            }
+          }}
+          style={{ padding: '5px 10px', marginTop: '5px', marginLeft: '5px' }}
+        >
+          Test Function Directly
+        </button>
       </div>
     </div>
   )

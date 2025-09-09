@@ -405,6 +405,54 @@ a {
   display: block;
 }
 
+.profile-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.profile-avatar.guest {
+  background: #333;
+}
+
+.profile-avatar.logged-in {
+  background: #188038;
+  box-shadow: 0 0 0 2px rgba(24, 128, 56, 0.3);
+}
+
+.profile-avatar.logged-in:hover {
+  box-shadow: 0 0 0 3px rgba(24, 128, 56, 0.5);
+  transform: scale(1.1);
+}
+
+.avatar-text {
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  text-align: center;
+}
+
+.t4p-profile-avatar.logged-in {
+  background: #188038;
+  border: 2px solid rgba(24, 128, 56, 0.3);
+}
+
+.t4p-profile-avatar.guest {
+  background: #f0f0f0;
+  border: 2px solid #ddd;
+}
+
+.profile-avatar-text {
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+}
+
 .t4p-modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;

@@ -6,6 +6,16 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
+// Helper function to generate invite code
+const generateInviteCode = async (): Promise<string> => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = '';
+  for (let i = 0; i < 8; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
 // User types
 export interface User {
   id: string
@@ -14,12 +24,19 @@ export interface User {
   created_at: string
   ad_count: number
   total_donations: number
+  sponsored_donations?: number
+  total_raised?: number
+  rank?: number
+  tier?: string
+  invite_code?: string
+  daily_streak?: number
 }
 
 // Auth helper functions
 export const auth = {
   // Sign up with email and password
   async signUp(email: string, password: string, username?: string) {
+    console.log('Supabase signUp called with:', { email, username })
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -29,6 +46,7 @@ export const auth = {
         }
       }
     })
+    console.log('Supabase signUp response:', { data, error })
     return { data, error }
   },
 
@@ -82,23 +100,76 @@ export const userProfile = {
 
   // Create user profile
   async createProfile(userId: string, email: string, username?: string) {
-    const profileData = {
+    console.log('Attempting to create profile for:', { userId, email, username })
+    
+    try {
+      // Try using the server-side function first (doesn't require authentication)
+      const { data: functionResult, error: functionError } = await supabase.rpc('create_user_profile', {
+        user_id: userId,
+        user_email: email,
+        user_username: username || email.split('@')[0]
+      })
+      
+      console.log('Function result:', { functionResult, functionError })
+      console.log('Function result details:', {
+        success: functionResult?.success,
+        message: functionResult?.message,
+        error: functionError
+      })
+      
+      if (functionError) {
+        console.error('Function error details:', {
+          code: functionError.code,
+          message: functionError.message,
+          details: functionError.details,
+          hint: functionError.hint
+        })
+      }
+      
+      // Check if function succeeded
+      if (functionResult && functionResult.success) {
+        console.log('Profile created successfully via function')
+        return { data: functionResult, error: null }
+      }
+      
+      if (functionError || (functionResult && !functionResult.success)) {
+        console.log('Function failed, trying direct insert...')
+        console.log('Function failure reason:', functionResult?.message || functionError?.message)
+        
+        // Fallback to direct insert
+        const basicProfileData = {
       id: userId,
       email,
       username: username || email.split('@')[0],
       ad_count: 1,
-      total_donations: 0
+          total_donations: 0,
+          sponsored_donations: 0
+        }
+        
+        console.log('Attempting direct insert with data:', basicProfileData)
+        
+        const { data, error } = await supabase
+          .from('profiles')
+          .insert([basicProfileData])
+        
+        console.log('Direct insert result:', { data, error })
+        
+        if (error) {
+          console.error('Direct insert failed:', {
+            message: error.message,
+            details: error.details,
+            hint: error.hint,
+            code: error.code
+          })
+          return { data, error }
+        }
+        
+        return { data, error }
+      }
+    } catch (error) {
+      console.error('Profile creation failed:', error)
+      return { data: null, error }
     }
-    
-    console.log('Attempting to create profile with data:', profileData)
-    
-    const { data, error } = await supabase
-      .from('profiles')
-      .insert([profileData])
-    
-    console.log('Supabase insert result:', { data, error })
-    
-    return { data, error }
   }
 }
 
@@ -316,7 +387,7 @@ export const sponsoredTracker = {
       const newSponsoredTotal = (profileData?.sponsored_donations || 0) + donationAmount
 
       const { data: updateData, error: updateError } = await supabase
-        .from('profiles')
+      .from('profiles')
         .update({ sponsored_donations: newSponsoredTotal })
         .eq('id', userId)
 
@@ -380,6 +451,182 @@ export const sponsoredTracker = {
         recentClicks: allTimeData?.slice(0, 10) || [] 
       }, 
       error: null 
+    }
+  }
+}
+
+// Gamification functions
+export const gamificationTracker = {
+  async updateUserStats(userId: string | null, tabOpened: boolean = false, sponsoredClick: boolean = false) {
+    try {
+      if (!userId) return { success: false, error: 'No user ID provided' };
+      
+      // Update daily streak
+      const { data: streakData, error: streakError } = await supabase
+        .rpc('update_daily_streak', { user_id: userId });
+      
+      if (streakError) {
+        console.error('Error updating streak:', streakError);
+      }
+      
+      // Update total raised (this will trigger rank and tier updates)
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('total_donations, sponsored_donations')
+        .eq('id', userId)
+        .single();
+      
+      if (profileError) {
+        console.error('Error getting profile data:', profileError);
+        return { success: false, error: profileError };
+      }
+      
+      const totalRaised = (profileData.total_donations || 0) + (profileData.sponsored_donations || 0);
+      
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ total_raised: totalRaised })
+        .eq('id', userId);
+      
+      if (updateError) {
+        console.error('Error updating total raised:', updateError);
+        return { success: false, error: updateError };
+      }
+      
+      // Check for achievements
+      await gamificationTracker.checkAchievements(userId, totalRaised, streakData || 0);
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Error in updateUserStats:', error);
+      return { success: false, error };
+    }
+  },
+
+  async checkAchievements(userId: string, totalRaised: number, streakDays: number) {
+    try {
+      const achievements = [];
+      
+      // Check amount-based achievements
+      if (totalRaised >= 1 && totalRaised < 1.01) {
+        achievements.push('first_dollar');
+      }
+      if (totalRaised >= 10 && totalRaised < 10.01) {
+        achievements.push('ten_dollars');
+      }
+      if (totalRaised >= 100 && totalRaised < 100.01) {
+        achievements.push('hundred_dollars');
+      }
+      
+      // Check streak achievements
+      if (streakDays >= 7 && streakDays < 8) {
+        achievements.push('daily_streak_7');
+      }
+      if (streakDays >= 30 && streakDays < 31) {
+        achievements.push('daily_streak_30');
+      }
+      
+      // Insert new achievements
+      for (const badgeType of achievements) {
+        const { error } = await supabase
+          .from('achievements')
+          .insert({
+            user_id: userId,
+            badge_type: badgeType
+          })
+          .select();
+        
+        if (error && error.code !== '23505') { // Ignore duplicate key errors
+          console.error('Error inserting achievement:', error);
+        }
+      }
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Error in checkAchievements:', error);
+      return { success: false, error };
+    }
+  },
+
+  async getUserProfile(userId: string) {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, username, total_raised, rank, tier, daily_streak, invite_code')
+        .eq('id', userId)
+        .single();
+      
+      if (error) {
+        console.error('Error getting user profile:', error);
+        return { success: false, error };
+      }
+      
+      return { success: true, data };
+    } catch (error) {
+      console.error('Error in getUserProfile:', error);
+      return { success: false, error };
+    }
+  },
+
+  async updateCommunityStats() {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Get current stats
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('total_raised');
+      
+      const { data: tabsData, error: tabsError } = await supabase
+        .from('tab_opens')
+        .select('donation_amount');
+      
+      const { data: sponsoredData, error: sponsoredError } = await supabase
+        .from('sponsored_clicks')
+        .select('donation_amount');
+      
+      if (profilesError || tabsError || sponsoredError) {
+        console.error('Error getting community stats:', { profilesError, tabsError, sponsoredError });
+        return { success: false, error: 'Failed to get community stats' };
+      }
+      
+      const totalUsers = profilesData?.length || 0;
+      const totalRaised = profilesData?.reduce((sum, p) => sum + (p.total_raised || 0), 0) || 0;
+      const totalTabsOpened = tabsData?.length || 0;
+      const totalSponsoredClicks = sponsoredData?.length || 0;
+      
+      // Calculate monthly raised (last 30 days)
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      
+      const { data: monthlyData, error: monthlyError } = await supabase
+        .from('tab_opens')
+        .select('donation_amount')
+        .gte('created_at', thirtyDaysAgo.toISOString());
+      
+      const monthlyRaised = monthlyData?.reduce((sum, tab) => sum + tab.donation_amount, 0) || 0;
+      
+      // Upsert community stats
+      const { error: upsertError } = await supabase
+        .from('community_stats')
+        .upsert({
+          stat_date: today,
+          total_users: totalUsers,
+          total_raised: totalRaised,
+          total_tabs_opened: totalTabsOpened,
+          total_sponsored_clicks: totalSponsoredClicks,
+          monthly_raised: monthlyRaised
+        });
+      
+      if (upsertError) {
+        console.error('Error upserting community stats:', upsertError);
+        return { success: false, error: upsertError };
+      }
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Error in updateCommunityStats:', error);
+      return { success: false, error };
     }
   }
 } 

@@ -205,4 +205,19 @@
   .auth-stats {
     justify-content: center;
   }
+}
+
+.auth-success {
+  text-align: center;
+  padding: 20px;
+  background: #e8f5e8;
+  border: 1px solid #4caf50;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.auth-success p {
+  margin: 0 0 15px 0;
+  color: #2e7d32;
+  font-weight: 500;
 } 

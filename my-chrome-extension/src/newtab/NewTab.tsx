@@ -4,9 +4,11 @@ import EmbeddedAdComponent from './EmbeddedAdComponent'
 import AdvertisementsUpgrade from './AdvertisementsUpgrade'
 import AboutPage from './AboutPage'
 import AuthComponent from './AuthComponent'
-import { auth, userProfile, donationTracker, sponsoredTracker } from '../lib/supabase'
+import GamificationModal from './GamificationModal'
+import { auth, userProfile, donationTracker, sponsoredTracker, gamificationTracker } from '../lib/supabase'
 
 import './NewTab.css'
+import './GamificationModal.css'
 import logoWhite from '../assets/logo_white_transparent.png'
 import logoGreen from '../assets/logo_green_transparent.png'
 import oliveIcon from '../assets/olive.png'
@@ -24,7 +26,7 @@ import TrophyIcon from '../assets/icons/trophy_24dp_FFFFFF_FILL0_wght400_GRAD0_o
 import CachedIconBlack from '../assets/icons/cached_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg'
 import CachedIconWhite from '../assets/icons/cached_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg'
 
-function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground, adCount, onAdUpgrade, sponsoredShortcutsCount, setSponsoredShortcutsCount, showMoneyRaised, setShowMoneyRaised, showShortcuts, setShowShortcuts, shortcutsType, setShortcutsType }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void, adCount: number, onAdUpgrade: (count: number) => void, sponsoredShortcutsCount: number, setSponsoredShortcutsCount: (count: number) => void, showMoneyRaised: boolean, setShowMoneyRaised: (show: boolean) => void, showShortcuts: boolean, setShowShortcuts: (show: boolean) => void, shortcutsType: 'advertisements' | 'most-visited' | 'favorites', setShortcutsType: (type: 'advertisements' | 'most-visited' | 'favorites') => void }) {
+function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground, adCount, onAdUpgrade, sponsoredShortcutsCount, setSponsoredShortcutsCount, showMoneyRaised, setShowMoneyRaised, showShortcuts, setShowShortcuts, shortcutsType, setShortcutsType, onAuthChange }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void, adCount: number, onAdUpgrade: (count: number) => void, sponsoredShortcutsCount: number, setSponsoredShortcutsCount: (count: number) => void, showMoneyRaised: boolean, setShowMoneyRaised: (show: boolean) => void, showShortcuts: boolean, setShowShortcuts: (show: boolean) => void, shortcutsType: 'advertisements' | 'most-visited' | 'favorites', setShortcutsType: (type: 'advertisements' | 'most-visited' | 'favorites') => void, onAuthChange: (user: any) => void }) {
   const [activeTab, setActiveTab] = useState('General');
   const fileInputRef = useRef<HTMLInputElement>(null);
   if (!open) return null;
@@ -151,10 +153,7 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
             </div>
           )}
           {activeTab === 'Account' && (
-            <AuthComponent onAuthChange={(user) => {
-              // Handle user auth state change
-              console.log('User auth changed:', user)
-            }} />
+            <AuthComponent onAuthChange={onAuthChange} />
           )}
           {activeTab === 'Shortcuts' && (
             <div className="t4p-shortcuts-section">
@@ -314,6 +313,8 @@ export const NewTab = () => {
   const [showMoneyRaised, setShowMoneyRaised] = useState(true);
   const [showShortcuts, setShowShortcuts] = useState(true);
   const [shortcutsType, setShortcutsType] = useState<'advertisements' | 'most-visited' | 'favorites'>('advertisements');
+  const [gamificationUser, setGamificationUser] = useState<any>(null);
+
 
   // Function to add new shortcut
   const addShortcut = () => {
@@ -382,6 +383,17 @@ export const NewTab = () => {
   const trackTabOpen = async () => {
     try {
       await donationTracker.trackTabOpen(currentUser?.id || null, adCount);
+      
+      // Update gamification stats if user is logged in
+      if (currentUser?.id) {
+        await gamificationTracker.updateUserStats(currentUser.id, true, false);
+        // Reload gamification user data
+        const gamificationResult = await gamificationTracker.getUserProfile(currentUser.id);
+        if (gamificationResult.success) {
+          setGamificationUser(gamificationResult.data);
+        }
+      }
+      
       // Reload total donations after tracking
       loadTotalDonations();
     } catch (error) {
@@ -480,6 +492,12 @@ export const NewTab = () => {
           email: user.email,
           username: profile?.username || user.email?.split('@')[0]
         })
+        
+        // Load gamification user data
+        const gamificationResult = await gamificationTracker.getUserProfile(user.id);
+        if (gamificationResult.success) {
+          setGamificationUser(gamificationResult.data);
+        }
       } else {
         setCurrentUser(null)
       }
@@ -627,6 +645,17 @@ export const NewTab = () => {
   const handleSponsoredShortcutClick = async (shortcut: { name: string, url: string }) => {
     try {
       await sponsoredTracker.trackSponsoredClick(currentUser?.id || null, shortcut.name, shortcut.url);
+      
+      // Update gamification stats if user is logged in
+      if (currentUser?.id) {
+        await gamificationTracker.updateUserStats(currentUser.id, false, true);
+        // Reload gamification user data
+        const gamificationResult = await gamificationTracker.getUserProfile(currentUser.id);
+        if (gamificationResult.success) {
+          setGamificationUser(gamificationResult.data);
+        }
+      }
+      
       // Reload total donations after tracking
       loadTotalDonations();
     } catch (error) {
@@ -680,7 +709,29 @@ export const NewTab = () => {
           setShowShortcuts={setShowShortcuts}
           shortcutsType={shortcutsType}
           setShortcutsType={setShortcutsType}
+          onAuthChange={(user) => {
+            console.log('User auth changed:', user);
+            setCurrentUser(user);
+            
+            if (user?.id) {
+              gamificationTracker.getUserProfile(user.id).then(result => {
+                if (result.success) {
+                  setGamificationUser(result.data);
+                }
+              });
+            } else {
+              setGamificationUser(null);
+            }
+          }}
         />
+      
+      {/* Gamification Modal */}
+      <GamificationModal
+        open={gamificationOpen}
+        onClose={() => setGamificationOpen(false)}
+        currentUser={gamificationUser}
+      />
+      
       {/* Apps Bubble */}
       {appsOpen && (
         <div className="t4p-apps-bubble">
@@ -733,10 +784,16 @@ export const NewTab = () => {
           {!showAuthForm ? (
             <div className="t4p-profile-section">
               <div className="t4p-profile-header">
-                <div className="t4p-profile-avatar">
-                  <svg width="40" height="40" fill="none" viewBox="0 0 24 24">
-                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#666"/>
-                  </svg>
+                <div className={`t4p-profile-avatar ${currentUser ? 'logged-in' : 'guest'}`}>
+                  {currentUser ? (
+                    <span className="profile-avatar-text">
+                      {currentUser.username?.charAt(0).toUpperCase() || currentUser.email?.charAt(0).toUpperCase()}
+                    </span>
+                  ) : (
+                    <svg width="40" height="40" fill="none" viewBox="0 0 24 24">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#666"/>
+                    </svg>
+                  )}
                 </div>
                 <div className="t4p-profile-info">
                   <div className="t4p-profile-name">
@@ -925,7 +982,15 @@ export const NewTab = () => {
            </button>
          )}
          <button className="t4p-icon-btn" title="Profile" onClick={() => setProfileOpen(v => !v)}>
-           <img src={ProfileIcon} width="24" height="24" alt="Profile" />
+           <div className={`profile-avatar ${currentUser ? 'logged-in' : 'guest'}`}>
+             {currentUser ? (
+               <span className="avatar-text">
+                 {currentUser.username?.charAt(0).toUpperCase() || currentUser.email?.charAt(0).toUpperCase()}
+               </span>
+             ) : (
+               <img src={ProfileIcon} width="24" height="24" alt="Profile" />
+             )}
+           </div>
          </button>
          <button className="t4p-icon-btn" title="Settings" onClick={() => setSettingsOpen(true)}>
            <img src={SettingsIcon} width="24" height="24" alt="Settings" />
