@@ -1,31 +1,543 @@
-@media (prefers-color-scheme: light) {
-  a:hover {
-    color: #61dafb;
-  }
+/* Import Coustard fonts */
+@font-face {
+  font-family: 'Coustard';
+  src: url('../assets/fonts/Coustard-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
 }
 
-body {
-  min-width: 20rem;
+@font-face {
+  font-family: 'Coustard';
+  src: url('../assets/fonts/Coustard-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
 }
 
-main {
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Coustard', serif;
+  background: #F8F8F0;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Main container */
+.t4p-options-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #F8F8F0 0%, #f0f8f0 100%);
+  padding: 0;
+}
+
+/* Header */
+.t4p-options-header {
+  background: linear-gradient(135deg, #188038 0%, #0f5a28 100%);
+  color: white;
+  padding: 32px 24px;
   text-align: center;
-  padding: 1em;
+  box-shadow: 0 4px 20px rgba(24, 128, 56, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.t4p-options-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  opacity: 0.3;
+}
+
+.t4p-options-logo {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 16px;
+}
+
+.t4p-options-logo img {
+  width: 120px;
+  height: auto;
+  filter: brightness(0) invert(1);
+}
+
+.t4p-options-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin: 0 0 8px 0;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.t4p-options-subtitle {
+  font-size: 1.1rem;
+  margin: 0;
+  opacity: 0.9;
+  position: relative;
+  z-index: 2;
+  font-weight: 400;
+}
+
+/* Content */
+.t4p-options-content {
+  padding: 24px 20px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
-h3 {
-  color: #61dafb;
-  text-transform: uppercase;
-  font-size: 1.5rem;
-  font-weight: 200;
-  line-height: 1.2rem;
-  margin: 2rem auto;
+.t4p-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  align-items: start;
 }
 
-a {
-  font-size: 0.5rem;
-  margin: 0.5rem;
-  color: #cccccc;
+/* Setting Cards */
+.t4p-setting-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(24, 128, 56, 0.08);
+  border: 1px solid rgba(24, 128, 56, 0.15);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.t4p-setting-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(24, 128, 56, 0.12);
+  border-color: rgba(24, 128, 56, 0.25);
+}
+
+.t4p-setting-card-title {
+  background: linear-gradient(135deg, #188038 0%, #0f5a28 100%);
+  color: white;
+  margin: 0;
+  padding: 16px 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  font-family: 'Coustard', serif;
+}
+
+.t4p-setting-card-content {
+  padding: 20px;
+}
+
+/* Toggle Rows */
+.t4p-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.t4p-toggle-row:last-child {
+  border-bottom: none;
+}
+
+.t4p-toggle-info {
+  flex: 1;
+  margin-right: 16px;
+}
+
+.t4p-toggle-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  margin: 0 0 2px 0;
+  display: block;
+  font-family: 'Coustard', serif;
+}
+
+.t4p-toggle-description {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.3;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Toggle Switch */
+.t4p-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.t4p-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.t4p-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e0e0e0;
+  transition: 0.2s ease;
+  border-radius: 24px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.t4p-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.2s ease;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.t4p-switch input:checked + .t4p-slider {
+  background-color: #188038;
+}
+
+.t4p-switch input:checked + .t4p-slider:before {
+  transform: translateX(20px);
+}
+
+/* Select Rows */
+.t4p-select-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.t4p-select-row:last-child {
+  border-bottom: none;
+}
+
+.t4p-select-info {
+  flex: 1;
+  margin-right: 16px;
+}
+
+.t4p-select-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  margin: 0 0 2px 0;
+  display: block;
+  font-family: 'Coustard', serif;
+}
+
+.t4p-select-description {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.3;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.t4p-select {
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: white;
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+  flex-shrink: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.t4p-select:focus {
+  outline: none;
+  border-color: #188038;
+  box-shadow: 0 0 0 2px rgba(24, 128, 56, 0.1);
+}
+
+.t4p-select:hover {
+  border-color: #ccc;
+}
+
+/* Slider Rows */
+.t4p-slider-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.t4p-slider-row:last-child {
+  border-bottom: none;
+}
+
+.t4p-slider-info {
+  flex: 1;
+  margin-right: 16px;
+}
+
+.t4p-slider-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  margin: 0 0 2px 0;
+  display: block;
+  font-family: 'Coustard', serif;
+}
+
+.t4p-slider-description {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.3;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.t4p-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 140px;
+  flex-shrink: 0;
+}
+
+.t4p-range-slider {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #e8f5e8 0%, #188038 100%);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.t4p-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #188038;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.t4p-range-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #188038;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.t4p-slider-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #188038;
+  min-width: 35px;
+  text-align: center;
+  font-family: 'Coustard', serif;
+}
+
+/* Statistics Grid */
+.t4p-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.t4p-stat-item {
+  text-align: center;
+  padding: 16px;
+  background: linear-gradient(135deg, #f0f8f0 0%, #e8f5e8 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(24, 128, 56, 0.2);
+}
+
+.t4p-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #188038;
+  margin-bottom: 4px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  font-family: 'Coustard', serif;
+}
+
+.t4p-stat-label {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* About Section */
+.t4p-about-content {
+  text-align: center;
+}
+
+.t4p-about-text {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0 0 20px 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.t4p-about-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.t4p-about-link {
+  color: #188038;
   text-decoration: none;
+  font-weight: 500;
+  padding: 10px 16px;
+  border: 1px solid #188038;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  background: white;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.t4p-about-link:hover {
+  background: #188038;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(24, 128, 56, 0.25);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .t4p-options-header {
+    padding: 20px 16px;
+  }
+  
+  .t4p-options-logo img {
+    width: 80px;
+  }
+  
+  .t4p-options-title {
+    font-size: 1.8rem;
+  }
+  
+  .t4p-options-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .t4p-options-content {
+    padding: 20px 16px;
+  }
+  
+  .t4p-options-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .t4p-setting-card-content {
+    padding: 16px;
+  }
+  
+  .t4p-toggle-row,
+  .t4p-select-row,
+  .t4p-slider-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .t4p-toggle-info,
+  .t4p-select-info,
+  .t4p-slider-info {
+    margin-right: 0;
+  }
+  
+  .t4p-select {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .t4p-slider-container {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .t4p-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .t4p-about-links {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .t4p-options-header {
+    padding: 16px 12px;
+  }
+  
+  .t4p-options-logo img {
+    width: 60px;
+  }
+  
+  .t4p-options-title {
+    font-size: 1.5rem;
+  }
+  
+  .t4p-options-subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .t4p-options-content {
+    padding: 16px 12px;
+  }
+  
+  .t4p-setting-card-content {
+    padding: 14px;
+  }
+  
+  .t4p-toggle-label,
+  .t4p-select-label,
+  .t4p-slider-label {
+    font-size: 0.9rem;
+  }
+  
+  .t4p-toggle-description,
+  .t4p-select-description,
+  .t4p-slider-description {
+    font-size: 0.8rem;
+  }
+  
+  .t4p-stat-value {
+    font-size: 1.2rem;
+  }
+  
+  .t4p-stat-label {
+    font-size: 0.7rem;
+  }
 }

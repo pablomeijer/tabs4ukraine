@@ -1,3 +1,256 @@
+/* Dark mode styles */
+.dark-mode {
+  background: #1a1a1a !important;
+  color: #ffffff !important;
+}
+
+.dark-mode .t4p-logo {
+  filter: brightness(0) invert(1);
+}
+
+.dark-mode .t4p-digital-clock {
+  color: #ffffff !important;
+}
+
+.dark-mode .t4p-logo-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+}
+
+.dark-mode .t4p-logo-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .quick-access-item {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff !important;
+}
+
+.dark-mode .quick-access-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .quick-access-item span {
+  color: #ffffff !important;
+}
+
+.dark-mode .t4p-add-shortcut-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+  color: #ffffff !important;
+}
+
+.dark-mode .t4p-add-shortcut-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .t4p-add-shortcut-btn svg {
+  color: #ffffff !important;
+}
+
+.dark-mode .t4p-add-shortcut-btn::after {
+  color: #ffffff !important;
+}
+
+.dark-mode .donation-container {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.dark-mode .donation-refresh-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+}
+
+.dark-mode .donation-refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .donation-refresh-btn img {
+  filter: brightness(0) invert(1);
+}
+
+.dark-mode .settings-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+  color: #ffffff !important;
+}
+
+.dark-mode .settings-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .settings-btn svg {
+  color: #ffffff !important;
+}
+
+/* Modal styles for dark mode */
+.dark-mode .t4p-modal-bubble {
+  background: #2a2a2a;
+  color: #ffffff;
+}
+
+.dark-mode .t4p-modal-content {
+  background: #2a2a2a;
+  color: #ffffff;
+}
+
+.dark-mode .t4p-modal-tab {
+  color: #cccccc;
+}
+
+.dark-mode .t4p-modal-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.dark-mode .t4p-modal-tab-active {
+  background: #188038;
+  color: #ffffff;
+}
+
+.dark-mode .t4p-toggle-label {
+  color: #ffffff;
+}
+
+.dark-mode .t4p-section-title {
+  color: #ffffff;
+}
+
+.dark-mode .t4p-subsection-title {
+  color: #ffffff;
+}
+
+.dark-mode .t4p-subsection-description {
+  color: #cccccc;
+}
+
+.dark-mode .t4p-theme-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.dark-mode .t4p-theme-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .t4p-theme-btn-active {
+  background: #188038;
+  border-color: #188038;
+  color: #ffffff;
+}
+
+.dark-mode .t4p-preview-title {
+  color: #ffffff;
+}
+
+.dark-mode .t4p-edit-background-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.dark-mode .t4p-edit-background-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Wallpaper modal dark mode */
+.dark-mode .t4p-wallpaper-modal {
+  background: #2a2a2a;
+  color: #ffffff;
+}
+
+.dark-mode .t4p-wallpaper-modal-header h2 {
+  color: #ffffff;
+}
+
+.dark-mode .t4p-wallpaper-modal-header p {
+  color: #cccccc;
+}
+
+.dark-mode .t4p-category-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.dark-mode .t4p-category-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .t4p-category-btn-active {
+  background: #188038;
+  border-color: #188038;
+  color: #ffffff;
+}
+
+.dark-mode .t4p-wallpaper-item-info h4 {
+  color: #ffffff;
+}
+
+.dark-mode .t4p-wallpaper-item-info p {
+  color: #cccccc;
+}
+
+/* Shortcuts modal dark mode */
+.dark-mode .t4p-shortcuts-section h3 {
+  color: #ffffff;
+}
+
+.dark-mode .t4p-shortcuts-section h4 {
+  color: #ffffff;
+}
+
+.dark-mode .t4p-shortcuts-section p {
+  color: #cccccc;
+}
+
+.dark-mode .t4p-shortcuts-type-option {
+  color: #ffffff;
+}
+
+.dark-mode .t4p-sponsored-label {
+  color: #ffffff;
+}
+
+.dark-mode .t4p-explanation-title {
+  color: #ffffff;
+}
+
+.dark-mode .t4p-explanation-text {
+  color: #cccccc;
+}
+
+/* Search bar dark mode */
+.dark-mode .search-container {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+}
+
+.dark-mode .search-input {
+  background: transparent;
+  color: #ffffff;
+}
+
+.dark-mode .search-input::placeholder {
+  color: #cccccc;
+}
+
+.dark-mode .search-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.dark-mode .search-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .search-btn svg {
+  color: #ffffff;
+}
+
 /* Import Coustard fonts */
 @font-face {
   font-family: 'Coustard';
@@ -202,19 +455,19 @@ h1, h2 {
   align-items: center;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .search-box:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.15);
   transform: translateY(-1px);
 }
 
 .search-box:focus-within {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 4px 8px rgba(0, 0, 0, 0.2);
   transform: translateY(-2px);
 }
 
@@ -495,49 +748,63 @@ a {
 }
 .t4p-modal-close {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: #888;
+  top: 12px;
+  right: 12px;
+  background: rgba(24, 128, 56, 0.1);
+  border: 1px solid rgba(24, 128, 56, 0.2);
+  font-size: 1.2rem;
+  color: #188038;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: all 0.2s ease;
   z-index: 10;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+  font-weight: 600;
+  font-family: 'Coustard', serif;
 }
 .t4p-modal-close:hover {
-  color: #222;
+  background: #188038;
+  color: white;
+  border-color: #188038;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(24, 128, 56, 0.3);
 }
 .t4p-modal-tabs {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   margin-bottom: 0;
-  border-bottom: 1px solid #e8eaed;
-  background: #f8f9fa;
+  border-bottom: 1px solid rgba(24, 128, 56, 0.15);
+  background: #f8f8f0;
+  border-radius: 8px 8px 0 0;
 }
 .t4p-modal-tab {
   background: transparent;
   border: none;
   border-radius: 0;
-  padding: 12px 16px;
-  font-size: 0.9rem;
+  padding: 14px 18px;
+  font-size: 0.95rem;
   color: #666;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: all 0.2s ease;
   text-align: left;
   border-left: 3px solid transparent;
+  font-family: 'Coustard', serif;
+  font-weight: 500;
+}
+.t4p-modal-tab:hover {
+  background: rgba(24, 128, 56, 0.08);
+  color: #333;
 }
 .t4p-modal-tab-active, .t4p-modal-tab:active {
-  background: #1a73e8;
+  background: #188038;
   color: #fff;
-  border-left-color: #1a73e8;
+  border-left-color: #188038;
+  font-weight: 600;
 }
 
 .t4p-toggles-list {
@@ -654,6 +921,273 @@ a {
 }
 .t4p-bg-btn-active svg {
   filter: drop-shadow(0 0 2px #fff);
+}
+
+/* New Background Settings Styles */
+.t4p-background-settings {
+  padding: 24px;
+}
+
+.t4p-appearance-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.t4p-section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+  font-family: 'Coustard', serif;
+}
+
+.t4p-theme-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.t4p-theme-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.t4p-subsection-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  font-family: 'Coustard', serif;
+}
+
+.t4p-subsection-description {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.t4p-theme-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.t4p-theme-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f8f8f8;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 16px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.t4p-theme-btn:hover {
+  background: #f0f0f0;
+  border-color: #188038;
+  transform: translateY(-1px);
+}
+
+.t4p-theme-btn-active {
+  background: #188038;
+  border-color: #188038;
+  color: white;
+}
+
+.t4p-wallpaper-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.t4p-wallpaper-preview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #f8f8f8;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+}
+
+.t4p-wallpaper-preview-image {
+  width: 80px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.t4p-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.t4p-wallpaper-preview-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.t4p-preview-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.t4p-edit-background-btn {
+  background: #188038;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+}
+
+.t4p-edit-background-btn:hover {
+  background: #0f5a28;
+  transform: translateY(-1px);
+}
+
+/* Wallpaper Modal Styles */
+.t4p-wallpaper-modal {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  min-width: 600px;
+  max-width: 90vw;
+  max-height: 80vh;
+  padding: 32px 28px 24px 28px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  animation: fadeInModal 0.2s;
+}
+
+.t4p-wallpaper-modal-header {
+  margin-bottom: 24px;
+}
+
+.t4p-wallpaper-modal-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+  font-family: 'Coustard', serif;
+}
+
+.t4p-wallpaper-modal-header p {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.t4p-wallpaper-categories {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.t4p-category-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.t4p-category-btn:hover {
+  color: #333;
+}
+
+.t4p-category-btn-active {
+  color: #188038;
+  border-bottom-color: #188038;
+}
+
+.t4p-wallpaper-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.t4p-wallpaper-item {
+  background: #f8f8f8;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.t4p-wallpaper-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  border-color: #188038;
+}
+
+.t4p-wallpaper-item-image {
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+}
+
+.t4p-wallpaper-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.t4p-wallpaper-item-info {
+  padding: 12px;
+}
+
+.t4p-wallpaper-item-info h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 4px 0;
+}
+
+.t4p-photographer {
+  font-size: 0.8rem;
+  color: #666;
+  margin: 0 0 4px 0;
+  font-style: italic;
+}
+
+.t4p-description {
+  font-size: 0.8rem;
+  color: #888;
+  margin: 0;
+  line-height: 1.3;
 }
 
 @media (max-width: 1024px) {
@@ -861,7 +1395,7 @@ a {
 .quick-access-item img {
   width: 36px;
   height: 36px;
-  object-fit: contain;
+  object-fit: cover;
   margin-bottom: 4px;
   border-radius: 6px;
 }
@@ -888,6 +1422,25 @@ section[style*="backgroundImage"] .quick-access-item,
   padding: 12px 8px !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
   backdrop-filter: blur(10px);
+}
+
+/* Gallery mode shortcut items styling */
+section[style*="backgroundImage"] .t4p-shortcut-item,
+.gallery-mode .t4p-shortcut-item {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+section[style*="backgroundImage"] .t4p-shortcut-item span,
+.gallery-mode .t4p-shortcut-item span {
+  color: #333 !important;
+  font-weight: 600;
+}
+
+section[style*="backgroundImage"] .t4p-shortcut-item img,
+.gallery-mode .t4p-shortcut-item img {
+  filter: none !important;
 }
 
 section[style*="backgroundImage"] .quick-access-item span,
@@ -1633,7 +2186,17 @@ section[style*="backgroundImage"] .t4p-add-shortcut-btn,
 
 section[style*="backgroundImage"] .t4p-add-shortcut-btn::after,
 .gallery-mode .t4p-add-shortcut-btn::after {
-  color: #333 !important;
+  color: white !important;
+}
+
+section[style*="backgroundImage"] .t4p-add-shortcut-btn,
+.gallery-mode .t4p-add-shortcut-btn {
+  color: white !important;
+}
+
+section[style*="backgroundImage"] .t4p-add-shortcut-btn svg,
+.gallery-mode .t4p-add-shortcut-btn svg {
+  color: white !important;
 }
 
 .t4p-add-shortcut-btn svg {

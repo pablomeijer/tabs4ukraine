@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import AdComponent from './AdComponent'
 import EmbeddedAdComponent from './EmbeddedAdComponent'
+import EthiclyAdComponent from './EthiclyAdComponent'
 import AdvertisementsUpgrade from './AdvertisementsUpgrade'
 import AboutPage from './AboutPage'
 import AuthComponent from './AuthComponent'
@@ -26,7 +27,7 @@ import TrophyIcon from '../assets/icons/trophy_24dp_FFFFFF_FILL0_wght400_GRAD0_o
 import CachedIconBlack from '../assets/icons/cached_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg'
 import CachedIconWhite from '../assets/icons/cached_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg'
 
-function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground, adCount, onAdUpgrade, sponsoredShortcutsCount, setSponsoredShortcutsCount, showMoneyRaised, setShowMoneyRaised, showShortcuts, setShowShortcuts, shortcutsType, setShortcutsType, onAuthChange }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void, adCount: number, onAdUpgrade: (count: number) => void, sponsoredShortcutsCount: number, setSponsoredShortcutsCount: (count: number) => void, showMoneyRaised: boolean, setShowMoneyRaised: (show: boolean) => void, showShortcuts: boolean, setShowShortcuts: (show: boolean) => void, shortcutsType: 'advertisements' | 'most-visited' | 'favorites', setShortcutsType: (type: 'advertisements' | 'most-visited' | 'favorites') => void, onAuthChange: (user: any) => void }) {
+function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground, adCount, onAdUpgrade, sponsoredShortcutsCount, setSponsoredShortcutsCount, showMoneyRaised, setShowMoneyRaised, showShortcuts, setShowShortcuts, shortcutsType, setShortcutsType, onAuthChange, onShowWallpaperModal, selectedWallpaper }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void, adCount: number, onAdUpgrade: (count: number) => void, sponsoredShortcutsCount: number, setSponsoredShortcutsCount: (count: number) => void, showMoneyRaised: boolean, setShowMoneyRaised: (show: boolean) => void, showShortcuts: boolean, setShowShortcuts: (show: boolean) => void, shortcutsType: 'advertisements' | 'most-visited' | 'favorites', setShortcutsType: (type: 'advertisements' | 'most-visited' | 'favorites') => void, onAuthChange: (user: any) => void, onShowWallpaperModal: () => void, selectedWallpaper: any }) {
   const [activeTab, setActiveTab] = useState('General');
   const fileInputRef = useRef<HTMLInputElement>(null);
   if (!open) return null;
@@ -49,9 +50,16 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
           {activeTab === 'General' && (
             <div className="t4p-toggles-list">
               <div className="t4p-toggle-row">
-                <span className="t4p-toggle-label">Show Apps (Hamburger Menu)</span>
+                <span className="t4p-toggle-label">Show Apps Grid</span>
                 <label className="t4p-switch">
                   <input type="checkbox" checked={toggles.apps} onChange={e => setToggles({...toggles, apps: e.target.checked})} />
+                  <span className="t4p-slider"></span>
+                </label>
+              </div>
+              <div className="t4p-toggle-row">
+                <span className="t4p-toggle-label">Show News</span>
+                <label className="t4p-switch">
+                  <input type="checkbox" checked={toggles.news} onChange={e => setToggles({...toggles, news: e.target.checked})} />
                   <span className="t4p-slider"></span>
                 </label>
               </div>
@@ -86,21 +94,69 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
             </div>
           )}
           {activeTab === 'Background' && (
-            <div className="t4p-bg-options">
-              <button className={`t4p-bg-btn${backgroundMode === 'default' ? ' t4p-bg-btn-active' : ''}`} onClick={() => setBackgroundMode('default')}>
-                <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#188038"/></svg>
-                <span>Default</span>
-              </button>
-              <button className={`t4p-bg-btn${backgroundMode === 'gallery' ? ' t4p-bg-btn-active' : ''}`} onClick={() => setBackgroundMode('gallery')}>
-                <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" stroke="#222" strokeWidth="2"/><circle cx="8" cy="10" r="2" fill="#188038"/><path d="M21 19l-5.5-7-4.5 6-3-4-4 5" stroke="#188038" strokeWidth="2"/></svg>
-                <span>Gallery</span>
-              </button>
+            <div className="t4p-background-settings">
+              {/* Appearance Section */}
+              <div className="t4p-appearance-section">
+                <h3 className="t4p-section-title">Appearance</h3>
+                
+                {/* Theme Section */}
+                <div className="t4p-theme-section">
+                  <div className="t4p-theme-header">
+                    <h4 className="t4p-subsection-title">Theme</h4>
+                    <p className="t4p-subsection-description">Changes the overall look of your homepage</p>
+                  </div>
+                  
+                  <div className="t4p-theme-options">
+                    <button 
+                      className={`t4p-theme-btn${backgroundMode === 'default' ? ' t4p-theme-btn-active' : ''}`} 
+                      onClick={() => setBackgroundMode('default')}
+                    >
+                      <span>Default</span>
+                    </button>
+                    
+                    <button 
+                      className={`t4p-theme-btn${backgroundMode === 'gallery' ? ' t4p-theme-btn-active' : ''}`} 
+                      onClick={() => setBackgroundMode('gallery')}
+                    >
+                      <span>Gallery</span>
+                    </button>
+                    
+                    <button 
+                      className={`t4p-theme-btn${backgroundMode === 'dark' ? ' t4p-theme-btn-active' : ''}`} 
+                      onClick={() => setBackgroundMode('dark')}
+                    >
+                      <span>Dark</span>
+                    </button>
+                  </div>
+                </div>
 
-              <button className={`t4p-bg-btn${backgroundMode === 'upload' ? ' t4p-bg-btn-active' : ''}`} onClick={() => fileInputRef.current?.click()}>
-                <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4" stroke="#188038" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="4" y="16" width="16" height="4" rx="2" fill="#188038"/></svg>
-                <span>Upload</span>
-                <input ref={fileInputRef} type="file" accept="image/*" style={{display:'none'}} onChange={e => { if(e.target.files?.[0]) onUploadBackground(e.target.files[0]); setBackgroundMode('upload'); }} />
-              </button>
+                {/* Wallpaper Section */}
+                <div className="t4p-wallpaper-section">
+                  <div className="t4p-wallpaper-header">
+                    <h4 className="t4p-subsection-title">Wallpaper</h4>
+                    <p className="t4p-subsection-description">Customize your homepage</p>
+                  </div>
+                  
+                  <div className="t4p-wallpaper-preview">
+                    <div className="t4p-wallpaper-preview-image">
+                      <img 
+                        src={selectedWallpaper.image} 
+                        alt={`${selectedWallpaper.name} preview`}
+                        className="t4p-preview-img"
+                      />
+                    </div>
+                    <div className="t4p-wallpaper-preview-info">
+                      <span className="t4p-preview-title">{selectedWallpaper.name}</span>
+                      <button 
+                        className="t4p-edit-background-btn"
+                        onClick={onShowWallpaperModal}
+                      >
+                        Edit Background
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
           {activeTab === 'Advertisements' && (
@@ -109,7 +165,91 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
                 currentAdCount={adCount} 
                 onUpgrade={onAdUpgrade} 
               />
+            </div>
+          )}
+          {activeTab === 'Account' && (
+            <AuthComponent onAuthChange={onAuthChange} />
+          )}
+          {activeTab === 'Shortcuts' && (
+            <div className="t4p-shortcuts-section">
+              <div className="t4p-shortcuts-header">
+                <h3>Shortcuts Settings</h3>
+                <div className="t4p-shortcuts-toggle">
+                  <span className="t4p-toggle-label">Show Shortcuts</span>
+                  <label className="t4p-switch">
+                    <input 
+                      type="checkbox" 
+                      checked={showShortcuts} 
+                      onChange={e => setShowShortcuts(e.target.checked)} 
+                    />
+                    <span className="t4p-slider"></span>
+                  </label>
+                </div>
+              </div>
               
+              {showShortcuts && (
+                <div className="t4p-shortcuts-type-section">
+                  <div className="t4p-shortcuts-type-header">
+                    <h4>Shortcut Type</h4>
+                    <p>Choose what type of shortcuts to display</p>
+                  </div>
+                  
+                  <div className="t4p-shortcuts-type-options">
+                    <label className="t4p-shortcuts-type-option">
+                      <input
+                        type="radio"
+                        name="shortcutsType"
+                        value="advertisements"
+                        checked={shortcutsType === 'advertisements'}
+                        onChange={e => {
+                          console.log('Shortcut type changed to:', e.target.value);
+                          setShortcutsType(e.target.value as 'advertisements' | 'most-visited' | 'favorites');
+                        }}
+                      />
+                      <div className="t4p-option-content">
+                        <div className="t4p-option-title">Sponsored Advertisements</div>
+                        <div className="t4p-option-description">Show sponsored shortcuts that support Palestinian causes</div>
+                      </div>
+                    </label>
+                    
+                    <label className="t4p-shortcuts-type-option">
+                      <input
+                        type="radio"
+                        name="shortcutsType"
+                        value="most-visited"
+                        checked={shortcutsType === 'most-visited'}
+                        onChange={e => {
+                          console.log('Shortcut type changed to:', e.target.value);
+                          setShortcutsType(e.target.value as 'advertisements' | 'most-visited' | 'favorites');
+                        }}
+                      />
+                      <div className="t4p-option-content">
+                        <div className="t4p-option-title">Most Visited</div>
+                        <div className="t4p-option-description">Show your most frequently visited websites</div>
+                      </div>
+                    </label>
+                    
+                    <label className="t4p-shortcuts-type-option">
+                      <input
+                        type="radio"
+                        name="shortcutsType"
+                        value="favorites"
+                        checked={shortcutsType === 'favorites'}
+                        onChange={e => {
+                          console.log('Shortcut type changed to:', e.target.value);
+                          setShortcutsType(e.target.value as 'advertisements' | 'most-visited' | 'favorites');
+                        }}
+                      />
+                      <div className="t4p-option-content">
+                        <div className="t4p-option-title">Favorites</div>
+                        <div className="t4p-option-description">Show your bookmarked favorite websites</div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              )}
+
+              {/* Sponsored Shortcuts Section */}
               <div className="t4p-sponsored-shortcuts-section">
                 <div className="t4p-sponsored-header">
                   <h3>Sponsored Shortcuts</h3>
@@ -152,80 +292,6 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
               </div>
             </div>
           )}
-          {activeTab === 'Account' && (
-            <AuthComponent onAuthChange={onAuthChange} />
-          )}
-          {activeTab === 'Shortcuts' && (
-            <div className="t4p-shortcuts-section">
-              <div className="t4p-shortcuts-header">
-                <h3>Shortcuts Settings</h3>
-                <div className="t4p-shortcuts-toggle">
-                  <span className="t4p-toggle-label">Show Shortcuts</span>
-                  <label className="t4p-switch">
-                    <input 
-                      type="checkbox" 
-                      checked={showShortcuts} 
-                      onChange={e => setShowShortcuts(e.target.checked)} 
-                    />
-                    <span className="t4p-slider"></span>
-                  </label>
-                </div>
-              </div>
-              
-              {showShortcuts && (
-                <div className="t4p-shortcuts-type-section">
-                  <div className="t4p-shortcuts-type-header">
-                    <h4>Shortcut Type</h4>
-                    <p>Choose what type of shortcuts to display</p>
-                  </div>
-                  
-                  <div className="t4p-shortcuts-type-options">
-                    <label className="t4p-shortcuts-type-option">
-                      <input
-                        type="radio"
-                        name="shortcutsType"
-                        value="advertisements"
-                        checked={shortcutsType === 'advertisements'}
-                        onChange={e => setShortcutsType(e.target.value as 'advertisements' | 'most-visited' | 'favorites')}
-                      />
-                      <div className="t4p-option-content">
-                        <div className="t4p-option-title">Sponsored Advertisements</div>
-                        <div className="t4p-option-description">Show sponsored shortcuts that support Palestinian causes</div>
-                      </div>
-                    </label>
-                    
-                    <label className="t4p-shortcuts-type-option">
-                      <input
-                        type="radio"
-                        name="shortcutsType"
-                        value="most-visited"
-                        checked={shortcutsType === 'most-visited'}
-                        onChange={e => setShortcutsType(e.target.value as 'advertisements' | 'most-visited' | 'favorites')}
-                      />
-                      <div className="t4p-option-content">
-                        <div className="t4p-option-title">Most Visited</div>
-                        <div className="t4p-option-description">Show your most frequently visited websites</div>
-                      </div>
-                    </label>
-                    
-                    <label className="t4p-shortcuts-type-option">
-                      <input
-                        type="radio"
-                        name="shortcutsType"
-                        value="favorites"
-                        checked={shortcutsType === 'favorites'}
-                        onChange={e => setShortcutsType(e.target.value as 'advertisements' | 'most-visited' | 'favorites')}
-                      />
-                      <div className="t4p-option-content">
-                        <div className="t4p-option-title">Favorites</div>
-                        <div className="t4p-option-description">Show your bookmarked favorite websites</div>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
           {activeTab === 'About' && <AboutPage />}
         </div>
       </div>
@@ -233,41 +299,189 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
   );
 }
 
-// Import all gallery images from src/assets/backgrounds
-// Using dynamic imports to handle missing images gracefully
-const backgroundImageNames = [
-  'pexels-gaza-8660631.jpg',
-  'pexels-earano-1352196.jpg',
-  'pexels-pixabay-531767.jpg',
-  'pexels-walidphotoz-847402.jpg',
-  'pexels-abu-adel-2153065-3805146.jpg',
-  'pexels-ahmed-akacha-3313934-10629415.jpg',
-  'pexels-fabio2311-712392.jpg',
-  'pexels-mikolaj-kolodziejczyk-2377168-16118911.jpg',
-  'pexels-rana-841343.jpg',
-  'pexels-smuldur-2048865.jpg',
-  'pexels-abdghat-1631665.jpg',
-  'pexels-vincent-pelletier-113252-720254.jpg',
-  'pexels-samer-zeton-455914177-33151206.jpg',
-  'pexels-haleyve-2102625.jpg',
-  'pexels-distoreal-3689859.jpg',
-  'pexels-haleyve-2102627.jpg',
-  'pexels-haleyve-2087388.jpg',
-  'pexels-belal-salem-91944577-9140968.jpg',
-  'pexels-belal-salem-91944577-9140972.jpg',
-  'pexels-leon-natan-2996182-6850831.jpg'
-]
+// Wallpaper Selection Modal Component
+function WallpaperModal({ open, onClose, onSelectWallpaper }: { open: boolean, onClose: () => void, onSelectWallpaper: (wallpaper: any) => void }) {
+  const [selectedCategory, setSelectedCategory] = useState<'palestine' | 'basic'>('palestine');
+  
+  if (!open) return null;
 
-// Gallery images array using public directory
-const galleryImages = backgroundImageNames.map(name => `/img/backgrounds/${name}`)
+  const wallpaperCategories = {
+    palestine: [
+      {
+        id: 'abu-adel-gaza-day',
+        name: 'Gaza at Day',
+        photographer: 'Abu Adel',
+        description: 'Gaza at Day',
+        image: '/img/backgrounds/abu-adel-gaza-at-day.jpg'
+      },
+      {
+        id: 'ala-j-graczyk-bethlehem',
+        name: 'Bethlehem, Palestine',
+        photographer: 'Ala J Graczyk',
+        description: 'Bethlehem, Palestine',
+        image: '/img/backgrounds/ala-j-graczyk-bethlehem-palestine.jpg'
+      },
+      {
+        id: 'belal-salem-gaza-night',
+        name: 'Gaza at Night',
+        photographer: 'Belal Salem',
+        description: 'Gaza at Night',
+        image: '/img/backgrounds/belal-salem-gaza-at-night.jpg'
+      },
+      {
+        id: 'haley-black-jerusalem',
+        name: 'Jerusalem',
+        photographer: 'Haley Black',
+        description: 'Jerusalem',
+        image: '/img/backgrounds/haley-black-jerusalem.jpg'
+      },
+      {
+        id: 'haley-black-jerusalem-palestine',
+        name: 'Jerusalem, Palestine',
+        photographer: 'Haley Black',
+        description: 'Jerusalem, Palestine',
+        image: '/img/backgrounds/haley-black-jerusalem-palestine.jpg'
+      },
+      {
+        id: 'haley-black-dead-sea',
+        name: 'Western Shore of the Dead Sea',
+        photographer: 'Haley Black',
+        description: 'Western Shore of the Dead Sea',
+        image: '/img/backgrounds/haley-black-western-shore-of-the-dead-sea.jpg'
+      },
+      {
+        id: 'leon-natan-jerusalem',
+        name: 'Jerusalem, Palestine',
+        photographer: 'Leon Natan',
+        description: 'Jerusalem, Palestine',
+        image: '/img/backgrounds/leon-natan-jerusalem-palestine.jpg'
+      },
+      {
+        id: 'musa-alzanoun-jerusalem',
+        name: 'Jerusalem, Palestine',
+        photographer: 'Musa Alzanoun',
+        description: 'Jerusalem, Palestine',
+        image: '/img/backgrounds/musa-alzanoun-jerusalem-palestine.jpg'
+      }
+    ],
+    basic: [
+      {
+        id: 'default-wallpaper',
+        name: 'Default Wallpaper',
+        photographer: 'Tabs4Palestine',
+        description: 'Default Wallpaper',
+        image: '/img/backgrounds/background-default-wallpaper.png'
+      },
+      {
+        id: 'samer-zeton-al-ain',
+        name: 'Rocky Landscape of Al Ain',
+        photographer: 'Samer Zeton',
+        description: 'Rocky Landscape of Al Ain',
+        image: '/img/backgrounds/Samer-Zeton-rocky-landscape-of-al-ain.jpg'
+      },
+      {
+        id: 'emiliano-arano-la-pampa',
+        name: 'La Pampa, Argentina',
+        photographer: 'Emiliano Arano',
+        description: 'La Pampa, Argentina',
+        image: '/img/backgrounds/emiliano-arano-la-pampa-argentina.jpg'
+      },
+      {
+        id: 'white-clouds-pixabay',
+        name: 'White Clouds',
+        photographer: 'Pixabay',
+        description: 'White Clouds',
+        image: '/img/backgrounds/white-clouds-pixabay.jpg'
+      }
+    ]
+  };
 
-// Function to get available background images
-const getAvailableBackgroundImages = () => {
-  // For now, return all images - we'll handle loading errors when actually using them
-  return galleryImages;
-};
+  return (
+    <div className="t4p-modal-overlay" onClick={onClose}>
+      <div className="t4p-wallpaper-modal" onClick={e => e.stopPropagation()}>
+        <button className="t4p-modal-close" onClick={onClose}>×</button>
+        
+        <div className="t4p-wallpaper-modal-header">
+          <h2>Wallpaper</h2>
+          <p>Customize your homepage</p>
+        </div>
+
+        <div className="t4p-wallpaper-categories">
+          <button 
+            className={`t4p-category-btn${selectedCategory === 'palestine' ? ' t4p-category-btn-active' : ''}`}
+            onClick={() => setSelectedCategory('palestine')}
+          >
+            Palestine
+          </button>
+          <button 
+            className={`t4p-category-btn${selectedCategory === 'basic' ? ' t4p-category-btn-active' : ''}`}
+            onClick={() => setSelectedCategory('basic')}
+          >
+            Basic Background
+          </button>
+        </div>
+
+        <div className="t4p-wallpaper-grid">
+          {wallpaperCategories[selectedCategory].map((wallpaper) => (
+            <div 
+              key={wallpaper.id} 
+              className="t4p-wallpaper-item"
+              onClick={() => {
+                onSelectWallpaper(wallpaper);
+                onClose();
+              }}
+            >
+              <div className="t4p-wallpaper-item-image">
+                <img src={wallpaper.image} alt={wallpaper.name} />
+              </div>
+              <div className="t4p-wallpaper-item-info">
+                <h4>{wallpaper.name}</h4>
+                <p className="t4p-photographer">by {wallpaper.photographer}</p>
+                <p className="t4p-description">{wallpaper.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export const NewTab = () => {
+  console.log('NewTab component starting...');
+  
+  // Import all gallery images from src/assets/backgrounds
+  // Using dynamic imports to handle missing images gracefully
+  const backgroundImageNames = [
+    'pexels-gaza-8660631.jpg',
+    'pexels-earano-1352196.jpg',
+    'pexels-pixabay-531767.jpg',
+    'pexels-walidphotoz-847402.jpg',
+    'pexels-abu-adel-2153065-3805146.jpg',
+    'pexels-ahmed-akacha-3313934-10629415.jpg',
+    'pexels-fabio2311-712392.jpg',
+    'pexels-mikolaj-kolodziejczyk-2377168-16118911.jpg',
+    'pexels-rana-841343.jpg',
+    'pexels-smuldur-2048865.jpg',
+    'pexels-abdghat-1631665.jpg',
+    'pexels-vincent-pelletier-113252-720254.jpg',
+    'pexels-samer-zeton-455914177-33151206.jpg',
+    'pexels-haleyve-2102625.jpg',
+    'pexels-distoreal-3689859.jpg',
+    'pexels-haleyve-2102627.jpg',
+    'pexels-haleyve-2087388.jpg',
+    'pexels-belal-salem-91944577-9140968.jpg',
+    'pexels-belal-salem-91944577-9140972.jpg',
+    'pexels-leon-natan-2996182-6850831.jpg'
+  ]
+  
+  // Gallery images array using public directory
+  const galleryImages = backgroundImageNames.map(name => `/img/backgrounds/${name}`)
+  
+  const getAvailableBackgroundImages = () => {
+    // For now, return all images - we'll handle loading errors when actually using them
+    return galleryImages;
+  };
   const [searchQuery, setSearchQuery] = useState('')
   const [time, setTime] = useState('')
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -275,11 +489,12 @@ export const NewTab = () => {
     apps: true,
     logo: true,
     clock: true,
-    search: true
+    search: true,
+    news: true
   })
   const [backgroundMode, setBackgroundMode] = useState('default');
   const [customBg, setCustomBg] = useState<string | null>(null);
-  const [galleryBg, setGalleryBg] = useState(galleryImages[0]);
+  const [galleryBg, setGalleryBg] = useState('/img/backgrounds/pexels-gaza-8660631.jpg');
   const [logoType, setLogoType] = useState<'logo' | 'clock' | 'watermelon'>('logo');
   const [appsOpen, setAppsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -305,6 +520,7 @@ export const NewTab = () => {
     { name: 'Palestine Store', url: 'https://www.palestinestore.com', icon: '/img/8_icons/01-scaled-2.jpg' },
     { name: 'Paliroots', url: 'https://www.paliroots.com', icon: '/img/8_icons/paliroots-logo.png' }
   ]);
+  const [filteredShortcuts, setFilteredShortcuts] = useState(shortcuts.slice(0, sponsoredShortcutsCount));
   const [showShortcutModal, setShowShortcutModal] = useState(false);
   const [newShortcut, setNewShortcut] = useState({ name: '', url: '' });
   const [shortcutError, setShortcutError] = useState('');
@@ -314,10 +530,156 @@ export const NewTab = () => {
   const [showShortcuts, setShowShortcuts] = useState(true);
   const [shortcutsType, setShortcutsType] = useState<'advertisements' | 'most-visited' | 'favorites'>('advertisements');
   const [gamificationUser, setGamificationUser] = useState<any>(null);
+  const [gamificationRefreshTrigger, setGamificationRefreshTrigger] = useState(0);
+  const [showWallpaperModal, setShowWallpaperModal] = useState(false);
+  const [selectedWallpaper, setSelectedWallpaper] = useState({
+    id: 'default-wallpaper',
+    name: 'Default Wallpaper',
+    photographer: 'Tabs4Palestine',
+    description: 'Default Wallpaper',
+    image: '/img/backgrounds/background-default-wallpaper.png'
+  });
 
+  // Wallpaper data structure
+  const mainWallpaperCategories = {
+    palestine: [
+      {
+        id: 'abu-adel-gaza-day',
+        name: 'Gaza at Day',
+        photographer: 'Abu Adel',
+        description: 'Gaza at Day',
+        image: '/img/backgrounds/abu-adel-gaza-at-day.jpg'
+      },
+      {
+        id: 'ala-j-graczyk-bethlehem',
+        name: 'Bethlehem, Palestine',
+        photographer: 'Ala J Graczyk',
+        description: 'Bethlehem, Palestine',
+        image: '/img/backgrounds/ala-j-graczyk-bethlehem-palestine.jpg'
+      },
+      {
+        id: 'belal-salem-gaza-night',
+        name: 'Gaza at Night',
+        photographer: 'Belal Salem',
+        description: 'Gaza at Night',
+        image: '/img/backgrounds/belal-salem-gaza-at-night.jpg'
+      },
+      {
+        id: 'haley-black-jerusalem',
+        name: 'Jerusalem',
+        photographer: 'Haley Black',
+        description: 'Jerusalem',
+        image: '/img/backgrounds/haley-black-jerusalem.jpg'
+      },
+      {
+        id: 'haley-black-jerusalem-palestine',
+        name: 'Jerusalem, Palestine',
+        photographer: 'Haley Black',
+        description: 'Jerusalem, Palestine',
+        image: '/img/backgrounds/haley-black-jerusalem-palestine.jpg'
+      },
+      {
+        id: 'haley-black-dead-sea',
+        name: 'Western Shore of the Dead Sea',
+        photographer: 'Haley Black',
+        description: 'Western Shore of the Dead Sea',
+        image: '/img/backgrounds/haley-black-western-shore-of-the-dead-sea.jpg'
+      },
+      {
+        id: 'leon-natan-jerusalem',
+        name: 'Jerusalem, Palestine',
+        photographer: 'Leon Natan',
+        description: 'Jerusalem, Palestine',
+        image: '/img/backgrounds/leon-natan-jerusalem-palestine.jpg'
+      },
+      {
+        id: 'musa-alzanoun-jerusalem',
+        name: 'Jerusalem, Palestine',
+        photographer: 'Musa Alzanoun',
+        description: 'Jerusalem, Palestine',
+        image: '/img/backgrounds/musa-alzanoun-jerusalem-palestine.jpg'
+      }
+    ],
+    basic: [
+      {
+        id: 'default-wallpaper',
+        name: 'Default Wallpaper',
+        photographer: 'Tabs4Palestine',
+        description: 'Default Wallpaper',
+        image: '/img/backgrounds/background-default-wallpaper.png'
+      },
+      {
+        id: 'samer-zeton-al-ain',
+        name: 'Rocky Landscape of Al Ain',
+        photographer: 'Samer Zeton',
+        description: 'Rocky Landscape of Al Ain',
+        image: '/img/backgrounds/Samer-Zeton-rocky-landscape-of-al-ain.jpg'
+      },
+      {
+        id: 'emiliano-arano-la-pampa',
+        name: 'La Pampa, Argentina',
+        photographer: 'Emiliano Arano',
+        description: 'La Pampa, Argentina',
+        image: '/img/backgrounds/emiliano-arano-la-pampa-argentina.jpg'
+      },
+      {
+        id: 'white-clouds-pixabay',
+        name: 'White Clouds',
+        photographer: 'Pixabay',
+        description: 'White Clouds',
+        image: '/img/backgrounds/white-clouds-pixabay.jpg'
+      }
+    ]
+  };
+
+  // Function to get filtered shortcuts based on type
+  const getFilteredShortcuts = () => {
+    console.log('Getting filtered shortcuts for type:', shortcutsType);
+    console.log('Total shortcuts available:', shortcuts.length);
+    console.log('Sponsored shortcuts count:', sponsoredShortcutsCount);
+    
+    switch (shortcutsType) {
+      case 'advertisements':
+        const ads = shortcuts.slice(0, sponsoredShortcutsCount);
+        console.log('Returning advertisements:', ads.length);
+        return ads;
+      case 'most-visited':
+        // For now, return empty array - Chrome API will be implemented later
+        console.log('Most visited mode - returning empty array for now');
+        return [];
+      case 'favorites':
+        // For now, return empty array - Chrome API will be implemented later
+        console.log('Favorites mode - returning empty array for now');
+        return [];
+      default:
+        const defaultShortcuts = shortcuts.slice(0, sponsoredShortcutsCount);
+        console.log('Returning default:', defaultShortcuts.length);
+        return defaultShortcuts;
+    }
+  };
+
+  // Update filtered shortcuts when shortcutsType or sponsoredShortcutsCount changes
+  useEffect(() => {
+    try {
+      const newShortcuts = getFilteredShortcuts();
+      setFilteredShortcuts(newShortcuts);
+    } catch (error) {
+      console.error('Error updating filtered shortcuts:', error);
+      // Fallback to sponsored shortcuts
+      setFilteredShortcuts(shortcuts.slice(0, sponsoredShortcutsCount));
+    }
+  }, [shortcutsType, sponsoredShortcutsCount]);
+
+  // Initialize filtered shortcuts on component mount
+  useEffect(() => {
+    if (filteredShortcuts.length === 0) {
+      setFilteredShortcuts(shortcuts.slice(0, sponsoredShortcutsCount));
+    }
+  }, []);
 
   // Function to add new shortcut
   const addShortcut = () => {
+    console.log('Adding shortcut:', newShortcut);
     if (!newShortcut.name || !newShortcut.url) {
       setShortcutError('Name and URL are required.');
       return;
@@ -327,7 +689,9 @@ export const NewTab = () => {
     const defaultIcon = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMiA3VjIwSDEwVjE0SDE0VjIwSDIyVjdMMTIgMloiIGZpbGw9IiMxODgwMzgiLz4KPC9zdmc+';
     
     const shortcutWithIcon = { ...newShortcut, icon: defaultIcon };
+    console.log('Adding shortcut with icon:', shortcutWithIcon);
     setShortcuts([...shortcuts, shortcutWithIcon]);
+    console.log('Shortcuts after adding:', [...shortcuts, shortcutWithIcon]);
     setShowShortcutModal(false);
     setNewShortcut({ name: '', url: '' });
     setShortcutError('');
@@ -335,7 +699,7 @@ export const NewTab = () => {
 
   // Load settings from storage on mount
   useEffect(() => {
-    chrome.storage.sync.get(['adCount', 'backgroundMode', 'sponsoredShortcutsCount'], (result: { adCount?: number, backgroundMode?: string, sponsoredShortcutsCount?: number }) => {
+    chrome.storage.sync.get(['adCount', 'backgroundMode', 'sponsoredShortcutsCount', 'showMoneyRaised', 'selectedWallpaper', 'galleryBg'], (result: { adCount?: number, backgroundMode?: string, sponsoredShortcutsCount?: number, showMoneyRaised?: boolean, selectedWallpaper?: any, galleryBg?: string }) => {
       console.log('Loading settings from storage:', result);
       if (result.adCount) {
         setAdCount(result.adCount);
@@ -350,11 +714,18 @@ export const NewTab = () => {
       if (result.sponsoredShortcutsCount !== undefined) {
         setSponsoredShortcutsCount(result.sponsoredShortcutsCount);
       }
+      if (result.showMoneyRaised !== undefined) {
+        setShowMoneyRaised(result.showMoneyRaised);
+      }
+      if (result.selectedWallpaper) {
+        setSelectedWallpaper(result.selectedWallpaper);
+      }
+      if (result.galleryBg) {
+        setGalleryBg(result.galleryBg);
+      }
     });
 
-    // Load total donations
-    loadTotalDonations();
-    
+    // Don't load total donations automatically - only when refresh button is clicked
     // Track tab open when component mounts (new tab opened)
     trackTabOpen();
   }, []);
@@ -392,10 +763,11 @@ export const NewTab = () => {
         if (gamificationResult.success) {
           setGamificationUser(gamificationResult.data);
         }
+        // Trigger gamification modal refresh
+        setGamificationRefreshTrigger(prev => prev + 1);
       }
       
-      // Reload total donations after tracking
-      loadTotalDonations();
+      // Don't automatically reload total donations - only update on refresh button click
     } catch (error) {
       console.error('Error tracking tab open:', error);
     }
@@ -422,6 +794,11 @@ export const NewTab = () => {
     chrome.storage.sync.set({ sponsoredShortcutsCount: count });
   };
 
+  const handleShowMoneyRaisedChange = (show: boolean) => {
+    setShowMoneyRaised(show);
+    chrome.storage.sync.set({ showMoneyRaised: show });
+  };
+
   // Save background mode to storage when it changes
   const handleBackgroundModeChange = (mode: string) => {
     console.log('Changing background mode to:', mode);
@@ -441,6 +818,29 @@ export const NewTab = () => {
         console.warn('No gallery images available');
       }
     }
+  };
+
+  const handleWallpaperSelection = (wallpaper: any) => {
+    console.log('Wallpaper selected:', wallpaper);
+    console.log('Setting background mode to gallery and wallpaper to:', wallpaper.image);
+    console.log('Current galleryBg before update:', galleryBg);
+    console.log('Current backgroundMode before update:', backgroundMode);
+    
+    // Set the wallpaper as the gallery background
+    setGalleryBg(wallpaper.image);
+    setBackgroundMode('gallery');
+    setSelectedWallpaper(wallpaper);
+    
+    console.log('State updates called - galleryBg:', wallpaper.image, 'backgroundMode: gallery');
+    
+    chrome.storage.sync.set({ 
+      backgroundMode: 'gallery',
+      galleryBg: wallpaper.image,
+      selectedWallpaper: wallpaper
+    }, () => {
+      console.log('Wallpaper settings saved to storage');
+      console.log('Saved data:', { backgroundMode: 'gallery', galleryBg: wallpaper.image, selectedWallpaper: wallpaper });
+    });
   };
 
   const handleAuthSubmit = async (e: React.FormEvent) => {
@@ -523,18 +923,26 @@ export const NewTab = () => {
 
   useEffect(() => {
     // Check for current user on component mount
-    checkCurrentUser()
+    try {
+      checkCurrentUser()
+    } catch (error) {
+      console.error('Error checking current user:', error);
+    }
   }, [])
 
   // Subscribe to real-time donation updates
   useEffect(() => {
-    const subscription = donationTracker.subscribeToDonationUpdates((total) => {
-      setTotalDonations(total);
-    });
+    try {
+      const subscription = donationTracker.subscribeToDonationUpdates((total) => {
+        setTotalDonations(total);
+      });
 
-    return () => {
-      subscription.unsubscribe();
-    };
+      return () => {
+        subscription.unsubscribe();
+      };
+    } catch (error) {
+      console.error('Error subscribing to donation updates:', error);
+    }
   }, []);
 
   useEffect(() => {
@@ -566,6 +974,20 @@ export const NewTab = () => {
       img.src = selectedImage;
     }
   }, [backgroundMode]);
+
+  // Gallery mode rotation on new tab open
+  useEffect(() => {
+    // Rotate gallery image each time component mounts (new tab opened)
+    if (backgroundMode === 'gallery') {
+      const availableImages = getAvailableBackgroundImages();
+      if (availableImages.length > 0) {
+        const randomIndex = Math.floor(Math.random() * availableImages.length);
+        const newImage = availableImages[randomIndex];
+        console.log('New tab opened - rotating to new gallery image:', newImage);
+        setGalleryBg(newImage);
+      }
+    }
+  }, []); // Empty dependency array means this runs on every mount (new tab)
 
   // Ensure gallery background is set on initial load if in gallery mode
   useEffect(() => {
@@ -654,10 +1076,11 @@ export const NewTab = () => {
         if (gamificationResult.success) {
           setGamificationUser(gamificationResult.data);
         }
+        // Trigger gamification modal refresh
+        setGamificationRefreshTrigger(prev => prev + 1);
       }
       
-      // Reload total donations after tracking
-      loadTotalDonations();
+      // Don't automatically reload total donations - only update on refresh button click
     } catch (error) {
       console.error('Error tracking sponsored click:', error);
     }
@@ -672,10 +1095,21 @@ export const NewTab = () => {
     setShowLogoToggle(false);
   };
 
+  // Debug effect to monitor galleryBg changes
+  useEffect(() => {
+    console.log('galleryBg changed to:', galleryBg);
+  }, [galleryBg]);
+
+  // Debug effect to monitor backgroundMode changes
+  useEffect(() => {
+    console.log('backgroundMode changed to:', backgroundMode);
+  }, [backgroundMode]);
+
   // Debug logging for background mode
   console.log('Current background mode:', backgroundMode);
   console.log('Gallery background:', galleryBg);
   console.log('Custom background:', customBg);
+  console.log('Selected wallpaper:', selectedWallpaper);
   
   const sectionStyle = backgroundMode === 'default'
     ? { background: '#F8F8F0' }
@@ -688,48 +1122,58 @@ export const NewTab = () => {
     : { background: '#F8F8F0' };
   
   console.log('Applied section style:', sectionStyle);
+  console.log('Section style calculation - backgroundMode:', backgroundMode, 'galleryBg:', galleryBg);
   
   return (
-    <section style={sectionStyle}>
-              <SettingsModal
-          open={settingsOpen}
-          onClose={() => setSettingsOpen(false)}
-          toggles={toggles}
-          setToggles={setToggles}
-          backgroundMode={backgroundMode}
-          setBackgroundMode={handleBackgroundModeChange}
-          onUploadBackground={handleUploadBackground}
-          adCount={adCount}
-          onAdUpgrade={handleAdUpgrade}
-          sponsoredShortcutsCount={sponsoredShortcutsCount}
-          setSponsoredShortcutsCount={handleSponsoredShortcutsChange}
-          showMoneyRaised={showMoneyRaised}
-          setShowMoneyRaised={setShowMoneyRaised}
-          showShortcuts={showShortcuts}
-          setShowShortcuts={setShowShortcuts}
-          shortcutsType={shortcutsType}
-          setShortcutsType={setShortcutsType}
-          onAuthChange={(user) => {
-            console.log('User auth changed:', user);
-            setCurrentUser(user);
-            
-            if (user?.id) {
-              gamificationTracker.getUserProfile(user.id).then(result => {
-                if (result.success) {
-                  setGamificationUser(result.data);
-                }
-              });
-            } else {
-              setGamificationUser(null);
+    <section style={sectionStyle} className={backgroundMode === 'dark' ? 'dark-mode' : ''}>
+      <SettingsModal
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        toggles={toggles}
+        setToggles={setToggles}
+        backgroundMode={backgroundMode}
+        setBackgroundMode={handleBackgroundModeChange}
+        onUploadBackground={handleUploadBackground}
+        adCount={adCount}
+        onAdUpgrade={handleAdUpgrade}
+        sponsoredShortcutsCount={sponsoredShortcutsCount}
+        setSponsoredShortcutsCount={handleSponsoredShortcutsChange}
+        showMoneyRaised={showMoneyRaised}
+        setShowMoneyRaised={handleShowMoneyRaisedChange}
+        showShortcuts={showShortcuts}
+        setShowShortcuts={setShowShortcuts}
+        shortcutsType={shortcutsType}
+        setShortcutsType={setShortcutsType}
+        onAuthChange={(user) => {
+          console.log('User auth changed:', user);
+          setCurrentUser(user);
+          
+          if (user?.id) {
+            gamificationTracker.getUserProfile(user.id).then(result => {
+              if (result.success) {
+                setGamificationUser(result.data);
+              }
+            });
+          } else {
+            setGamificationUser(null);
             }
           }}
+          onShowWallpaperModal={() => setShowWallpaperModal(true)}
+          selectedWallpaper={selectedWallpaper}
         />
+        
+      <WallpaperModal
+        open={showWallpaperModal}
+        onClose={() => setShowWallpaperModal(false)}
+        onSelectWallpaper={handleWallpaperSelection}
+      />
       
       {/* Gamification Modal */}
       <GamificationModal
         open={gamificationOpen}
         onClose={() => setGamificationOpen(false)}
         currentUser={gamificationUser}
+        refreshTrigger={gamificationRefreshTrigger}
       />
       
       {/* Apps Bubble */}
@@ -976,9 +1420,9 @@ export const NewTab = () => {
          <button className="t4p-signup-btn" onClick={() => setProfileOpen(true)}>
            Sign Up
          </button>
-         {toggles.apps && (
-           <button className="t4p-icon-btn" title="Notifications" onClick={() => setNotificationsOpen(v => !v)}>
-             <img src={NotificationsIcon} width="24" height="24" alt="Notifications" />
+         {toggles.news && (
+           <button className="t4p-icon-btn" title="News" onClick={() => setNotificationsOpen(v => !v)}>
+             <img src={NotificationsIcon} width="24" height="24" alt="News" />
            </button>
          )}
          <button className="t4p-icon-btn" title="Profile" onClick={() => setProfileOpen(v => !v)}>
@@ -1010,7 +1454,7 @@ export const NewTab = () => {
            <div className="t4p-logo-container">
              {logoType === 'logo' && (
                <img 
-                 src={backgroundMode === 'gallery' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : '/img/logo_green_transparent.png'} 
+                 src={backgroundMode === 'gallery' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : backgroundMode === 'dark' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : '/img/logo_green_transparent.png'} 
                  alt="tabs4palestine logo" 
                  className="t4p-logo" 
                  style={{ transform: 'scale(1.2)' }}
@@ -1024,7 +1468,7 @@ export const NewTab = () => {
              )}
              {logoType === 'watermelon' && (
                <img 
-                 src={backgroundMode === 'gallery' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : '/img/logo_green_transparent.png'} 
+                 src={backgroundMode === 'gallery' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : backgroundMode === 'dark' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : '/img/logo_green_transparent.png'} 
                  alt="Tabs4Palestine Logo" 
                  className="t4p-logo" 
                  style={{ transform: 'scale(1.2)' }}
@@ -1085,7 +1529,7 @@ export const NewTab = () => {
                                               {/* Donation Box - Bottom Left */}
            {showMoneyRaised && (
              <div className="donation-box-bottom-left">
-               <button className="donation-close-btn" title="Hide" onClick={() => setShowMoneyRaised(false)}>
+               <button className="donation-close-btn" title="Hide" onClick={() => handleShowMoneyRaisedChange(false)}>
                  ×
                </button>
                <img src={oliveIcon} alt="Olive" className="donation-icon" />
@@ -1100,7 +1544,7 @@ export const NewTab = () => {
            )}
          
          <div className="quick-access-grid">
-           {shortcuts.slice(0, sponsoredShortcutsCount).map((shortcut, index) => (
+           {filteredShortcuts.map((shortcut, index) => (
              <a 
                key={index} 
                href={shortcut.url} 
@@ -1125,21 +1569,9 @@ export const NewTab = () => {
            </button>
          </div>
          
-         {/* 3rd Advertisement - Below Shortcuts, Near Bottom */}
+         {/* 3rd Advertisement - Ethicly API-driven Leaderboard Ad */}
          {adCount >= 3 && (
-           <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
-             <img 
-               src="/img/ads/3rd_ad.png" 
-               alt="Advertisement" 
-               style={{ 
-                 width: '400px', 
-                 height: '150px', 
-                 objectFit: 'contain',
-                 borderRadius: '8px',
-                 boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-               }} 
-             />
-           </div>
+           <EthiclyAdComponent />
          )}
       </div>
       

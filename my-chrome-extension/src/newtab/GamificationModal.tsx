@@ -30,6 +30,7 @@ interface GamificationModalProps {
   open: boolean;
   onClose: () => void;
   currentUser: User | null;
+  refreshTrigger?: number; // Add this to trigger refresh when it changes
 }
 
 const TIER_INFO = {
@@ -50,7 +51,7 @@ const BADGE_ICONS = {
   'community_builder': '🏗️'
 };
 
-export default function GamificationModal({ open, onClose, currentUser }: GamificationModalProps) {
+export default function GamificationModal({ open, onClose, currentUser, refreshTrigger }: GamificationModalProps) {
   const [activeTab, setActiveTab] = useState('leaderboard');
   const [leaderboard, setLeaderboard] = useState<User[]>([]);
   const [friendsLeaderboard, setFriendsLeaderboard] = useState<User[]>([]);
@@ -69,7 +70,7 @@ export default function GamificationModal({ open, onClose, currentUser }: Gamifi
       loadCommunityStats();
       loadFriends();
     }
-  }, [open, currentUser]);
+  }, [open, currentUser, refreshTrigger]);
 
   const loadLeaderboard = async () => {
     try {
