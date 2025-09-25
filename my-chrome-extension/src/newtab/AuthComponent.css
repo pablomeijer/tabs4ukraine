@@ -169,17 +169,130 @@
 }
 
 .auth-stats {
-  display: flex;
-  gap: 16px;
+  margin-top: 20px;
 }
 
-.auth-stat {
+.auth-stat-group {
+  margin-bottom: 24px;
+}
+
+.auth-stat-group h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #202124;
+  margin: 0 0 16px 0;
+  text-align: center;
+}
+
+.auth-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.auth-stat-item {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #e8eaed;
+  transition: all 0.2s ease;
+}
+
+.auth-stat-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.auth-stat-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a73e8;
+  margin-bottom: 4px;
+}
+
+.auth-stat-label {
+  display: block;
   font-size: 0.8rem;
+  color: #5f6368;
+  font-weight: 500;
+}
+
+.auth-account-info h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #202124;
+  margin: 0 0 12px 0;
+  text-align: center;
+}
+
+.auth-account-details {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #e8eaed;
+}
+
+.auth-account-details p {
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
   color: #5f6368;
 }
 
-.auth-stat strong {
-  color: #1a73e8;
+.auth-account-details p:last-child {
+  margin-bottom: 0;
+}
+
+.auth-account-details strong {
+  color: #202124;
+}
+
+/* Dark mode styles */
+.dark-mode .auth-stat-group h4 {
+  color: #ffffff;
+}
+
+.dark-mode .auth-stat-item {
+  background: #3a3a3a;
+  border-color: #555555;
+}
+
+.dark-mode .auth-stat-number {
+  color: #188038;
+}
+
+.dark-mode .auth-stat-label {
+  color: #cccccc;
+}
+
+.dark-mode .auth-account-info h4 {
+  color: #ffffff;
+}
+
+.dark-mode .auth-account-details {
+  background: #3a3a3a;
+  border-color: #555555;
+}
+
+.dark-mode .auth-account-details p {
+  color: #cccccc;
+}
+
+.dark-mode .auth-account-details strong {
+  color: #ffffff;
+}
+
+.auth-loading {
+  text-align: center;
+  padding: 20px;
+  color: #5f6368;
+  font-style: italic;
+}
+
+.dark-mode .auth-loading {
+  color: #cccccc;
 }
 
 /* Responsive design */
@@ -202,8 +315,9 @@
     margin-bottom: 12px;
   }
   
-  .auth-stats {
-    justify-content: center;
+  .auth-stat-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 }
 

@@ -170,6 +170,63 @@
   margin: 0;
 }
 
+/* Dark mode styles */
+.dark-mode .about-header {
+  border-bottom-color: #3a3a3a;
+}
+
+.dark-mode .about-title {
+  color: #ffffff;
+}
+
+.dark-mode .about-subtitle {
+  color: #cccccc;
+}
+
+.dark-mode .about-section-title {
+  color: #ffffff;
+}
+
+.dark-mode .about-description {
+  color: #cccccc;
+}
+
+.dark-mode .about-features li {
+  color: #cccccc;
+}
+
+.dark-mode .impact-level {
+  background: #3a3a3a;
+  border-left-color: #188038;
+}
+
+.dark-mode .impact-text {
+  color: #ffffff;
+}
+
+.dark-mode .about-button.secondary {
+  background: #3a3a3a;
+  color: #cccccc;
+  border-color: #555555;
+}
+
+.dark-mode .about-button.secondary:hover {
+  background: #4a4a4a;
+  color: #ffffff;
+}
+
+.dark-mode .about-footer {
+  border-top-color: #3a3a3a;
+}
+
+.dark-mode .about-footer-text {
+  color: #cccccc;
+}
+
+.dark-mode .about-version {
+  color: #999999;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .about-container {

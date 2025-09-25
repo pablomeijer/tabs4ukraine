@@ -59,16 +59,19 @@ export default function GamificationModal({ open, onClose, currentUser, refreshT
   const [communityStats, setCommunityStats] = useState<CommunityStats | null>(null);
   const [friends, setFriends] = useState<User[]>([]);
   const [pendingFriends, setPendingFriends] = useState<User[]>([]);
-  const [showFriendsOnly, setShowFriendsOnly] = useState(false);
+  // Removed showFriendsOnly state - leaderboard is now always global
   const [friendCode, setFriendCode] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (open && currentUser) {
-      loadLeaderboard();
-      loadAchievements();
-      loadCommunityStats();
-      loadFriends();
+    if (open) {
+      loadLeaderboard(); // Always load leaderboard for all users
+      loadCommunityStats(); // Always load community stats for all users
+      
+      if (currentUser) {
+        loadAchievements();
+        loadFriends();
+      }
     }
   }, [open, currentUser, refreshTrigger]);
 
@@ -231,7 +234,7 @@ export default function GamificationModal({ open, onClose, currentUser, refreshT
 
   if (!open) return null;
 
-  const currentLeaderboard = showFriendsOnly ? friendsLeaderboard : leaderboard;
+  const currentLeaderboard = leaderboard; // Always show global leaderboard
   const userRank = currentUser ? currentLeaderboard.findIndex(u => u.id === currentUser.id) + 1 : 0;
   const tierProgress = currentUser ? getTierProgress(currentUser.total_raised) : { progress: 0, nextTier: null };
 
@@ -259,18 +262,8 @@ export default function GamificationModal({ open, onClose, currentUser, refreshT
           {activeTab === 'leaderboard' && (
             <div className="leaderboard-section">
               <div className="leaderboard-header">
-                <h3>🏆 Leaderboard</h3>
-                <div className="leaderboard-toggle">
-                  <label className="toggle-switch">
-                    <input
-                      type="checkbox"
-                      checked={showFriendsOnly}
-                      onChange={e => setShowFriendsOnly(e.target.checked)}
-                    />
-                    <span className="toggle-slider"></span>
-                    <span className="toggle-label">Friends Only</span>
-                  </label>
-                </div>
+                <h3>🏆 Global Leaderboard</h3>
+                <p className="leaderboard-subtitle">See who's raising the most for Palestine!</p>
               </div>
 
               {currentUser && (
@@ -317,22 +310,36 @@ export default function GamificationModal({ open, onClose, currentUser, refreshT
           {activeTab === 'achievements' && (
             <div className="achievements-section">
               <h3>🏅 Achievements</h3>
-              <div className="achievements-grid">
-                {achievements.map(achievement => (
-                  <div key={achievement.id} className="achievement-card earned">
-                    <div className="achievement-icon">
-                      {BADGE_ICONS[achievement.badge_type as keyof typeof BADGE_ICONS] || '🏆'}
-                    </div>
-                    <div className="achievement-info">
-                      <div className="achievement-name">{achievement.badge_name}</div>
-                      <div className="achievement-description">{achievement.badge_description}</div>
-                      <div className="achievement-date">
-                        Earned {new Date(achievement.earned_at).toLocaleDateString()}
+              {currentUser ? (
+                <div className="achievements-grid">
+                  {achievements.map(achievement => (
+                    <div key={achievement.id} className="achievement-card earned">
+                      <div className="achievement-icon">
+                        {BADGE_ICONS[achievement.badge_type as keyof typeof BADGE_ICONS] || '🏆'}
+                      </div>
+                      <div className="achievement-info">
+                        <div className="achievement-name">{achievement.badge_name}</div>
+                        <div className="achievement-description">{achievement.badge_description}</div>
+                        <div className="achievement-date">
+                          Earned {new Date(achievement.earned_at).toLocaleDateString()}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="login-encouragement">
+                  <div className="encouragement-icon">🔐</div>
+                  <h4>Sign in to track your achievements!</h4>
+                  <p>
+                    Create an account or sign in to unlock achievements, track your fundraising progress, 
+                    and compete with friends on the leaderboard.
+                  </p>
+                  <button className="login-encouragement-btn" onClick={onClose}>
+                    Sign In / Sign Up
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

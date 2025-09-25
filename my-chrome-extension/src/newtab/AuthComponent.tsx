@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
-import { auth, userProfile, User, supabase } from '../lib/supabase'
+import { auth, userProfile, User, supabase, gamificationTracker } from '../lib/supabase'
 import './AuthComponent.css'
 
 interface AuthComponentProps {
   onAuthChange: (user: User | null) => void
+  gamificationUser?: any
+  totalDonations?: number
 }
 
-export const AuthComponent = ({ onAuthChange }: AuthComponentProps) => {
+export const AuthComponent = ({ onAuthChange, gamificationUser, totalDonations }: AuthComponentProps) => {
   const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -15,6 +17,17 @@ export const AuthComponent = ({ onAuthChange }: AuthComponentProps) => {
   const [error, setError] = useState('')
   const [user, setUser] = useState<User | null>(null)
   const [signupSuccess, setSignupSuccess] = useState(false)
+  
+  // Provide default values to prevent undefined errors
+  const safeGamificationUser = gamificationUser || {}
+  const safeTotalDonations = totalDonations || 0
+  
+  // Debug logging
+  console.log('AuthComponent props:', { gamificationUser, totalDonations, safeGamificationUser, safeTotalDonations })
+  
+  // Add loading state for when data is being fetched
+  const [isLoadingData, setIsLoadingData] = useState(false)
+  const [localGamificationData, setLocalGamificationData] = useState<any>(null)
 
   useEffect(() => {
     // Check for existing session
@@ -32,6 +45,29 @@ export const AuthComponent = ({ onAuthChange }: AuthComponentProps) => {
 
     return () => subscription.unsubscribe()
   }, [])
+
+  // Load gamification data when user is available
+  useEffect(() => {
+    const loadGamificationData = async () => {
+      if (user?.id) {
+        setIsLoadingData(true)
+        try {
+          const result = await gamificationTracker.getUserProfile(user.id)
+          if (result.success) {
+            setLocalGamificationData(result.data)
+          }
+        } catch (error) {
+          console.error('Error loading gamification data:', error)
+        } finally {
+          setIsLoadingData(false)
+        }
+      } else {
+        setLocalGamificationData(null)
+      }
+    }
+
+    loadGamificationData()
+  }, [user])
 
   const checkUser = async () => {
     const { user } = await auth.getCurrentUser()
@@ -51,11 +87,12 @@ export const AuthComponent = ({ onAuthChange }: AuthComponentProps) => {
       if (error && error.code === 'PGRST116') {
         console.log('Profile not found, creating new profile...')
         // Profile doesn't exist, create it
-        const { data: newProfile, error: createError } = await userProfile.createProfile(
+        const createResult = await userProfile.createProfile(
           supabaseUser.id,
           supabaseUser.email,
           supabaseUser.user_metadata?.username
         )
+        const { data: newProfile, error: createError } = createResult || { data: null, error: null }
         console.log('Profile creation result:', { newProfile, createError })
         if (createError) throw createError
         profile = newProfile
@@ -113,11 +150,12 @@ export const AuthComponent = ({ onAuthChange }: AuthComponentProps) => {
               username: username || data.user.email.split('@')[0]
             })
             
-            const { data: profileData, error: profileError } = await userProfile.createProfile(
+            const createResult = await userProfile.createProfile(
               data.user.id,
               data.user.email,
               username || data.user.email.split('@')[0]
             )
+            const { data: profileData, error: profileError } = createResult || { data: null, error: null }
             
             console.log('Profile creation result for unconfirmed user:', { profileData, profileError })
             
@@ -136,11 +174,12 @@ export const AuthComponent = ({ onAuthChange }: AuthComponentProps) => {
             username: username || data.user.email.split('@')[0]
           })
           
-          const { data: profileData, error: profileError } = await userProfile.createProfile(
+          const createResult = await userProfile.createProfile(
             data.user.id,
             data.user.email,
             username || data.user.email.split('@')[0]
           )
+          const { data: profileData, error: profileError } = createResult || { data: null, error: null }
           
           console.log('Profile creation result:', { profileData, profileError })
           
@@ -189,18 +228,47 @@ export const AuthComponent = ({ onAuthChange }: AuthComponentProps) => {
       <div className="auth-container">
         <div className="auth-user-info">
           <div className="auth-avatar">
-            {user.username?.charAt(0).toUpperCase() || user.email.charAt(0).toUpperCase()}
+            {user?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
           </div>
           <div className="auth-user-details">
-            <h3 className="auth-username">{user.username || 'User'}</h3>
-            <p className="auth-email">{user.email}</p>
+            <h3 className="auth-username">{user?.username || 'User'}</h3>
+            <p className="auth-email">{user?.email || 'Not available'}</p>
             <div className="auth-stats">
-              <span className="auth-stat">
-                <strong>{user.ad_count}</strong> ads
-              </span>
-              <span className="auth-stat">
-                <strong>${user.total_donations}</strong> donated
-              </span>
+              <div className="auth-stat-group">
+                <h4>Your Impact</h4>
+                {isLoadingData ? (
+                  <div className="auth-loading">
+                    <p>Loading your stats...</p>
+                  </div>
+                ) : (
+                  <div className="auth-stat-grid">
+                    <div className="auth-stat-item">
+                      <span className="auth-stat-number">{localGamificationData?.tabs_opened || 0}</span>
+                      <span className="auth-stat-label">Tabs Opened</span>
+                    </div>
+                    <div className="auth-stat-item">
+                      <span className="auth-stat-number">${(user?.total_donations || 0).toFixed(2)}</span>
+                      <span className="auth-stat-label">Money Raised</span>
+                    </div>
+                    <div className="auth-stat-item">
+                      <span className="auth-stat-number">{user?.ad_count || 1}</span>
+                      <span className="auth-stat-label">Ad Level</span>
+                    </div>
+                    <div className="auth-stat-item">
+                      <span className="auth-stat-number">{localGamificationData?.achievements_unlocked || 0}</span>
+                      <span className="auth-stat-label">Achievements</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="auth-account-info">
+                <h4>Account Details</h4>
+                <div className="auth-account-details">
+                  <p><strong>Username:</strong> {user?.username || 'Not set'}</p>
+                  <p><strong>Email:</strong> {user?.email || 'Not available'}</p>
+                  <p><strong>Member since:</strong> {user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'Unknown'}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -320,7 +388,7 @@ export const AuthComponent = ({ onAuthChange }: AuthComponentProps) => {
       {/* Debug section - remove in production */}
       <div style={{ marginTop: '20px', padding: '10px', background: '#f0f0f0', borderRadius: '5px' }}>
         <h4>Debug Info:</h4>
-        <p>Current user: {user ? `${user.username} (${user.email})` : 'Not logged in'}</p>
+        <p>Current user: {user ? `${user.username || 'Unknown'} (${user.email || 'No email'})` : 'Not logged in'}</p>
         <button 
           onClick={async () => {
             console.log('Testing profile creation...')

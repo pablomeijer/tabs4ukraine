@@ -612,3 +612,60 @@ input:checked + .toggle-slider:before {
     gap: 10px;
   }
 }
+
+/* Login Encouragement Styles */
+.login-encouragement {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, rgba(24, 128, 56, 0.1) 0%, rgba(24, 128, 56, 0.05) 100%);
+  border-radius: 16px;
+  border: 2px dashed rgba(24, 128, 56, 0.3);
+}
+
+.encouragement-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.login-encouragement h4 {
+  color: #188038;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+}
+
+.login-encouragement p {
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 25px 0;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login-encouragement-btn {
+  background: linear-gradient(135deg, #188038 0%, #32CD32 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(24, 128, 56, 0.3);
+}
+
+.login-encouragement-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(24, 128, 56, 0.4);
+}
+
+/* Leaderboard subtitle */
+.leaderboard-subtitle {
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 0;
+}

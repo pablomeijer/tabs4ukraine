@@ -34,23 +34,9 @@
   color: #ffffff !important;
 }
 
-.dark-mode .t4p-add-shortcut-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #ffffff;
-  color: #ffffff !important;
-}
+/* Dark mode add shortcut button styles removed - now inherits from quick-access-item */
 
-.dark-mode .t4p-add-shortcut-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.dark-mode .t4p-add-shortcut-btn svg {
-  color: #ffffff !important;
-}
-
-.dark-mode .t4p-add-shortcut-btn::after {
-  color: #ffffff !important;
-}
+/* Add shortcut div styling - now uses same structure as other shortcuts */
 
 .dark-mode .donation-container {
   background: rgba(255, 255, 255, 0.1);
@@ -224,7 +210,7 @@
 
 /* Search bar dark mode */
 .dark-mode .search-container {
-  background: rgba(255, 255, 255, 0.1);
+  background: transparent;
   border-color: #ffffff;
 }
 
@@ -235,6 +221,20 @@
 
 .dark-mode .search-input::placeholder {
   color: #cccccc;
+}
+
+.dark-mode .search-box {
+  background: rgba(42, 42, 42, 0.9);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .search-box:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .search-box:focus-within {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .dark-mode .search-btn {
@@ -1020,6 +1020,20 @@ a {
   border: 1px solid #e0e0e0;
 }
 
+/* Dark mode for wallpaper preview */
+.dark-mode .t4p-wallpaper-preview {
+  background: #3a3a3a;
+  border-color: #555;
+}
+
+.dark-mode .t4p-wallpaper-preview-info h4 {
+  color: #ffffff !important;
+}
+
+.dark-mode .t4p-wallpaper-preview-info p {
+  color: #cccccc !important;
+}
+
 .t4p-wallpaper-preview-image {
   width: 80px;
   height: 60px;
@@ -1101,6 +1115,11 @@ a {
   line-height: 1.4;
 }
 
+/* Dark mode for wallpaper modal header text */
+.dark-mode .t4p-wallpaper-modal-header p {
+  color: #cccccc !important;
+}
+
 .t4p-wallpaper-categories {
   display: flex;
   gap: 8px;
@@ -1124,6 +1143,23 @@ a {
   color: #333;
 }
 
+/* Dark mode for category buttons */
+.dark-mode .t4p-category-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .t4p-category-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.dark-mode .t4p-category-btn-active {
+  background: #188038;
+  color: #ffffff;
+}
+
 .t4p-category-btn-active {
   color: #188038;
   border-bottom-color: #188038;
@@ -1145,6 +1181,11 @@ a {
   cursor: pointer;
   transition: all 0.2s ease;
   border: 2px solid transparent;
+}
+
+/* Dark mode for wallpaper items */
+.dark-mode .t4p-wallpaper-item {
+  background: #3a3a3a;
 }
 
 .t4p-wallpaper-item:hover {
@@ -1392,6 +1433,22 @@ a {
   background: rgba(128, 128, 128, 0.1);
   border-radius: 8px;
 }
+
+/* Disable hover effects in non-default backgrounds since we have permanent overlay */
+section[style*="backgroundImage"] .quick-access-item:hover,
+.gallery-mode .quick-access-item:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Dark mode hover effects for non-default backgrounds */
+.dark-mode section[style*="backgroundImage"] .quick-access-item:hover,
+.dark-mode .gallery-mode .quick-access-item:hover {
+  transform: translateY(-1px);
+  background: rgba(0, 0, 0, 0.85) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4) !important;
+}
 .quick-access-item img {
   width: 36px;
   height: 36px;
@@ -1399,29 +1456,62 @@ a {
   margin-bottom: 4px;
   border-radius: 6px;
 }
+
+/* White square background specifically for the add shortcut plus sign */
+.quick-access-item img[alt="Add Shortcut"] {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 4px;
+  border-radius: 6px;
+  object-fit: contain;
+}
 .quick-access-item span {
   font-size: 0.7rem;
   font-weight: 500;
   text-align: center;
   line-height: 1.1;
-  color: #333;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  white-space: pre-line;
 }
 
 /* When background is gallery mode (images), make shortcut text white */
 section[style*="backgroundImage"] .quick-access-item span,
 .gallery-mode .quick-access-item span {
-  color: white !important;
-  text-shadow: none;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  font-weight: 500;
 }
 
-/* Gallery mode shortcut background */
+/* Gallery mode styling - no permanent background */
 section[style*="backgroundImage"] .quick-access-item,
 .gallery-mode .quick-access-item {
-  background: rgba(255, 255, 255, 0.9) !important;
-  border-radius: 12px !important;
-  padding: 12px 8px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-  backdrop-filter: blur(10px);
+  background: transparent !important;
+  border-radius: 8px !important;
+  padding: 8px 4px !important;
+  box-shadow: none !important;
+  backdrop-filter: none;
+  border: none !important;
+  position: relative !important;
+}
+
+/* Permanent overlay removed - keeping only hover effects */
+
+/* Dark mode backgrounds for non-default backgrounds */
+.dark-mode section[style*="backgroundImage"] .quick-access-item,
+.dark-mode .gallery-mode .quick-access-item {
+  background: rgba(0, 0, 0, 0.85) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  position: relative;
+}
+
+/* Dark mode permanent overlay removed */
+
+.dark-mode section[style*="backgroundImage"] .quick-access-item span,
+.dark-mode .gallery-mode .quick-access-item span {
+  color: #ffffff !important;
+  text-shadow: none;
+  font-weight: 500;
 }
 
 /* Gallery mode shortcut items styling */
@@ -1434,8 +1524,9 @@ section[style*="backgroundImage"] .t4p-shortcut-item,
 
 section[style*="backgroundImage"] .t4p-shortcut-item span,
 .gallery-mode .t4p-shortcut-item span {
-  color: #333 !important;
+  color: #ffffff !important;
   font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 section[style*="backgroundImage"] .t4p-shortcut-item img,
@@ -1445,8 +1536,8 @@ section[style*="backgroundImage"] .t4p-shortcut-item img,
 
 section[style*="backgroundImage"] .quick-access-item span,
 .gallery-mode .quick-access-item span {
-  color: #333 !important;
-  text-shadow: none;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 @media (max-width: 768px) {
   .quick-access-grid {
@@ -1460,6 +1551,7 @@ section[style*="backgroundImage"] .quick-access-item span,
     background: transparent;
     box-shadow: none;
     border: none;
+    position: relative;
   }
   .quick-access-item:hover {
     background: rgba(128, 128, 128, 0.1);
@@ -1469,6 +1561,14 @@ section[style*="backgroundImage"] .quick-access-item span,
     height: 28px;
     margin-bottom: 3px;
   }
+
+  /* Mobile white square background for add shortcut plus sign */
+  .quick-access-item img[alt="Add Shortcut"] {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 3px;
+    border-radius: 4px;
+    object-fit: contain;
+  }
   .quick-access-item span {
     font-size: 0.6rem;
   }
@@ -1476,32 +1576,24 @@ section[style*="backgroundImage"] .quick-access-item span,
   /* Gallery mode shortcut background on mobile */
   section[style*="backgroundImage"] .quick-access-item,
   .gallery-mode .quick-access-item {
-    background: rgba(255, 255, 255, 0.9) !important;
-    border-radius: 10px !important;
-    padding: 10px 6px !important;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important;
-    backdrop-filter: blur(8px);
+    background: transparent !important;
+    border-radius: 6px !important;
+    padding: 6px 3px !important;
+    box-shadow: none !important;
+    backdrop-filter: none;
+    border: none !important;
+    position: relative;
   }
+
+  /* Mobile permanent overlay removed */
   
   section[style*="backgroundImage"] .quick-access-item span,
   .gallery-mode .quick-access-item span {
-    color: #333 !important;
-    text-shadow: none;
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
   
-  .t4p-add-shortcut-btn {
-    width: auto;
-    min-height: auto;
-  }
-  
-  .t4p-add-shortcut-btn::after {
-    font-size: 0.6rem;
-  }
-  
-  .t4p-add-shortcut-btn svg {
-    width: 28px;
-    height: 28px;
-  }
+  /* Add shortcut button mobile styles removed - now inherits from quick-access-item */
 }
 @media (max-width: 480px) {
   .t4p-logo-container {
@@ -1574,6 +1666,7 @@ section[style*="backgroundImage"] .quick-access-item span,
     background: transparent;
     box-shadow: none;
     border: none;
+    position: relative;
   }
   .quick-access-item:hover {
     background: rgba(128, 128, 128, 0.1);
@@ -1584,6 +1677,14 @@ section[style*="backgroundImage"] .quick-access-item span,
     height: 24px;
     margin-bottom: 2px;
   }
+
+  /* Small mobile white square background for add shortcut plus sign */
+  .quick-access-item img[alt="Add Shortcut"] {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px;
+    border-radius: 3px;
+    object-fit: contain;
+  }
   
   .quick-access-item span {
     font-size: 0.55rem;
@@ -1592,17 +1693,21 @@ section[style*="backgroundImage"] .quick-access-item span,
   /* Gallery mode shortcut background on small mobile */
   section[style*="backgroundImage"] .quick-access-item,
   .gallery-mode .quick-access-item {
-    background: rgba(255, 255, 255, 0.9) !important;
-    border-radius: 8px !important;
-    padding: 8px 4px !important;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
-    backdrop-filter: blur(6px);
+    background: transparent !important;
+    border-radius: 4px !important;
+    padding: 5px 2px !important;
+    box-shadow: none !important;
+    backdrop-filter: none;
+    border: none !important;
+    position: relative;
   }
+
+  /* Small mobile permanent overlay removed */
   
   section[style*="backgroundImage"] .quick-access-item span,
   .gallery-mode .quick-access-item span {
-    color: #333 !important;
-    text-shadow: none;
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
   
   .t4p-add-shortcut-btn {
@@ -1619,14 +1724,7 @@ section[style*="backgroundImage"] .quick-access-item span,
      min-width: 85vw;
    }
   
-  .t4p-add-shortcut-btn::after {
-    font-size: 0.55rem;
-  }
-  
-  .t4p-add-shortcut-btn svg {
-    width: 24px;
-    height: 24px;
-  }
+  /* Add shortcut button small mobile styles removed - now inherits from quick-access-item */
 }
 
 .t4p-apps-bubble {
@@ -1948,31 +2046,70 @@ section[style*="backgroundImage"] .quick-access-item span,
 }
 
 .t4p-gamification-item {
-  padding: 16px;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  background: #fafafa;
+  padding: 20px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(24, 128, 56, 0.1) 0%, rgba(24, 128, 56, 0.05) 100%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.t4p-gamification-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  background: linear-gradient(135deg, rgba(24, 128, 56, 0.15) 0%, rgba(24, 128, 56, 0.08) 100%);
 }
 
 .t4p-gamification-headline {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 8px;
-  line-height: 1.4;
+  font-size: 18px;
+  font-weight: 700;
+  color: #188038;
+  margin-bottom: 12px;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
 }
 
 .t4p-gamification-summary {
-  font-size: 14px;
-  color: #666;
-  line-height: 1.5;
-  margin-bottom: 12px;
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  font-weight: 400;
 }
 
 .t4p-gamification-placeholder {
-  font-size: 12px;
+  font-size: 13px;
   color: #188038;
-  font-weight: 500;
+  font-weight: 600;
+  padding: 8px 12px;
+  background: rgba(24, 128, 56, 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Dark mode for gamification */
+.dark-mode .t4p-gamification-item {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .t4p-gamification-item:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .t4p-gamification-headline {
+  color: #4CAF50;
+}
+
+.dark-mode .t4p-gamification-summary {
+  color: #e0e0e0;
+}
+
+.dark-mode .t4p-gamification-placeholder {
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.2);
   font-style: italic;
   text-align: center;
   padding: 8px;
@@ -2139,76 +2276,7 @@ section[style*="backgroundImage"] .quick-access-item span,
   font-weight: 500;
 }
 
-/* Add Shortcut Button */
-.t4p-add-shortcut-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: 2px dashed #188038;
-  border-radius: 8px;
-  padding: 8px 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: none;
-  backdrop-filter: none;
-  width: auto;
-  min-height: auto;
-  transform: translateY(0);
-  color: #188038;
-}
-
-.t4p-add-shortcut-btn:hover {
-  background: rgba(24, 128, 56, 0.1);
-  border-color: #188038;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-.t4p-add-shortcut-btn::after {
-  content: 'Add Shortcut';
-  font-size: 0.7rem;
-  font-weight: 500;
-  text-align: center;
-  line-height: 1.1;
-  color: #188038;
-  margin-top: 4px;
-}
-
-/* Gallery mode add shortcut button styling */
-section[style*="backgroundImage"] .t4p-add-shortcut-btn,
-.gallery-mode .t4p-add-shortcut-btn {
-  background: rgba(255, 255, 255, 0.9) !important;
-  border: 2px dashed white !important;
-  backdrop-filter: blur(10px);
-}
-
-section[style*="backgroundImage"] .t4p-add-shortcut-btn::after,
-.gallery-mode .t4p-add-shortcut-btn::after {
-  color: white !important;
-}
-
-section[style*="backgroundImage"] .t4p-add-shortcut-btn,
-.gallery-mode .t4p-add-shortcut-btn {
-  color: white !important;
-}
-
-section[style*="backgroundImage"] .t4p-add-shortcut-btn svg,
-.gallery-mode .t4p-add-shortcut-btn svg {
-  color: white !important;
-}
-
-.t4p-add-shortcut-btn svg {
-  width: 36px;
-  height: 36px;
-  margin-bottom: 4px;
-  transition: transform 0.2s ease;
-}
-
-.t4p-add-shortcut-btn:hover svg {
-  transform: scale(1.1);
-}
+/* Add Shortcut Button - now uses quick-access-item class, so inherits all the same styles */
 
 /* Logo Toggle Modal */
 .t4p-logo-toggle-modal-overlay {

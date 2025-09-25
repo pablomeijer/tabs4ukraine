@@ -27,7 +27,7 @@ import TrophyIcon from '../assets/icons/trophy_24dp_FFFFFF_FILL0_wght400_GRAD0_o
 import CachedIconBlack from '../assets/icons/cached_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg'
 import CachedIconWhite from '../assets/icons/cached_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg'
 
-function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground, adCount, onAdUpgrade, sponsoredShortcutsCount, setSponsoredShortcutsCount, showMoneyRaised, setShowMoneyRaised, showShortcuts, setShowShortcuts, shortcutsType, setShortcutsType, onAuthChange, onShowWallpaperModal, selectedWallpaper }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void, adCount: number, onAdUpgrade: (count: number) => void, sponsoredShortcutsCount: number, setSponsoredShortcutsCount: (count: number) => void, showMoneyRaised: boolean, setShowMoneyRaised: (show: boolean) => void, showShortcuts: boolean, setShowShortcuts: (show: boolean) => void, shortcutsType: 'advertisements' | 'most-visited' | 'favorites', setShortcutsType: (type: 'advertisements' | 'most-visited' | 'favorites') => void, onAuthChange: (user: any) => void, onShowWallpaperModal: () => void, selectedWallpaper: any }) {
+function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground, adCount, onAdUpgrade, sponsoredShortcutsCount, setSponsoredShortcutsCount, showMoneyRaised, setShowMoneyRaised, showShortcuts, setShowShortcuts, shortcutsType, setShortcutsType, onAuthChange, onShowWallpaperModal, selectedWallpaper, customWallpaperEnabled, onCustomWallpaperToggle }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void, adCount: number, onAdUpgrade: (count: number) => void, sponsoredShortcutsCount: number, setSponsoredShortcutsCount: (count: number) => void, showMoneyRaised: boolean, setShowMoneyRaised: (show: boolean) => void, showShortcuts: boolean, setShowShortcuts: (show: boolean) => void, shortcutsType: 'advertisements' | 'most-visited' | 'favorites', setShortcutsType: (type: 'advertisements' | 'most-visited' | 'favorites') => void, onAuthChange: (user: any) => void, onShowWallpaperModal: () => void, selectedWallpaper: any, customWallpaperEnabled: boolean, onCustomWallpaperToggle: (enabled: boolean) => void }) {
   const [activeTab, setActiveTab] = useState('General');
   const fileInputRef = useRef<HTMLInputElement>(null);
   if (!open) return null;
@@ -137,24 +137,40 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
                     <p className="t4p-subsection-description">Customize your homepage</p>
                   </div>
                   
-                  <div className="t4p-wallpaper-preview">
-                    <div className="t4p-wallpaper-preview-image">
-                      <img 
-                        src={selectedWallpaper.image} 
-                        alt={`${selectedWallpaper.name} preview`}
-                        className="t4p-preview-img"
-                      />
-                    </div>
-                    <div className="t4p-wallpaper-preview-info">
-                      <span className="t4p-preview-title">{selectedWallpaper.name}</span>
-                      <button 
-                        className="t4p-edit-background-btn"
-                        onClick={onShowWallpaperModal}
-                      >
-                        Edit Background
-                      </button>
+                  <div className="t4p-wallpaper-toggle">
+                    <div className="t4p-toggle-row">
+                      <span className="t4p-toggle-label">Enable Custom Wallpaper</span>
+                      <label className="t4p-switch">
+                        <input 
+                          type="checkbox" 
+                          checked={customWallpaperEnabled} 
+                          onChange={e => onCustomWallpaperToggle(e.target.checked)} 
+                        />
+                        <span className="t4p-slider"></span>
+                      </label>
                     </div>
                   </div>
+                  
+                  {customWallpaperEnabled && (
+                    <div className="t4p-wallpaper-preview">
+                      <div className="t4p-wallpaper-preview-image">
+                        <img 
+                          src={selectedWallpaper.image} 
+                          alt={`${selectedWallpaper.name} preview`}
+                          className="t4p-preview-img"
+                        />
+                      </div>
+                      <div className="t4p-wallpaper-preview-info">
+                        <span className="t4p-preview-title">{selectedWallpaper.name}</span>
+                        <button 
+                          className="t4p-edit-background-btn"
+                          onClick={onShowWallpaperModal}
+                        >
+                          Edit Background
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -168,7 +184,11 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
             </div>
           )}
           {activeTab === 'Account' && (
-            <AuthComponent onAuthChange={onAuthChange} />
+            <AuthComponent 
+              onAuthChange={onAuthChange} 
+              gamificationUser={null}
+              totalDonations={totalDonations}
+            />
           )}
           {activeTab === 'Shortcuts' && (
             <div className="t4p-shortcuts-section">
@@ -450,29 +470,20 @@ function WallpaperModal({ open, onClose, onSelectWallpaper }: { open: boolean, o
 export const NewTab = () => {
   console.log('NewTab component starting...');
   
-  // Import all gallery images from src/assets/backgrounds
-  // Using dynamic imports to handle missing images gracefully
+  // Import all gallery images from public/img/backgrounds
+  // Only include images that actually exist in the public folder
   const backgroundImageNames = [
-    'pexels-gaza-8660631.jpg',
-    'pexels-earano-1352196.jpg',
-    'pexels-pixabay-531767.jpg',
-    'pexels-walidphotoz-847402.jpg',
-    'pexels-abu-adel-2153065-3805146.jpg',
-    'pexels-ahmed-akacha-3313934-10629415.jpg',
-    'pexels-fabio2311-712392.jpg',
-    'pexels-mikolaj-kolodziejczyk-2377168-16118911.jpg',
-    'pexels-rana-841343.jpg',
-    'pexels-smuldur-2048865.jpg',
-    'pexels-abdghat-1631665.jpg',
-    'pexels-vincent-pelletier-113252-720254.jpg',
-    'pexels-samer-zeton-455914177-33151206.jpg',
-    'pexels-haleyve-2102625.jpg',
-    'pexels-distoreal-3689859.jpg',
-    'pexels-haleyve-2102627.jpg',
-    'pexels-haleyve-2087388.jpg',
-    'pexels-belal-salem-91944577-9140968.jpg',
-    'pexels-belal-salem-91944577-9140972.jpg',
-    'pexels-leon-natan-2996182-6850831.jpg'
+    'abu-adel-gaza-at-day.jpg',
+    'ala-j-graczyk-bethlehem-palestine.jpg',
+    'belal-salem-gaza-at-night.jpg',
+    'emiliano-arano-la-pampa-argentina.jpg',
+    'haley-black-jerusalem-palestine.jpg',
+    'haley-black-jerusalem.jpg',
+    'haley-black-western-shore-of-the-dead-sea.jpg',
+    'leon-natan-jerusalem-palestine.jpg',
+    'musa-alzanoun-jerusalem-palestine.jpg',
+    'Samer-Zeton-rocky-landscape-of-al-ain.jpg',
+    'white-clouds-pixabay.jpg'
   ]
   
   // Gallery images array using public directory
@@ -485,6 +496,8 @@ export const NewTab = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [time, setTime] = useState('')
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [customWallpaperEnabled, setCustomWallpaperEnabled] = useState(false);
+  // const [gamificationUserData, setGamificationUserData] = useState<any>(null);
   const [toggles, setToggles] = useState({
     apps: true,
     logo: true,
@@ -508,6 +521,7 @@ export const NewTab = () => {
      const [currentUser, setCurrentUser] = useState<any>(null);
    const [adCount, setAdCount] = useState(1);
    const [totalDonations, setTotalDonations] = useState(0);
+  const [sponsoredShortcutsCount, setSponsoredShortcutsCount] = useState(8);
   const [shortcuts, setShortcuts] = useState([
     { name: 'Huda Beauty', url: 'https://www.hudabeauty.com', icon: '/img/8_icons/huda-beauty.png' },
     { name: 'Watan Apparel', url: 'https://www.watanapparel.com', icon: '/img/8_icons/watan.png' },
@@ -517,7 +531,7 @@ export const NewTab = () => {
     { name: 'Darzah', url: 'https://www.darzah.org', icon: '/img/8_icons/white-darzah_logo.png' },
     { name: 'NOL Collective', url: 'https://www.nolcollective.com', icon: '/img/8_icons/white-nol-collective.png' },
     { name: 'SEP', url: 'https://www.sep.com', icon: '/img/8_icons/white-sep_icon_512x512.png' },
-    { name: 'Palestine Store', url: 'https://www.palestinestore.com', icon: '/img/8_icons/01-scaled-2.jpg' },
+    { name: 'Lush', url: 'https://www.lush.com', icon: '/img/8_icons/01-scaled-2.jpg' },
     { name: 'Paliroots', url: 'https://www.paliroots.com', icon: '/img/8_icons/paliroots-logo.png' }
   ]);
   const [filteredShortcuts, setFilteredShortcuts] = useState(shortcuts.slice(0, sponsoredShortcutsCount));
@@ -525,11 +539,9 @@ export const NewTab = () => {
   const [newShortcut, setNewShortcut] = useState({ name: '', url: '' });
   const [shortcutError, setShortcutError] = useState('');
   const [showLogoToggle, setShowLogoToggle] = useState(false);
-  const [sponsoredShortcutsCount, setSponsoredShortcutsCount] = useState(8);
   const [showMoneyRaised, setShowMoneyRaised] = useState(true);
   const [showShortcuts, setShowShortcuts] = useState(true);
   const [shortcutsType, setShortcutsType] = useState<'advertisements' | 'most-visited' | 'favorites'>('advertisements');
-  const [gamificationUser, setGamificationUser] = useState<any>(null);
   const [gamificationRefreshTrigger, setGamificationRefreshTrigger] = useState(0);
   const [showWallpaperModal, setShowWallpaperModal] = useState(false);
   const [selectedWallpaper, setSelectedWallpaper] = useState({
@@ -699,7 +711,7 @@ export const NewTab = () => {
 
   // Load settings from storage on mount
   useEffect(() => {
-    chrome.storage.sync.get(['adCount', 'backgroundMode', 'sponsoredShortcutsCount', 'showMoneyRaised', 'selectedWallpaper', 'galleryBg'], (result: { adCount?: number, backgroundMode?: string, sponsoredShortcutsCount?: number, showMoneyRaised?: boolean, selectedWallpaper?: any, galleryBg?: string }) => {
+    chrome.storage.sync.get(['adCount', 'backgroundMode', 'sponsoredShortcutsCount', 'showMoneyRaised', 'selectedWallpaper', 'galleryBg', 'customWallpaperEnabled', 'totalDonations'], (result: { adCount?: number, backgroundMode?: string, sponsoredShortcutsCount?: number, showMoneyRaised?: boolean, selectedWallpaper?: any, galleryBg?: string, customWallpaperEnabled?: boolean, totalDonations?: number }) => {
       console.log('Loading settings from storage:', result);
       if (result.adCount) {
         setAdCount(result.adCount);
@@ -723,9 +735,16 @@ export const NewTab = () => {
       if (result.galleryBg) {
         setGalleryBg(result.galleryBg);
       }
+      if (result.customWallpaperEnabled !== undefined) {
+        setCustomWallpaperEnabled(result.customWallpaperEnabled);
+      }
+      // Load the last saved total donations value
+      if (result.totalDonations !== undefined) {
+        console.log('Loading total donations from storage:', result.totalDonations);
+        setTotalDonations(result.totalDonations);
+      }
     });
 
-    // Don't load total donations automatically - only when refresh button is clicked
     // Track tab open when component mounts (new tab opened)
     trackTabOpen();
   }, []);
@@ -742,8 +761,13 @@ export const NewTab = () => {
         // Keep current value if there's an error
         return;
       } else {
-        console.log('Setting total donations to:', data);
-        setTotalDonations(data || 0);
+        const newTotal = data || 0;
+        console.log('Setting total donations to:', newTotal);
+        setTotalDonations(newTotal);
+        // Save to storage so it persists across new tabs
+        chrome.storage.sync.set({ totalDonations: newTotal }, () => {
+          console.log('Total donations saved to storage:', newTotal);
+        });
       }
     } catch (error) {
       console.error('Error loading total donations:', error);
@@ -761,7 +785,7 @@ export const NewTab = () => {
         // Reload gamification user data
         const gamificationResult = await gamificationTracker.getUserProfile(currentUser.id);
         if (gamificationResult.success) {
-          setGamificationUser(gamificationResult.data);
+          // setGamificationUserData(gamificationResult.data);
         }
         // Trigger gamification modal refresh
         setGamificationRefreshTrigger(prev => prev + 1);
@@ -799,6 +823,17 @@ export const NewTab = () => {
     chrome.storage.sync.set({ showMoneyRaised: show });
   };
 
+  const handleCustomWallpaperToggle = (enabled: boolean) => {
+    setCustomWallpaperEnabled(enabled);
+    chrome.storage.sync.set({ customWallpaperEnabled: enabled });
+    
+    // If disabling custom wallpaper, reset to default background
+    if (!enabled && backgroundMode === 'gallery') {
+      setBackgroundMode('default');
+      chrome.storage.sync.set({ backgroundMode: 'default' });
+    }
+  };
+
   // Save background mode to storage when it changes
   const handleBackgroundModeChange = (mode: string) => {
     console.log('Changing background mode to:', mode);
@@ -814,6 +849,8 @@ export const NewTab = () => {
         const selectedImage = availableImages[randomIndex];
         console.log('Setting gallery background to:', selectedImage);
         setGalleryBg(selectedImage);
+        // Save the gallery background to storage
+        chrome.storage.sync.set({ galleryBg: selectedImage });
       } else {
         console.warn('No gallery images available');
       }
@@ -822,6 +859,13 @@ export const NewTab = () => {
 
   const handleWallpaperSelection = (wallpaper: any) => {
     console.log('Wallpaper selected:', wallpaper);
+    console.log('Custom wallpaper enabled:', customWallpaperEnabled);
+    
+    if (!customWallpaperEnabled) {
+      console.log('Custom wallpaper not enabled, ignoring selection');
+      return;
+    }
+    
     console.log('Setting background mode to gallery and wallpaper to:', wallpaper.image);
     console.log('Current galleryBg before update:', galleryBg);
     console.log('Current backgroundMode before update:', backgroundMode);
@@ -836,7 +880,8 @@ export const NewTab = () => {
     chrome.storage.sync.set({ 
       backgroundMode: 'gallery',
       galleryBg: wallpaper.image,
-      selectedWallpaper: wallpaper
+      selectedWallpaper: wallpaper,
+      customWallpaperEnabled: true
     }, () => {
       console.log('Wallpaper settings saved to storage');
       console.log('Saved data:', { backgroundMode: 'gallery', galleryBg: wallpaper.image, selectedWallpaper: wallpaper });
@@ -896,7 +941,7 @@ export const NewTab = () => {
         // Load gamification user data
         const gamificationResult = await gamificationTracker.getUserProfile(user.id);
         if (gamificationResult.success) {
-          setGamificationUser(gamificationResult.data);
+          // setGamificationUserData(gamificationResult.data);
         }
       } else {
         setCurrentUser(null)
@@ -935,6 +980,10 @@ export const NewTab = () => {
     try {
       const subscription = donationTracker.subscribeToDonationUpdates((total) => {
         setTotalDonations(total);
+        // Save to storage so it persists across new tabs
+        chrome.storage.sync.set({ totalDonations: total }, () => {
+          console.log('Real-time donation update saved to storage:', total);
+        });
       });
 
       return () => {
@@ -1074,7 +1123,7 @@ export const NewTab = () => {
         // Reload gamification user data
         const gamificationResult = await gamificationTracker.getUserProfile(currentUser.id);
         if (gamificationResult.success) {
-          setGamificationUser(gamificationResult.data);
+          // setGamificationUserData(gamificationResult.data);
         }
         // Trigger gamification modal refresh
         setGamificationRefreshTrigger(prev => prev + 1);
@@ -1151,15 +1200,17 @@ export const NewTab = () => {
           if (user?.id) {
             gamificationTracker.getUserProfile(user.id).then(result => {
               if (result.success) {
-                setGamificationUser(result.data);
+                // setGamificationUserData(result.data);
               }
             });
           } else {
-            setGamificationUser(null);
+            // setGamificationUserData(null);
             }
           }}
           onShowWallpaperModal={() => setShowWallpaperModal(true)}
           selectedWallpaper={selectedWallpaper}
+          customWallpaperEnabled={customWallpaperEnabled}
+          onCustomWallpaperToggle={handleCustomWallpaperToggle}
         />
         
       <WallpaperModal
@@ -1172,7 +1223,7 @@ export const NewTab = () => {
       <GamificationModal
         open={gamificationOpen}
         onClose={() => setGamificationOpen(false)}
-        currentUser={gamificationUser}
+        currentUser={null}
         refreshTrigger={gamificationRefreshTrigger}
       />
       
@@ -1417,9 +1468,11 @@ export const NewTab = () => {
       
              {/* Top right icons */}
        <div className="t4p-top-right-icons">
-         <button className="t4p-signup-btn" onClick={() => setProfileOpen(true)}>
-           Sign Up
-         </button>
+         {!currentUser && (
+           <button className="t4p-signup-btn" onClick={() => setProfileOpen(true)}>
+             Sign Up
+           </button>
+         )}
          {toggles.news && (
            <button className="t4p-icon-btn" title="News" onClick={() => setNotificationsOpen(v => !v)}>
              <img src={NotificationsIcon} width="24" height="24" alt="News" />
@@ -1551,22 +1604,26 @@ export const NewTab = () => {
                target="_blank" 
                rel="noopener noreferrer" 
                className="quick-access-item" 
-               style={{ color: backgroundMode === 'gallery' ? 'white' : 'black' }}
                onClick={() => handleSponsoredShortcutClick(shortcut)}
              >
                <img src={shortcut.icon} alt={shortcut.name} />
                <span>{shortcut.name}</span>
              </a>
            ))}
-           <button className="t4p-add-shortcut-btn" onClick={() => setShowShortcutModal(true)} style={{ 
-             borderColor: backgroundMode === 'gallery' ? 'white' : '#188038', 
-             color: backgroundMode === 'gallery' ? 'black' : '#188038',
-             backgroundColor: backgroundMode === 'gallery' ? 'rgba(255, 255, 255, 0.2)' : 'transparent'
-           }}>
-             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-               <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill={backgroundMode === 'gallery' ? 'black' : '#188038'}/>
-             </svg>
-           </button>
+           <div 
+             className="quick-access-item" 
+             onClick={() => setShowShortcutModal(true)}
+             style={{ cursor: 'pointer' }}
+           >
+             <img 
+               src="/img/8_icons/plus_sign.png" 
+               alt="Add Shortcut" 
+             />
+             <span>
+               {shortcutsType === 'favorites' ? 'Add\nFavorite' : 
+                shortcutsType === 'most-visited' ? 'Add\nShortcut' : 'Add\nShortcut'}
+             </span>
+           </div>
          </div>
          
          {/* 3rd Advertisement - Ethicly API-driven Leaderboard Ad */}
@@ -1609,7 +1666,7 @@ export const NewTab = () => {
       {showShortcutModal && (
         <div className="t4p-shortcut-modal-overlay" onClick={() => setShowShortcutModal(false)}>
           <div className="t4p-shortcut-modal" onClick={e => e.stopPropagation()}>
-            <h2>Add New Shortcut</h2>
+            <h2>{shortcutsType === 'favorites' ? 'Add Favorite' : 'Add Shortcut'}</h2>
             <form onSubmit={(e) => {
               e.preventDefault();
               addShortcut();
