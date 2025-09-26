@@ -1441,7 +1441,8 @@ a {
 
 /* Disable hover effects in non-default backgrounds since we have permanent overlay */
 section[style*="backgroundImage"] .quick-access-item:hover,
-.gallery-mode .quick-access-item:hover {
+.gallery-mode .quick-access-item:hover,
+.custom-mode .quick-access-item:hover {
   transform: translateY(-1px);
   background: rgba(255, 255, 255, 0.95) !important;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25) !important;
@@ -1449,7 +1450,8 @@ section[style*="backgroundImage"] .quick-access-item:hover,
 
 /* Dark mode hover effects for non-default backgrounds */
 .dark-mode section[style*="backgroundImage"] .quick-access-item:hover,
-.dark-mode .gallery-mode .quick-access-item:hover {
+.dark-mode .gallery-mode .quick-access-item:hover,
+.dark-mode .custom-mode .quick-access-item:hover {
   transform: translateY(-1px);
   background: rgba(0, 0, 0, 0.85) !important;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4) !important;
@@ -1481,7 +1483,8 @@ section[style*="backgroundImage"] .quick-access-item:hover,
 
 /* When background is gallery mode (images), make shortcut text white */
 section[style*="backgroundImage"] .quick-access-item span,
-.gallery-mode .quick-access-item span {
+.gallery-mode .quick-access-item span,
+.custom-mode .quick-access-item span {
   color: #ffffff !important;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   font-weight: 500;
@@ -1489,7 +1492,8 @@ section[style*="backgroundImage"] .quick-access-item span,
 
 /* Gallery mode styling - no permanent background */
 section[style*="backgroundImage"] .quick-access-item,
-.gallery-mode .quick-access-item {
+.gallery-mode .quick-access-item,
+.custom-mode .quick-access-item {
   background: transparent !important;
   border-radius: 8px !important;
   padding: 8px 4px !important;
@@ -1503,7 +1507,8 @@ section[style*="backgroundImage"] .quick-access-item,
 
 /* Dark mode backgrounds for non-default backgrounds */
 .dark-mode section[style*="backgroundImage"] .quick-access-item,
-.dark-mode .gallery-mode .quick-access-item {
+.dark-mode .gallery-mode .quick-access-item,
+.dark-mode .custom-mode .quick-access-item {
   background: rgba(0, 0, 0, 0.85) !important;
   color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
@@ -1513,7 +1518,8 @@ section[style*="backgroundImage"] .quick-access-item,
 /* Dark mode permanent overlay removed */
 
 .dark-mode section[style*="backgroundImage"] .quick-access-item span,
-.dark-mode .gallery-mode .quick-access-item span {
+.dark-mode .gallery-mode .quick-access-item span,
+.dark-mode .custom-mode .quick-access-item span {
   color: #ffffff !important;
   text-shadow: none;
   font-weight: 500;
@@ -1521,26 +1527,30 @@ section[style*="backgroundImage"] .quick-access-item,
 
 /* Gallery mode shortcut items styling */
 section[style*="backgroundImage"] .t4p-shortcut-item,
-.gallery-mode .t4p-shortcut-item {
+.gallery-mode .t4p-shortcut-item,
+.custom-mode .t4p-shortcut-item {
   background: rgba(255, 255, 255, 0.9) !important;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 section[style*="backgroundImage"] .t4p-shortcut-item span,
-.gallery-mode .t4p-shortcut-item span {
+.gallery-mode .t4p-shortcut-item span,
+.custom-mode .t4p-shortcut-item span {
   color: #ffffff !important;
   font-weight: 600;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 section[style*="backgroundImage"] .t4p-shortcut-item img,
-.gallery-mode .t4p-shortcut-item img {
+.gallery-mode .t4p-shortcut-item img,
+.custom-mode .t4p-shortcut-item img {
   filter: none !important;
 }
 
 section[style*="backgroundImage"] .quick-access-item span,
-.gallery-mode .quick-access-item span {
+.gallery-mode .quick-access-item span,
+.custom-mode .quick-access-item span {
   color: #ffffff !important;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
@@ -1580,7 +1590,8 @@ section[style*="backgroundImage"] .quick-access-item span,
   
   /* Gallery mode shortcut background on mobile */
   section[style*="backgroundImage"] .quick-access-item,
-  .gallery-mode .quick-access-item {
+  .gallery-mode .quick-access-item,
+  .custom-mode .quick-access-item {
     background: transparent !important;
     border-radius: 6px !important;
     padding: 6px 3px !important;
@@ -1593,7 +1604,8 @@ section[style*="backgroundImage"] .quick-access-item span,
   /* Mobile permanent overlay removed */
   
   section[style*="backgroundImage"] .quick-access-item span,
-  .gallery-mode .quick-access-item span {
+  .gallery-mode .quick-access-item span,
+  .custom-mode .quick-access-item span {
     color: #ffffff !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
@@ -1697,7 +1709,8 @@ section[style*="backgroundImage"] .quick-access-item span,
   
   /* Gallery mode shortcut background on small mobile */
   section[style*="backgroundImage"] .quick-access-item,
-  .gallery-mode .quick-access-item {
+  .gallery-mode .quick-access-item,
+  .custom-mode .quick-access-item {
     background: transparent !important;
     border-radius: 4px !important;
     padding: 5px 2px !important;
@@ -1710,7 +1723,8 @@ section[style*="backgroundImage"] .quick-access-item span,
   /* Small mobile permanent overlay removed */
   
   section[style*="backgroundImage"] .quick-access-item span,
-  .gallery-mode .quick-access-item span {
+  .gallery-mode .quick-access-item span,
+  .custom-mode .quick-access-item span {
     color: #ffffff !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }

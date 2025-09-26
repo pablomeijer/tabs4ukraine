@@ -51,6 +51,65 @@ const BADGE_ICONS = {
   'community_builder': '🏗️'
 };
 
+const ALL_ACHIEVEMENTS = [
+  {
+    id: 'first_dollar',
+    name: 'First Dollar',
+    description: 'Raise your first dollar for Palestine',
+    icon: '💰',
+    requirement: 'Raise $1.00'
+  },
+  {
+    id: 'ten_dollars',
+    name: 'Ten Dollar Hero',
+    description: 'Raise ten dollars to support Palestinian causes',
+    icon: '💎',
+    requirement: 'Raise $10.00'
+  },
+  {
+    id: 'hundred_dollars',
+    name: 'Century Champion',
+    description: 'Raise one hundred dollars for Palestine',
+    icon: '👑',
+    requirement: 'Raise $100.00'
+  },
+  {
+    id: 'hundred_tabs',
+    name: 'Tab Master',
+    description: 'Open 100 tabs to generate donations',
+    icon: '📊',
+    requirement: 'Open 100 tabs'
+  },
+  {
+    id: 'daily_streak_7',
+    name: 'Week Warrior',
+    description: 'Maintain a 7-day streak of daily activity',
+    icon: '🔥',
+    requirement: '7-day streak'
+  },
+  {
+    id: 'daily_streak_30',
+    name: 'Monthly Master',
+    description: 'Maintain a 30-day streak of daily activity',
+    icon: '⭐',
+    requirement: '30-day streak'
+  },
+  {
+    id: 'friend_inviter',
+    name: 'Friend Inviter',
+    description: 'Invite a friend to join the cause',
+    icon: '🦋',
+    requirement: 'Invite 1 friend'
+  },
+  {
+    id: 'community_builder',
+    name: 'Community Builder',
+    description: 'Help build our community of supporters',
+    icon: '🏗️',
+    requirement: 'Invite 5 friends'
+  }
+];
+
 export default function GamificationModal({ open, onClose, currentUser, refreshTrigger }: GamificationModalProps) {
   const [activeTab, setActiveTab] = useState('leaderboard');
   const [leaderboard, setLeaderboard] = useState<User[]>([]);
@@ -270,7 +329,7 @@ export default function GamificationModal({ open, onClose, currentUser, refreshT
                 <div className="user-rank-card">
                   <div className="user-rank-info">
                     <span className="user-rank">#{userRank || 'Unranked'}</span>
-                    <span className="user-total">${currentUser.total_raised.toFixed(2)} raised</span>
+                    <span className="user-total">${(currentUser.total_raised || 0).toFixed(2)} raised</span>
                   </div>
                   <div className="tier-progress">
                     <div className="tier-info">
@@ -298,7 +357,7 @@ export default function GamificationModal({ open, onClose, currentUser, refreshT
                       <div className="tier">{TIER_INFO[user.tier as keyof typeof TIER_INFO]?.name}</div>
                     </div>
                     <div className="stats">
-                      <div className="total-raised">${user.total_raised.toFixed(2)}</div>
+                      <div className="total-raised">${(user.total_raised || 0).toFixed(2)}</div>
                       <div className="streak">🔥 {user.daily_streak}</div>
                     </div>
                   </div>
@@ -312,20 +371,31 @@ export default function GamificationModal({ open, onClose, currentUser, refreshT
               <h3>🏅 Achievements</h3>
               {currentUser ? (
                 <div className="achievements-grid">
-                  {achievements.map(achievement => (
-                    <div key={achievement.id} className="achievement-card earned">
-                      <div className="achievement-icon">
-                        {BADGE_ICONS[achievement.badge_type as keyof typeof BADGE_ICONS] || '🏆'}
-                      </div>
-                      <div className="achievement-info">
-                        <div className="achievement-name">{achievement.badge_name}</div>
-                        <div className="achievement-description">{achievement.badge_description}</div>
-                        <div className="achievement-date">
-                          Earned {new Date(achievement.earned_at).toLocaleDateString()}
+                  {ALL_ACHIEVEMENTS.map(achievement => {
+                    const earnedAchievement = achievements.find(a => a.badge_type === achievement.id);
+                    const isEarned = !!earnedAchievement;
+                    
+                    return (
+                      <div key={achievement.id} className={`achievement-card ${isEarned ? 'earned' : 'unearned'}`}>
+                        <div className="achievement-icon">
+                          {achievement.icon}
                         </div>
+                        <div className="achievement-info">
+                          <div className="achievement-name">{achievement.name}</div>
+                          <div className="achievement-description">{achievement.description}</div>
+                          <div className="achievement-requirement">{achievement.requirement}</div>
+                          {isEarned && earnedAchievement && (
+                            <div className="achievement-date">
+                              Earned {new Date(earnedAchievement.earned_at).toLocaleDateString()}
+                            </div>
+                          )}
+                        </div>
+                        {isEarned && (
+                          <div className="achievement-badge">✓</div>
+                        )}
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="login-encouragement">
@@ -387,7 +457,7 @@ export default function GamificationModal({ open, onClose, currentUser, refreshT
                       <div className="friend-tier">{TIER_INFO[friend.tier as keyof typeof TIER_INFO]?.name}</div>
                     </div>
                     <div className="friend-stats">
-                      <div className="friend-raised">${friend.total_raised.toFixed(2)}</div>
+                      <div className="friend-raised">${(friend.total_raised || 0).toFixed(2)}</div>
                       <div className="friend-streak">🔥 {friend.daily_streak}</div>
                     </div>
                   </div>

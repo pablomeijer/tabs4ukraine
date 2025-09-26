@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ethiclyService, EthiclyAd } from '../lib/ethicly';
+import { supabaseAdsService, SupabaseAd } from '../lib/supabase-ads';
 import './EthiclyAdComponent.css';
 
 interface EthiclyAdComponentProps {
@@ -11,7 +11,7 @@ export const EthiclyAdComponent: React.FC<EthiclyAdComponentProps> = ({
   onClose, 
   className = '' 
 }) => {
-  const [currentAd, setCurrentAd] = useState<EthiclyAd | null>(null);
+  const [currentAd, setCurrentAd] = useState<SupabaseAd | null>(null);
   const [isVisible, setIsVisible] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,23 +25,20 @@ export const EthiclyAdComponent: React.FC<EthiclyAdComponentProps> = ({
       setIsLoading(true);
       setError(null);
       
-      const ad = await ethiclyService.getRandomAd();
+      const ad = await supabaseAdsService.getRandomAd();
       
       if (ad) {
         setCurrentAd(ad);
+        console.log('Supabase ad loaded for leaderboard:', ad);
         
-        // Track impression using tracking URL if available
-        if (ad.tracking_urls.impression) {
-          await ethiclyService.trackImpression(ad.tracking_urls.impression);
-        } else if (ethiclyService.isFallbackAd(ad.ad_id)) {
-          await ethiclyService.trackFallbackAdInteraction(ad.ad_id, 'impression');
-        }
+        // Track impression for this ad
+        await supabaseAdsService.trackImpressions([ad.id]);
       } else {
         setError('No ads available');
         setIsVisible(false);
       }
     } catch (err) {
-      console.error('Error loading Ethicly ad:', err);
+      console.error('Error loading Supabase ad:', err);
       setError('Failed to load ad');
       setIsVisible(false);
     } finally {
@@ -52,19 +49,11 @@ export const EthiclyAdComponent: React.FC<EthiclyAdComponentProps> = ({
   const handleAdClick = async () => {
     if (currentAd) {
       try {
-        // Track click using tracking URL if available
-        if (currentAd.tracking_urls.click) {
-          await ethiclyService.trackClick(currentAd.tracking_urls.click);
-        } else if (ethiclyService.isFallbackAd(currentAd.ad_id)) {
-          await ethiclyService.trackFallbackAdInteraction(currentAd.ad_id, 'click');
-        }
-        
+        console.log('Supabase ad clicked:', currentAd);
         // Open the ad link in a new tab
         window.open(currentAd.destination_url, '_blank', 'noopener,noreferrer');
       } catch (error) {
-        console.error('Error tracking click:', error);
-        // Still open the link even if tracking fails
-        window.open(currentAd.destination_url, '_blank', 'noopener,noreferrer');
+        console.error('Error opening ad link:', error);
       }
     }
   };
@@ -88,15 +77,6 @@ export const EthiclyAdComponent: React.FC<EthiclyAdComponentProps> = ({
 
   return (
     <div className={`ethicly-ad-container ${className}`}>
-      {onClose && (
-        <button 
-          className="ethicly-ad-close" 
-          onClick={handleClose}
-          title="Close ad"
-        >
-          ×
-        </button>
-      )}
       
       <div className="ethicly-ad-content" onClick={handleAdClick}>
         {isLoading ? (
@@ -121,24 +101,21 @@ export const EthiclyAdComponent: React.FC<EthiclyAdComponentProps> = ({
           <>
             <div className="ethicly-ad-image-container">
               <img 
-                src={currentAd.image_url} 
-                alt={currentAd.title}
+                src={currentAd.logo_url} 
+                alt={currentAd.title || 'Advertisement'}
                 className="ethicly-ad-image"
                 onError={(e) => {
                   // Fallback to a placeholder if image fails to load
-                  e.currentTarget.src = 'https://via.placeholder.com/400x150/4a90e2/ffffff?text=Ethicly+Ad';
+                  e.currentTarget.src = 'https://via.placeholder.com/400x150/4a90e2/ffffff?text=Advertisement';
                 }}
               />
-              <div className="ethicly-ad-badge">
-                <span>Sponsored</span>
-              </div>
             </div>
             <div className="ethicly-ad-text">
-              <h3 className="ethicly-ad-title">{currentAd.title}</h3>
-              <p className="ethicly-ad-description">{currentAd.description}</p>
+              <h3 className="ethicly-ad-title">{currentAd.title || 'Advertisement'}</h3>
+              <p className="ethicly-ad-description">{currentAd.description || 'Click to learn more'}</p>
             </div>
-            <div className="ethicly-ad-cta">
-              <span>Click to support</span>
+            <div className="ethicly-ad-sponsored">
+              <span>Sponsored by Ethicly</span>
             </div>
           </>
         ) : null}

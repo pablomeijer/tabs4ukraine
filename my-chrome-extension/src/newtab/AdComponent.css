@@ -74,11 +74,12 @@
   line-height: 1.4;
 }
 
-.ad-organization {
+.ad-sponsored {
   margin: 0;
-  font-size: 12px;
-  color: #7f8c8d;
-  font-weight: 500;
+  font-size: 11px;
+  color: #999;
+  font-style: italic;
+  text-align: center;
 }
 
 /* Animation for ad appearance */

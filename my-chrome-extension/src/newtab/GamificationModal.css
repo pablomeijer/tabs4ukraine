@@ -307,11 +307,55 @@ input:checked + .toggle-slider:before {
   border-radius: 10px;
   border: 1px solid #e9ecef;
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .achievement-card.earned {
   background: linear-gradient(135deg, #f0f8f0 0%, #e8f5e8 100%);
   border: 2px solid #188038;
+}
+
+.achievement-card.unearned {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  opacity: 0.7;
+}
+
+.achievement-card.unearned .achievement-icon {
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+
+.achievement-card.unearned .achievement-name,
+.achievement-card.unearned .achievement-description {
+  color: #999;
+}
+
+.achievement-requirement {
+  font-size: 0.8rem;
+  color: #188038;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.achievement-card.unearned .achievement-requirement {
+  color: #999;
+}
+
+.achievement-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #188038;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
 }
 
 .achievement-card:hover {

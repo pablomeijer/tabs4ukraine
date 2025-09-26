@@ -123,24 +123,14 @@
   font-style: italic;
 }
 
-.ethicly-ad-cta {
+.ethicly-ad-sponsored {
   position: absolute;
   bottom: 8px;
   right: 12px;
-  background: linear-gradient(135deg, #188038 0%, #0f5c2a 100%);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 6px;
+  color: #999;
   font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: all 0.2s ease;
-}
-
-.ethicly-ad-container:hover .ethicly-ad-cta {
-  background: linear-gradient(135deg, #0f5c2a 0%, #0a4a22 100%);
-  transform: scale(1.05);
+  font-style: italic;
+  font-weight: 400;
 }
 
 /* Loading state */
@@ -279,8 +269,7 @@
     font-size: 8px;
   }
   
-  .ethicly-ad-cta {
+  .ethicly-ad-sponsored {
     font-size: 9px;
-    padding: 3px 6px;
   }
 }

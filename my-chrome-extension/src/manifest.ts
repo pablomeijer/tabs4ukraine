@@ -46,7 +46,20 @@ export default defineManifest({
       matches: ['<all_urls>'],
     },
   ],
-  permissions: ['sidePanel', 'storage', 'topSites', 'bookmarks'],
+  permissions: [
+    'sidePanel', 
+    'storage', 
+    'topSites', 
+    'bookmarks',
+    'geolocation',
+    'activeTab',
+    'tabs'
+  ],
+  host_permissions: [
+    'https://api.ethicly.com/*',
+    'https://fvmpnqaoympgmrullemj.supabase.co/*',
+    'https://images.unsplash.com/*'
+  ],
   chrome_url_overrides: {
     newtab: 'newtab.html',
   },

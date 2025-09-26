@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import AdComponent from './AdComponent'
-import EmbeddedAdComponent from './EmbeddedAdComponent'
 import EthiclyAdComponent from './EthiclyAdComponent'
 import AdvertisementsUpgrade from './AdvertisementsUpgrade'
 import AboutPage from './AboutPage'
@@ -187,7 +186,7 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
             <AuthComponent 
               onAuthChange={onAuthChange} 
               gamificationUser={null}
-              totalDonations={totalDonations}
+              totalDonations={0}
             />
           )}
           {activeTab === 'Shortcuts' && (
@@ -644,6 +643,70 @@ export const NewTab = () => {
     ]
   };
 
+  // State for most visited sites
+  const [mostVisitedSites, setMostVisitedSites] = useState<any[]>([]);
+  const [favoriteSites, setFavoriteSites] = useState<any[]>([]);
+
+  // Load most visited sites from Chrome API
+  useEffect(() => {
+    const loadMostVisitedSites = async () => {
+      try {
+        if (chrome?.topSites) {
+          const sites = await chrome.topSites.get();
+          console.log('Loaded most visited sites:', sites);
+          setMostVisitedSites(sites.slice(0, 10)); // Limit to 10 sites
+        } else {
+          console.warn('Chrome topSites API not available');
+        }
+      } catch (error) {
+        console.error('Error loading most visited sites:', error);
+      }
+    };
+
+    if (shortcutsType === 'most-visited') {
+      loadMostVisitedSites();
+    }
+  }, [shortcutsType]);
+
+  // Load favorite sites from Chrome bookmarks API
+  useEffect(() => {
+    const loadFavoriteSites = async () => {
+      try {
+        if (chrome?.bookmarks) {
+          const bookmarks = await chrome.bookmarks.getTree();
+          const extractBookmarks = (nodes: any[]): any[] => {
+            let result: any[] = [];
+            for (const node of nodes) {
+              if (node.url) {
+                result.push({
+                  id: node.id,
+                  title: node.title,
+                  url: node.url,
+                  favicon: `https://www.google.com/s2/favicons?domain=${new URL(node.url).hostname}&sz=32`
+                });
+              }
+              if (node.children) {
+                result = result.concat(extractBookmarks(node.children));
+              }
+            }
+            return result;
+          };
+          const favorites = extractBookmarks(bookmarks).slice(0, 10); // Limit to 10 sites
+          console.log('Loaded favorite sites:', favorites);
+          setFavoriteSites(favorites);
+        } else {
+          console.warn('Chrome bookmarks API not available');
+        }
+      } catch (error) {
+        console.error('Error loading favorite sites:', error);
+      }
+    };
+
+    if (shortcutsType === 'favorites') {
+      loadFavoriteSites();
+    }
+  }, [shortcutsType]);
+
   // Function to get filtered shortcuts based on type
   const getFilteredShortcuts = () => {
     console.log('Getting filtered shortcuts for type:', shortcutsType);
@@ -656,13 +719,16 @@ export const NewTab = () => {
         console.log('Returning advertisements:', ads.length);
         return ads;
       case 'most-visited':
-        // For now, return empty array - Chrome API will be implemented later
-        console.log('Most visited mode - returning empty array for now');
-        return [];
+        console.log('Most visited mode - returning sites:', mostVisitedSites.length);
+        return mostVisitedSites.map(site => ({
+          id: site.url,
+          title: site.title,
+          url: site.url,
+          favicon: `https://www.google.com/s2/favicons?domain=${new URL(site.url).hostname}&sz=32`
+        }));
       case 'favorites':
-        // For now, return empty array - Chrome API will be implemented later
-        console.log('Favorites mode - returning empty array for now');
-        return [];
+        console.log('Favorites mode - returning bookmarks:', favoriteSites.length);
+        return favoriteSites;
       default:
         const defaultShortcuts = shortcuts.slice(0, sponsoredShortcutsCount);
         console.log('Returning default:', defaultShortcuts.length);
@@ -697,13 +763,28 @@ export const NewTab = () => {
       return;
     }
     
+    // Check if we already have 10 shortcuts
+    if (shortcuts.length >= 10) {
+      setShortcutError('Maximum of 10 shortcuts allowed.');
+      return;
+    }
+    
     // Create a default icon (you can replace this with a generic icon)
     const defaultIcon = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMiA3VjIwSDEwVjE0SDE0VjIwSDIyVjdMMTIgMloiIGZpbGw9IiMxODgwMzgiLz4KPC9zdmc+';
     
     const shortcutWithIcon = { ...newShortcut, icon: defaultIcon };
     console.log('Adding shortcut with icon:', shortcutWithIcon);
-    setShortcuts([...shortcuts, shortcutWithIcon]);
-    console.log('Shortcuts after adding:', [...shortcuts, shortcutWithIcon]);
+    
+    const newShortcuts = [...shortcuts, shortcutWithIcon];
+    setShortcuts(newShortcuts);
+    
+    // Update filtered shortcuts if we're in advertisements mode
+    if (shortcutsType === 'advertisements') {
+      const newFilteredShortcuts = newShortcuts.slice(0, sponsoredShortcutsCount);
+      setFilteredShortcuts(newFilteredShortcuts);
+    }
+    
+    console.log('Shortcuts after adding:', newShortcuts);
     setShowShortcutModal(false);
     setNewShortcut({ name: '', url: '' });
     setShortcutError('');
@@ -896,25 +977,25 @@ export const NewTab = () => {
       return;
     }
     
-    console.log('Setting background mode to gallery and wallpaper to:', wallpaper.image);
+    console.log('Setting custom wallpaper permanently:', wallpaper.image);
     console.log('Current galleryBg before update:', galleryBg);
     console.log('Current backgroundMode before update:', backgroundMode);
     
-    // Set the wallpaper as the gallery background
+    // Set the wallpaper as a permanent custom background (not gallery mode)
     setGalleryBg(wallpaper.image);
-    setBackgroundMode('gallery');
+    setBackgroundMode('custom'); // Use 'custom' mode instead of 'gallery'
     setSelectedWallpaper(wallpaper);
     
-    console.log('State updates called - galleryBg:', wallpaper.image, 'backgroundMode: gallery');
+    console.log('State updates called - galleryBg:', wallpaper.image, 'backgroundMode: custom');
     
     chrome.storage.sync.set({ 
-      backgroundMode: 'gallery',
+      backgroundMode: 'custom',
       galleryBg: wallpaper.image,
       selectedWallpaper: wallpaper,
       customWallpaperEnabled: true
     }, () => {
-      console.log('Wallpaper settings saved to storage');
-      console.log('Saved data:', { backgroundMode: 'gallery', galleryBg: wallpaper.image, selectedWallpaper: wallpaper });
+      console.log('Custom wallpaper settings saved to storage');
+      console.log('Saved data:', { backgroundMode: 'custom', galleryBg: wallpaper.image, selectedWallpaper: wallpaper });
     });
   };
 
@@ -1198,13 +1279,15 @@ export const NewTab = () => {
     ? { backgroundImage: `url(${customBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }
     : backgroundMode === 'gallery'
     ? { backgroundImage: `url(${galleryBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+    : backgroundMode === 'custom'
+    ? { backgroundImage: `url(${galleryBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }
     : { background: '#F8F8F0' };
   
   console.log('Applied section style:', sectionStyle);
   console.log('Section style calculation - backgroundMode:', backgroundMode, 'galleryBg:', galleryBg);
   
   return (
-    <section style={sectionStyle} className={backgroundMode === 'dark' ? 'dark-mode' : backgroundMode === 'default' ? 'default-mode' : ''}>
+    <section style={sectionStyle} className={backgroundMode === 'dark' ? 'dark-mode' : backgroundMode === 'default' ? 'default-mode' : backgroundMode === 'custom' ? 'custom-mode' : backgroundMode === 'gallery' ? 'gallery-mode' : ''}>
       <SettingsModal
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}
@@ -1253,7 +1336,7 @@ export const NewTab = () => {
       <GamificationModal
         open={gamificationOpen}
         onClose={() => setGamificationOpen(false)}
-        currentUser={null}
+        currentUser={currentUser}
         refreshTrigger={gamificationRefreshTrigger}
       />
       
@@ -1537,21 +1620,21 @@ export const NewTab = () => {
            <div className="t4p-logo-container">
              {logoType === 'logo' && (
                <img 
-                 src={backgroundMode === 'gallery' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : backgroundMode === 'dark' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : '/img/logo_green_transparent.png'} 
+                 src={backgroundMode === 'gallery' || backgroundMode === 'custom' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : backgroundMode === 'dark' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : '/img/logo_green_transparent.png'} 
                  alt="tabs4palestine logo" 
                  className="t4p-logo" 
                  style={{ transform: 'scale(1.2)' }}
                />
              )}
              {logoType === 'clock' && (
-               <div className="t4p-digital-clock" style={{ color: backgroundMode === 'gallery' ? 'white' : '#188038' }}>
+               <div className="t4p-digital-clock" style={{ color: backgroundMode === 'gallery' || backgroundMode === 'custom' ? 'white' : '#188038' }}>
                  <div className="t4p-clock-time">{time}</div>
                  <div className="t4p-clock-date">{new Date().toLocaleDateString()}</div>
                </div>
              )}
              {logoType === 'watermelon' && (
                <img 
-                 src={backgroundMode === 'gallery' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : backgroundMode === 'dark' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : '/img/logo_green_transparent.png'} 
+                 src={backgroundMode === 'gallery' || backgroundMode === 'custom' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : backgroundMode === 'dark' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : '/img/logo_green_transparent.png'} 
                  alt="Tabs4Palestine Logo" 
                  className="t4p-logo" 
                  style={{ transform: 'scale(1.2)' }}
@@ -1559,7 +1642,7 @@ export const NewTab = () => {
              )}
              <button className="t4p-logo-toggle" title="Toggle Logo" onClick={handleLogoToggle}>
                <img 
-                 src={backgroundMode === 'gallery' ? CachedIconWhite : CachedIconBlack} 
+                 src={backgroundMode === 'gallery' || backgroundMode === 'custom' ? CachedIconWhite : CachedIconBlack} 
                  width="20" 
                  height="20" 
                  alt="Toggle" 
@@ -1626,20 +1709,32 @@ export const NewTab = () => {
              </div>
            )}
          
-         <div className="quick-access-grid">
-           {filteredShortcuts.map((shortcut, index) => (
-             <a 
-               key={index} 
-               href={shortcut.url} 
-               target="_blank" 
-               rel="noopener noreferrer" 
-               className="quick-access-item" 
-               onClick={() => handleSponsoredShortcutClick(shortcut)}
-             >
-               <img src={shortcut.icon} alt={shortcut.name} />
-               <span>{shortcut.name}</span>
-             </a>
-           ))}
+        <div className="quick-access-grid">
+          {filteredShortcuts.map((shortcut, index) => (
+            <a 
+              key={index} 
+              href={shortcut.url} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="quick-access-item" 
+              onClick={() => {
+                // Only track clicks for sponsored shortcuts, not user's own sites
+                if (shortcutsType === 'advertisements') {
+                  handleSponsoredShortcutClick(shortcut);
+                }
+              }}
+            >
+              <img 
+                src={(shortcut as any).icon || (shortcut as any).favicon} 
+                alt={(shortcut as any).name || (shortcut as any).title} 
+                onError={(e) => {
+                  // Fallback to a default icon if favicon fails to load
+                  e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNCIgZmlsbD0iI0Y1RjVGNSIvPgo8cGF0aCBkPSJNMTYgMTBMMjIgMTZMMTYgMjJMMTAgMTZMMTYgMTBaIiBmaWxsPSIjOTk5Ii8+Cjwvc3ZnPgo=';
+                }}
+              />
+              <span>{(shortcut as any).name || (shortcut as any).title}</span>
+            </a>
+          ))}
            <div 
              className="quick-access-item" 
              onClick={() => setShowShortcutModal(true)}
@@ -1656,39 +1751,21 @@ export const NewTab = () => {
            </div>
          </div>
          
-         {/* 3rd Advertisement - Ethicly API-driven Leaderboard Ad */}
+         {/* 3rd Advertisement - Supabase API-driven Leaderboard Ad */}
          {adCount >= 3 && (
-           <EthiclyAdComponent />
+           <EthiclyAdComponent key={`leaderboard-ad-${Date.now()}`} />
          )}
       </div>
       
-      {/* Embedded Advertisements - Side Ads */}
+      {/* Side Advertisements - Supabase Ads */}
       {adCount >= 1 && (
         <div style={{ position: 'absolute', bottom: '20px', right: '20px', zIndex: 10 }}>
-          <img 
-            src="/img/ads/1st_ad.png" 
-            alt="Advertisement" 
-            style={{ 
-              width: '200px', 
-              height: 'auto', 
-              borderRadius: '8px',
-              boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-            }} 
-          />
+          <AdComponent key={`side-ad-1-${Date.now()}`} />
         </div>
       )}
       {adCount >= 2 && (
-        <div style={{ position: 'absolute', bottom: '280px', right: '20px', zIndex: 10 }}>
-          <img 
-            src="/img/ads/2nd_ad.png" 
-            alt="Advertisement" 
-            style={{ 
-              width: '200px', 
-              height: 'auto', 
-              borderRadius: '8px',
-              boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-            }} 
-          />
+        <div style={{ position: 'absolute', bottom: '320px', right: '20px', zIndex: 10 }}>
+          <AdComponent key={`side-ad-2-${Date.now()}`} />
         </div>
       )}
 
@@ -1725,17 +1802,6 @@ export const NewTab = () => {
               <button type="submit" className="t4p-profile-btn t4p-profile-btn-primary">Add Shortcut</button>
               <button type="button" className="t4p-profile-btn t4p-profile-btn-link" onClick={() => setShowShortcutModal(false)}>Cancel</button>
             </form>
-            <h3>Current Shortcuts:</h3>
-            <div className="t4p-shortcut-list">
-              {shortcuts.map((shortcut, index) => (
-                <div key={index} className="t4p-shortcut-item">
-                  <a href={shortcut.url} target="_blank" rel="noopener noreferrer">
-                    <img src={shortcut.icon} alt={shortcut.name} />
-                    <span>{shortcut.name}</span>
-                  </a>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       )}
