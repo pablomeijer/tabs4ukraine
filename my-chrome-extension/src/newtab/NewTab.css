@@ -31,7 +31,12 @@
 }
 
 .dark-mode .quick-access-item span {
-  color: #ffffff !important;
+  color: #333333 !important;
+}
+
+/* Ensure default mode has black text */
+.default-mode .quick-access-item span {
+  color: #333333 !important;
 }
 
 /* Dark mode add shortcut button styles removed - now inherits from quick-access-item */
@@ -1469,8 +1474,8 @@ section[style*="backgroundImage"] .quick-access-item:hover,
   font-weight: 500;
   text-align: center;
   line-height: 1.1;
-  color: #ffffff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  color: #333333;
+  text-shadow: none;
   white-space: pre-line;
 }
 

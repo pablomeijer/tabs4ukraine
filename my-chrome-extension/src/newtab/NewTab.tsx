@@ -827,10 +827,17 @@ export const NewTab = () => {
     setCustomWallpaperEnabled(enabled);
     chrome.storage.sync.set({ customWallpaperEnabled: enabled });
     
-    // If disabling custom wallpaper, reset to default background
-    if (!enabled && backgroundMode === 'gallery') {
+    if (enabled) {
+      // When enabling custom wallpaper, set background to default mode
       setBackgroundMode('default');
       chrome.storage.sync.set({ backgroundMode: 'default' });
+      console.log('Custom wallpaper enabled, background set to default mode');
+    } else {
+      // If disabling custom wallpaper, reset to default background
+      if (backgroundMode === 'gallery') {
+        setBackgroundMode('default');
+        chrome.storage.sync.set({ backgroundMode: 'default' });
+      }
     }
   };
 
@@ -839,6 +846,13 @@ export const NewTab = () => {
     console.log('Changing background mode to:', mode);
     setBackgroundMode(mode);
     chrome.storage.sync.set({ backgroundMode: mode });
+    
+    // If switching to gallery or dark mode, disable custom wallpaper
+    if (mode === 'gallery' || mode === 'dark') {
+      setCustomWallpaperEnabled(false);
+      chrome.storage.sync.set({ customWallpaperEnabled: false });
+      console.log('Switched to', mode, 'mode, disabled custom wallpaper');
+    }
     
     // If switching to gallery mode, immediately pick a random image
     if (mode === 'gallery') {
@@ -863,6 +877,22 @@ export const NewTab = () => {
     
     if (!customWallpaperEnabled) {
       console.log('Custom wallpaper not enabled, ignoring selection');
+      return;
+    }
+    
+    // If default wallpaper is selected, set background to default mode
+    if (wallpaper.id === 'default-wallpaper') {
+      console.log('Default wallpaper selected, setting background to default mode');
+      setBackgroundMode('default');
+      setSelectedWallpaper(wallpaper);
+      
+      chrome.storage.sync.set({ 
+        backgroundMode: 'default',
+        selectedWallpaper: wallpaper,
+        customWallpaperEnabled: true
+      }, () => {
+        console.log('Default wallpaper settings saved to storage');
+      });
       return;
     }
     
@@ -1174,7 +1204,7 @@ export const NewTab = () => {
   console.log('Section style calculation - backgroundMode:', backgroundMode, 'galleryBg:', galleryBg);
   
   return (
-    <section style={sectionStyle} className={backgroundMode === 'dark' ? 'dark-mode' : ''}>
+    <section style={sectionStyle} className={backgroundMode === 'dark' ? 'dark-mode' : backgroundMode === 'default' ? 'default-mode' : ''}>
       <SettingsModal
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}
