@@ -70,13 +70,6 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
                 </label>
               </div>
               <div className="t4p-toggle-row">
-                <span className="t4p-toggle-label">Show Time (Clock)</span>
-                <label className="t4p-switch">
-                  <input type="checkbox" checked={toggles.clock} onChange={e => setToggles({...toggles, clock: e.target.checked})} />
-                  <span className="t4p-slider"></span>
-                </label>
-              </div>
-              <div className="t4p-toggle-row">
                 <span className="t4p-toggle-label">Show Search Bar</span>
                 <label className="t4p-switch">
                   <input type="checkbox" checked={toggles.search} onChange={e => setToggles({...toggles, search: e.target.checked})} />
@@ -543,6 +536,7 @@ export const NewTab = () => {
   const [shortcutsType, setShortcutsType] = useState<'advertisements' | 'most-visited' | 'favorites'>('advertisements');
   const [gamificationRefreshTrigger, setGamificationRefreshTrigger] = useState(0);
   const [showWallpaperModal, setShowWallpaperModal] = useState(false);
+  const [adRotationKey, setAdRotationKey] = useState(0);
   const [selectedWallpaper, setSelectedWallpaper] = useState({
     id: 'default-wallpaper',
     name: 'Default Wallpaper',
@@ -790,9 +784,15 @@ export const NewTab = () => {
     setShortcutError('');
   };
 
+  // Rotate ads only when component mounts (new tab opened)
+  useEffect(() => {
+    console.log('NewTab component starting...');
+    setAdRotationKey(prev => prev + 1);
+  }, []); // Empty dependency array means this only runs on mount
+
   // Load settings from storage on mount
   useEffect(() => {
-    chrome.storage.sync.get(['adCount', 'backgroundMode', 'sponsoredShortcutsCount', 'showMoneyRaised', 'selectedWallpaper', 'galleryBg', 'customWallpaperEnabled', 'totalDonations'], (result: { adCount?: number, backgroundMode?: string, sponsoredShortcutsCount?: number, showMoneyRaised?: boolean, selectedWallpaper?: any, galleryBg?: string, customWallpaperEnabled?: boolean, totalDonations?: number }) => {
+    chrome.storage.sync.get(['adCount', 'backgroundMode', 'sponsoredShortcutsCount', 'showMoneyRaised', 'selectedWallpaper', 'galleryBg', 'customWallpaperEnabled', 'totalDonations', 'logoType'], (result: { adCount?: number, backgroundMode?: string, sponsoredShortcutsCount?: number, showMoneyRaised?: boolean, selectedWallpaper?: any, galleryBg?: string, customWallpaperEnabled?: boolean, totalDonations?: number, logoType?: 'logo' | 'clock' | 'watermelon' }) => {
       console.log('Loading settings from storage:', result);
       if (result.adCount) {
         setAdCount(result.adCount);
@@ -823,6 +823,9 @@ export const NewTab = () => {
       if (result.totalDonations !== undefined) {
         console.log('Loading total donations from storage:', result.totalDonations);
         setTotalDonations(result.totalDonations);
+      }
+      if (result.logoType) {
+        setLogoType(result.logoType);
       }
     });
 
@@ -1253,6 +1256,8 @@ export const NewTab = () => {
   const handleLogoTypeChange = (type: 'logo' | 'clock' | 'watermelon') => {
     setLogoType(type);
     setShowLogoToggle(false);
+    // Save to storage for persistence
+    chrome.storage.sync.set({ logoType: type });
   };
 
   // Debug effect to monitor galleryBg changes
@@ -1751,21 +1756,21 @@ export const NewTab = () => {
            </div>
          </div>
          
-         {/* 3rd Advertisement - Supabase API-driven Leaderboard Ad */}
-         {adCount >= 3 && (
-           <EthiclyAdComponent key={`leaderboard-ad-${Date.now()}`} />
-         )}
+        {/* 3rd Advertisement - Supabase API-driven Leaderboard Ad */}
+        {adCount >= 3 && (
+          <EthiclyAdComponent key={`leaderboard-ad-${adRotationKey}`} />
+        )}
       </div>
       
       {/* Side Advertisements - Supabase Ads */}
       {adCount >= 1 && (
-        <div style={{ position: 'absolute', bottom: '20px', right: '20px', zIndex: 10 }}>
-          <AdComponent key={`side-ad-1-${Date.now()}`} />
+        <div style={{ position: 'absolute', bottom: '50px', right: '20px', zIndex: 10 }}>
+          <AdComponent key={`side-ad-1-${adRotationKey}`} />
         </div>
       )}
       {adCount >= 2 && (
-        <div style={{ position: 'absolute', bottom: '320px', right: '20px', zIndex: 10 }}>
-          <AdComponent key={`side-ad-2-${Date.now()}`} />
+        <div style={{ position: 'absolute', bottom: '325px', right: '20px', zIndex: 10 }}>
+          <AdComponent key={`side-ad-2-${adRotationKey}`} />
         </div>
       )}
 

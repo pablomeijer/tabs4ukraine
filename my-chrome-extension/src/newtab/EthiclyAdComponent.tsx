@@ -49,11 +49,17 @@ export const EthiclyAdComponent: React.FC<EthiclyAdComponentProps> = ({
   const handleAdClick = async () => {
     if (currentAd) {
       try {
-        console.log('Supabase ad clicked:', currentAd);
+        console.log('🖱️ Leaderboard ad clicked:', currentAd);
+        
+        // Track the click
+        await supabaseAdsService.trackClick(currentAd.id);
+        
         // Open the ad link in a new tab
         window.open(currentAd.destination_url, '_blank', 'noopener,noreferrer');
       } catch (error) {
-        console.error('Error opening ad link:', error);
+        console.error('❌ Error handling leaderboard ad click:', error);
+        // Still open the link even if tracking fails
+        window.open(currentAd.destination_url, '_blank', 'noopener,noreferrer');
       }
     }
   };
@@ -109,10 +115,6 @@ export const EthiclyAdComponent: React.FC<EthiclyAdComponentProps> = ({
                   e.currentTarget.src = 'https://via.placeholder.com/400x150/4a90e2/ffffff?text=Advertisement';
                 }}
               />
-            </div>
-            <div className="ethicly-ad-text">
-              <h3 className="ethicly-ad-title">{currentAd.title || 'Advertisement'}</h3>
-              <p className="ethicly-ad-description">{currentAd.description || 'Click to learn more'}</p>
             </div>
             <div className="ethicly-ad-sponsored">
               <span>Sponsored by Ethicly</span>

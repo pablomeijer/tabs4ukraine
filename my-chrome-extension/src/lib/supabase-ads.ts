@@ -12,6 +12,7 @@ export interface SupabaseAd {
 
 export class SupabaseAdsService {
   private readonly RPC_URL = "https://fvmpnqaoympgmrullemj.supabase.co/rest/v1/rpc/increment_impressions";
+  private readonly CLICKS_RPC_URL = "https://fvmpnqaoympgmrullemj.supabase.co/rest/v1/rpc/increment_clicks";
   private readonly API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2bXBucWFveW1wZ21ydWxsZW1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4OTY5NjYsImV4cCI6MjA3NDQ3Mjk2Nn0.6gAhop5FNlHR7-3adPfeLF4QxoOn3rlRROC6GaXJigs";
 
   /**
@@ -43,6 +44,44 @@ export class SupabaseAdsService {
   }
 
   /**
+   * Track clicks for ads
+   * @param adId - Ad ID to track click for
+   */
+  async trackClick(adId: number): Promise<void> {
+    try {
+      console.log('🖱️ Tracking click for ad ID:', adId);
+      console.log('🔍 Clicks RPC URL:', this.CLICKS_RPC_URL);
+
+      const response = await fetch(this.CLICKS_RPC_URL, {
+        method: "POST",
+        headers: {
+          "apikey": this.API_KEY,
+          "Authorization": `Bearer ${this.API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ ad_id: adId })
+      });
+
+      console.log('🔍 Click response status:', response.status);
+      console.log('🔍 Click response ok:', response.ok);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('❌ Error tracking click:', errorText);
+        console.error('❌ Click response status:', response.status);
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+      }
+
+      const responseText = await response.text();
+      console.log('✅ Click tracked successfully for ad:', adId);
+      console.log('✅ Click response:', responseText);
+    } catch (error) {
+      console.error('❌ Error tracking click:', error);
+      // Don't throw error to avoid breaking the ad click
+    }
+  }
+
+  /**
    * Track impressions for displayed ads
    * @param adIds - Array of ad IDs to track impressions for
    */
@@ -53,7 +92,9 @@ export class SupabaseAdsService {
         return;
       }
 
-      console.log('Tracking impressions for ad IDs:', adIds);
+      console.log('🔍 Tracking impressions for ad IDs:', adIds);
+      console.log('🔍 RPC URL:', this.RPC_URL);
+      console.log('🔍 Request body:', JSON.stringify({ ad_ids: adIds }));
 
       const response = await fetch(this.RPC_URL, {
         method: "POST",
@@ -65,15 +106,21 @@ export class SupabaseAdsService {
         body: JSON.stringify({ ad_ids: adIds })
       });
 
+      console.log('🔍 Response status:', response.status);
+      console.log('🔍 Response ok:', response.ok);
+
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Error tracking impressions:', errorText);
+        console.error('❌ Error tracking impressions:', errorText);
+        console.error('❌ Response status:', response.status);
         throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
       }
 
-      console.log('Impressions tracked successfully for ads:', adIds);
+      const responseText = await response.text();
+      console.log('✅ Impressions tracked successfully for ads:', adIds);
+      console.log('✅ Response:', responseText);
     } catch (error) {
-      console.error('Error tracking impressions:', error);
+      console.error('❌ Error tracking impressions:', error);
       // Don't throw error to avoid breaking the ad display
     }
   }

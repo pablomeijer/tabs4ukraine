@@ -58,9 +58,24 @@ export const AdComponent = () => {
     loadAd()
   }, [])
 
-  const handleAdClick = () => {
+  const handleAdClick = async () => {
     if (currentAd) {
-      window.open(currentAd.link, '_blank')
+      try {
+        console.log('🖱️ Ad clicked:', currentAd);
+        
+        // Track the click if it's a Supabase ad
+        if (currentAd.id.startsWith('supabase-')) {
+          const adId = parseInt(currentAd.id.replace('supabase-', ''));
+          await supabaseAdsService.trackClick(adId);
+        }
+        
+        // Open the ad link
+        window.open(currentAd.link, '_blank');
+      } catch (error) {
+        console.error('❌ Error handling ad click:', error);
+        // Still open the link even if tracking fails
+        window.open(currentAd.link, '_blank');
+      }
     }
   }
 
@@ -86,8 +101,6 @@ export const AdComponent = () => {
           }}
         />
         <div className="ad-text">
-          <h3 className="ad-title">{currentAd.title}</h3>
-          <p className="ad-description">{currentAd.description}</p>
           <p className="ad-sponsored">Sponsored by Ethicly</p>
         </div>
       </div>

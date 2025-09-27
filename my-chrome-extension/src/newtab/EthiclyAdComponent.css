@@ -1,12 +1,12 @@
 /* Ethicly Ad Component Styles */
 .ethicly-ad-container {
   position: absolute;
-  bottom: 20px;
+  bottom: 50px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  width: 400px;
-  height: 150px;
+  width: 728px;
+  height: 90px;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -55,7 +55,7 @@
 
 .ethicly-ad-image-container {
   position: relative;
-  height: 80px;
+  height: 90px;
   overflow: hidden;
 }
 
@@ -86,11 +86,12 @@
 }
 
 .ethicly-ad-text {
-  flex: 1;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0;
+  display: none;
 }
 
 .ethicly-ad-title {
@@ -125,12 +126,16 @@
 
 .ethicly-ad-sponsored {
   position: absolute;
-  bottom: 8px;
-  right: 12px;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
   color: #999;
   font-size: 10px;
   font-style: italic;
   font-weight: 400;
+  text-align: center;
+  margin: 0;
+  white-space: nowrap;
 }
 
 /* Loading state */
@@ -213,63 +218,3 @@
   animation: slideInFromBottom 0.5s ease-out;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .ethicly-ad-container {
-    width: 350px;
-    height: 130px;
-    bottom: 15px;
-  }
-  
-  .ethicly-ad-image-container {
-    height: 70px;
-  }
-  
-  .ethicly-ad-text {
-    padding: 10px;
-  }
-  
-  .ethicly-ad-title {
-    font-size: 13px;
-  }
-  
-  .ethicly-ad-description {
-    font-size: 11px;
-  }
-  
-  .ethicly-ad-organization {
-    font-size: 9px;
-  }
-}
-
-@media (max-width: 480px) {
-  .ethicly-ad-container {
-    width: 300px;
-    height: 120px;
-    bottom: 10px;
-  }
-  
-  .ethicly-ad-image-container {
-    height: 60px;
-  }
-  
-  .ethicly-ad-text {
-    padding: 8px;
-  }
-  
-  .ethicly-ad-title {
-    font-size: 12px;
-  }
-  
-  .ethicly-ad-description {
-    font-size: 10px;
-  }
-  
-  .ethicly-ad-organization {
-    font-size: 8px;
-  }
-  
-  .ethicly-ad-sponsored {
-    font-size: 9px;
-  }
-}
