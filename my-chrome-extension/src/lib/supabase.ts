@@ -193,7 +193,8 @@ export const donationTracker = {
       }])
     
     if (tabError) {
-      console.error('Error tracking tab open:', tabError)
+      console.error('Error tracking tab open:', tabError instanceof Error ? tabError.message : String(tabError))
+      console.error('Full tabError object:', tabError)
       return { data: null, error: tabError }
     }
 
@@ -557,13 +558,15 @@ export const gamificationTracker = {
         .single();
       
       if (error) {
-        console.error('Error getting user profile:', error);
+        console.error('Error getting user profile:', error instanceof Error ? error.message : String(error));
+        console.error('Full error object:', error);
         return { success: false, error };
       }
       
       return { success: true, data };
     } catch (error) {
-      console.error('Error in getUserProfile:', error);
+      console.error('Error in getUserProfile:', error instanceof Error ? error.message : String(error));
+      console.error('Full error object:', error);
       return { success: false, error };
     }
   },

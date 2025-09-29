@@ -13,7 +13,14 @@ export interface SupabaseAd {
 export class SupabaseAdsService {
   private readonly RPC_URL = "https://fvmpnqaoympgmrullemj.supabase.co/rest/v1/rpc/increment_impressions";
   private readonly CLICKS_RPC_URL = "https://fvmpnqaoympgmrullemj.supabase.co/rest/v1/rpc/increment_clicks";
+  private readonly TOTAL_STATS_URL = "https://fvmpnqaoympgmrullemj.supabase.co/rest/v1/rpc/get_total_ad_stats";
   private readonly API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2bXBucWFveW1wZ21ydWxsZW1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4OTY5NjYsImV4cCI6MjA3NDQ3Mjk2Nn0.6gAhop5FNlHR7-3adPfeLF4QxoOn3rlRROC6GaXJigs";
+  
+  // Revenue calculations:
+  // $3 per 1000 impressions = $0.003 per impression
+  // $0.50 per click (50 cents)
+  private readonly REVENUE_PER_IMPRESSION = 0.003;
+  private readonly REVENUE_PER_CLICK = 0.50;
 
   /**
    * Fetch ads from Supabase
@@ -146,6 +153,56 @@ export class SupabaseAdsService {
     } catch (error) {
       console.error('Error getting random ad from Supabase:', error);
       return null;
+    }
+  }
+
+  /**
+   * Get total impressions and clicks across all users and calculate money raised
+   * @returns Promise<number> - Total money raised in dollars
+   */
+  async getTotalMoneyRaised(): Promise<number> {
+    try {
+      console.log('💰 Fetching total ad stats to calculate money raised...');
+      
+      const response = await fetch(this.TOTAL_STATS_URL, {
+        method: "POST",
+        headers: {
+          "apikey": this.API_KEY,
+          "Authorization": `Bearer ${this.API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({})
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('❌ Error fetching total ad stats:', errorText);
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+      }
+
+      const result = await response.json();
+      console.log('🔍 Raw RPC response:', result);
+      
+      // Supabase RPC functions return data in an array format
+      const data = Array.isArray(result) ? result[0] : result;
+      console.log('🔍 Parsed data:', data);
+      
+      const totalImpressions = data?.total_impressions || 0;
+      const totalClicks = data?.total_clicks || 0;
+      
+      // Calculate revenue from impressions and clicks
+      const impressionRevenue = totalImpressions * this.REVENUE_PER_IMPRESSION;
+      const clickRevenue = totalClicks * this.REVENUE_PER_CLICK;
+      const totalMoneyRaised = impressionRevenue + clickRevenue;
+      
+      console.log('💰 Total impressions:', totalImpressions, '($' + impressionRevenue.toFixed(2) + ')');
+      console.log('💰 Total clicks:', totalClicks, '($' + clickRevenue.toFixed(2) + ')');
+      console.log('💰 Total money raised: $' + totalMoneyRaised.toFixed(2));
+      
+      return Math.round(totalMoneyRaised * 100) / 100; // Round to 2 decimal places
+    } catch (error) {
+      console.error('❌ Error calculating money raised:', error);
+      return 0;
     }
   }
 

@@ -32,12 +32,15 @@ export const EmbeddedAdComponent = ({ position, onClose }: EmbeddedAdComponentPr
           referrerPolicy="no-referrer-when-downgrade"
           style={{
             width: '100%',
-            height: '100%',
+            height: position === 'bottom-middle' ? 'calc(100% - 30px)' : 'calc(100% - 30px)',
             border: '0',
             display: 'block',
             background: 'transparent'
           }}
         />
+        <div className="embedded-ad-sponsored">
+          <span>Sponsored by Ethicly</span>
+        </div>
       </div>
     </div>
   )

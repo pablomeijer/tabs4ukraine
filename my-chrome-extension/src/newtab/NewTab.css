@@ -21,6 +21,10 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
+.dark-mode .t4p-logo-toggle svg {
+  fill: #ffffff;
+}
+
 .dark-mode .quick-access-item {
   background: rgba(255, 255, 255, 0.1);
   color: #ffffff !important;
@@ -58,7 +62,7 @@
 }
 
 .dark-mode .donation-refresh-btn img {
-  filter: brightness(0) invert(1);
+  filter: brightness(0) invert(0);
 }
 
 .dark-mode .settings-btn {
@@ -87,7 +91,7 @@
 }
 
 .dark-mode .t4p-modal-tab {
-  color: #cccccc;
+  color: #000000;
 }
 
 .dark-mode .t4p-modal-tab:hover {
@@ -1238,94 +1242,6 @@ a {
 
 
 /* Responsive design for logo/title */
-@media (max-width: 768px) {
-  .t4p-logo-container {
-    top: 20%;
-    gap: 12px;
-  }
-  .t4p-logo {
-    width: 200px;
-  }
-  .t4p-clock-logo {
-    width: 200px;
-  }
-  
-  .t4p-digital-clock .t4p-clock-time {
-    font-size: 2.5rem;
-  }
-  
-  .t4p-digital-clock .t4p-clock-date {
-    font-size: 1rem;
-  }
-  .t4p-logo-toggle {
-    width: 32px;
-    height: 32px;
-  }
-  .t4p-logo-toggle svg {
-    width: 18px;
-    height: 18px;
-  }
-  .t4p-title {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-  }
-  .search-container {
-    top: 35%;
-    padding: 0 20px;
-  }
-  
-  .search-box {
-    border-radius: 20px;
-  }
-  
-  .search-input {
-    font-size: 16px;
-    padding: 14px 16px 14px 10px;
-  }
-  
-  
-  
-  .quick-access-grid {
-    top: 65%;
-  }
-  
-  
-  .t4p-top-right-icons {
-    top: 12px;
-    right: 12px;
-    gap: 10px;
-  }
-  
-   
-   .donation-box-bottom-left {
-     bottom: 12px;
-     left: 12px;
-     padding: 12px 16px;
-     gap: 12px;
-   }
-   
-   .donation-box-bottom-left .donation-icon {
-     width: 32px;
-     height: 32px;
-   }
-   
-   .donation-box-bottom-left .donation-amount {
-     font-size: 18px;
-   }
-   
-   .donation-box-bottom-left .donation-label {
-     font-size: 11px;
-   }
-   
-   .donation-box-bottom-left .donation-refresh-btn {
-     width: 24px;
-     height: 24px;
-     margin-left: 8px;
-   }
-  .t4p-icon-btn {
-    padding: 6px;
-  }
-}
 
 .t4p-pill {
   display: flex;
@@ -1355,23 +1271,6 @@ a {
   letter-spacing: 0.01em;
   white-space: nowrap;
 }
-@media (max-width: 600px) {
-  .t4p-top-right-icons {
-    gap: 8px;
-  }
-  .t4p-pill {
-    padding: 2px 8px 2px 4px;
-    min-width: 60px;
-  }
-  .t4p-pill-logo {
-    width: 18px;
-    height: 18px;
-    margin-right: 4px;
-  }
-  .t4p-pill-amount {
-    font-size: 0.95rem;
-  }
-}
 
 .quick-access-grid {
   position: absolute;
@@ -1380,29 +1279,47 @@ a {
   transform: translateX(-50%);
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-  max-width: 500px;
+  gap: 16px;
+  max-width: 520px;
   width: 100%;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 .quick-access-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: transparent;
-  border-radius: 8px;
-  padding: 8px 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 8px;
   text-decoration: none;
   color: #333;
-  transition: all 0.2s ease;
-  box-shadow: none;
-  backdrop-filter: none;
-  border: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+.quick-access-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 .quick-access-item:hover {
-  transform: translateY(-2px);
-  background: rgba(128, 128, 128, 0.1);
-  border-radius: 8px;
+  transform: translateY(-4px) scale(1.02);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.quick-access-item:hover::before {
+  opacity: 1;
 }
 
 /* Disable hover effects in non-default backgrounds since we have permanent overlay */
@@ -1429,19 +1346,29 @@ section[style*="backgroundImage"] .quick-access-item:hover,
   box-shadow: none !important;
 }
 .quick-access-item img {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   object-fit: cover;
-  margin-bottom: 4px;
-  border-radius: 6px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+.quick-access-item:hover img {
+  transform: scale(1.05);
 }
 
-/* White square background specifically for the add shortcut plus sign */
+/* Add shortcut button styling */
 .quick-access-item img[alt="Add Shortcut"] {
   background: rgba(255, 255, 255, 0.9);
   padding: 4px;
   border-radius: 6px;
   object-fit: contain;
+  transition: all 0.3s ease;
+}
+.quick-access-item:hover img[alt="Add Shortcut"] {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.05);
 }
 .quick-access-item span {
   font-size: 0.7rem;
@@ -1451,6 +1378,36 @@ section[style*="backgroundImage"] .quick-access-item:hover,
   color: #333333;
   text-shadow: none;
   white-space: pre-line;
+}
+
+/* Sponsored shortcuts - show full text (no truncation) */
+.quick-access-item[data-shortcut-type="advertisements"] span {
+  overflow: visible;
+  text-overflow: unset;
+  display: block;
+  max-height: none;
+}
+
+/* Most visited shortcuts - truncate to 12 characters with ellipsis, left-aligned */
+.quick-access-item[data-shortcut-type="most-visited"] span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  max-height: 1.1em; /* Single line height */
+  max-width: 12ch; /* Limit to 12 characters */
+  text-align: left;
+}
+
+/* Favorites shortcuts - truncate to 12 characters with ellipsis, left-aligned */
+.quick-access-item[data-shortcut-type="favorites"] span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  max-height: 1.1em; /* Single line height */
+  max-width: 12ch; /* Limit to 12 characters */
+  text-align: left;
 }
 
 /* When background is gallery mode (images), make shortcut text white */
@@ -1532,197 +1489,6 @@ section[style*="backgroundImage"] .quick-access-item span,
 .custom-mode .quick-access-item span {
   color: #ffffff !important;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-@media (max-width: 768px) {
-  .quick-access-grid {
-    top: 45%;
-    gap: 10px;
-    padding: 0 16px;
-    max-width: 420px;
-  }
-  .quick-access-item {
-    padding: 6px 3px;
-    background: transparent;
-    box-shadow: none;
-    border: none;
-    position: relative;
-  }
-  .quick-access-item:hover {
-    background: rgba(128, 128, 128, 0.1);
-  }
-  .quick-access-item img {
-    width: 28px;
-    height: 28px;
-    margin-bottom: 3px;
-  }
-
-  /* Mobile white square background for add shortcut plus sign */
-  .quick-access-item img[alt="Add Shortcut"] {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 3px;
-    border-radius: 4px;
-    object-fit: contain;
-  }
-  .quick-access-item span {
-    font-size: 0.6rem;
-  }
-  
-  /* Gallery mode shortcut background on mobile */
-  section[style*="backgroundImage"] .quick-access-item,
-  .gallery-mode .quick-access-item,
-  .custom-mode .quick-access-item {
-    background: transparent !important;
-    border-radius: 6px !important;
-    padding: 6px 3px !important;
-    box-shadow: none !important;
-    backdrop-filter: none;
-    border: none !important;
-    position: relative;
-  }
-
-  /* Mobile permanent overlay removed */
-  
-  section[style*="backgroundImage"] .quick-access-item span,
-  .gallery-mode .quick-access-item span,
-  .custom-mode .quick-access-item span {
-    color: #ffffff !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-  }
-  
-  /* Add shortcut button mobile styles removed - now inherits from quick-access-item */
-}
-@media (max-width: 480px) {
-  .t4p-logo-container {
-    top: 15%;
-    gap: 8px;
-  }
-  .t4p-logo {
-    width: 160px;
-  }
-  .t4p-clock-logo {
-    width: 160px;
-  }
-  
-  .t4p-digital-clock .t4p-clock-time {
-    font-size: 2rem;
-  }
-  
-  .t4p-digital-clock .t4p-clock-date {
-    font-size: 0.9rem;
-  }
-  .t4p-logo-toggle {
-    width: 28px;
-    height: 28px;
-  }
-  .t4p-logo-toggle svg {
-    width: 16px;
-    height: 16px;
-  }
-  
-  .search-container {
-    top: 30%;
-  }
-  .quick-access-grid {
-    top: 40%;
-    gap: 8px;
-    padding: 0 12px;
-    max-width: 360px;
-  }
-  
-     .donation-box-bottom-left {
-     bottom: 8px;
-     left: 8px;
-     padding: 10px 14px;
-     gap: 10px;
-   }
-   
-   .donation-box-bottom-left .donation-icon {
-     width: 28px;
-     height: 28px;
-   }
-   
-   .donation-box-bottom-left .donation-amount {
-     font-size: 16px;
-   }
-   
-       .donation-box-bottom-left .donation-label {
-      font-size: 10px;
-    }
-    
-    .donation-box-bottom-left .donation-refresh-btn {
-      width: 20px;
-      height: 20px;
-      margin-left: 6px;
-    }
-  
-
-  
-  .quick-access-item {
-    padding: 5px 2px;
-    background: transparent;
-    box-shadow: none;
-    border: none;
-    position: relative;
-  }
-  .quick-access-item:hover {
-    background: rgba(128, 128, 128, 0.1);
-  }
-  
-  .quick-access-item img {
-    width: 24px;
-    height: 24px;
-    margin-bottom: 2px;
-  }
-
-  /* Small mobile white square background for add shortcut plus sign */
-  .quick-access-item img[alt="Add Shortcut"] {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 2px;
-    border-radius: 3px;
-    object-fit: contain;
-  }
-  
-  .quick-access-item span {
-    font-size: 0.55rem;
-  }
-  
-  /* Gallery mode shortcut background on small mobile */
-  section[style*="backgroundImage"] .quick-access-item,
-  .gallery-mode .quick-access-item,
-  .custom-mode .quick-access-item {
-    background: transparent !important;
-    border-radius: 4px !important;
-    padding: 5px 2px !important;
-    box-shadow: none !important;
-    backdrop-filter: none;
-    border: none !important;
-    position: relative;
-  }
-
-  /* Small mobile permanent overlay removed */
-  
-  section[style*="backgroundImage"] .quick-access-item span,
-  .gallery-mode .quick-access-item span,
-  .custom-mode .quick-access-item span {
-    color: #ffffff !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-  }
-  
-  .t4p-add-shortcut-btn {
-    width: auto;
-    min-height: auto;
-  }
-  
-     .t4p-apps-bubble,
-   .t4p-profile-bubble,
-   .t4p-notifications-bubble,
-   .t4p-gamification-bubble {
-     top: 50px;
-     right: 12px;
-     min-width: 85vw;
-   }
-  
-  /* Add shortcut button small mobile styles removed - now inherits from quick-access-item */
 }
 
 .t4p-apps-bubble {
@@ -1837,32 +1603,6 @@ section[style*="backgroundImage"] .quick-access-item span,
   margin-top: 10px;
   border-top: 1px solid #e0e0e0;
   padding-top: 10px;
-}
-@media (max-width: 600px) {
-  .t4p-apps-bubble {
-    right: 10px;
-    top: 60px;
-    min-width: 90vw;
-    padding: 14px 4px 10px 4px;
-  }
-  .t4p-apps-bubble:after {
-    right: 12px;
-    top: 60px;
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent;
-    border-left: 12px solid #fff;
-  }
-  .t4p-apps-grid {
-    gap: 6px;
-  }
-  .t4p-apps-item img {
-    width: 20px;
-    height: 20px;
-    margin-bottom: 2px;
-  }
-  .t4p-apps-item span {
-    font-size: 0.65rem;
-  }
 }
 
 /* Profile Bubble Styles */
@@ -2349,63 +2089,7 @@ section[style*="backgroundImage"] .quick-access-item span,
 }
 
 /* Responsive Shortcut Modal */
-@media (max-width: 768px) {
-  .t4p-shortcut-modal {
-    padding: 20px;
-    max-width: 90%;
-  }
-  
-  .t4p-shortcut-list {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
-  }
-  
-  .t4p-shortcut-item {
-    padding: 6px;
-  }
-  
-  .t4p-shortcut-item img {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .t4p-shortcut-item span {
-    font-size: 0.7rem;
-  }
-}
 
-@media (max-width: 480px) {
-  .t4p-shortcut-modal {
-    padding: 16px;
-    max-width: 95%;
-  }
-  
-  .t4p-shortcut-modal h2 {
-    font-size: 1.3rem;
-  }
-  
-  .t4p-shortcut-modal h3 {
-    font-size: 1.1rem;
-  }
-  
-  .t4p-shortcut-list {
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
-  
-  .t4p-shortcut-item {
-    padding: 4px;
-  }
-  
-  .t4p-shortcut-item img {
-    width: 18px;
-    height: 18px;
-  }
-  
-  .t4p-shortcut-item span {
-    font-size: 0.65rem;
-  }
-}
 
 /* Sponsored Shortcuts Section */
 .t4p-sponsored-shortcuts-section {

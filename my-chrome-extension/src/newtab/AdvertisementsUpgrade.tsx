@@ -11,6 +11,13 @@ export const AdvertisementsUpgrade = ({ currentAdCount, onUpgrade }: AdUpgradePr
 
   const impactLevels = [
     {
+      id: 0,
+      title: 'No Advertisements',
+      description: 'Use extension without ads',
+      price: '$0',
+      rate: 'no donations'
+    },
+    {
       id: 1,
       title: '1 Advertisement',
       description: 'Basic impact level',
@@ -77,15 +84,17 @@ export const AdvertisementsUpgrade = ({ currentAdCount, onUpgrade }: AdUpgradePr
           onClick={handleUpgrade}
           disabled={selectedPlan === currentAdCount}
         >
-          {selectedPlan === currentAdCount ? 'Current Level' : `Raise More with ${selectedPlan} Advertisement${selectedPlan > 1 ? 's' : ''}`}
+          {selectedPlan === currentAdCount ? 'Current Level' : 
+           selectedPlan === 0 ? 'Disable Advertisements' : 
+           `Raise More with ${selectedPlan} Advertisement${selectedPlan > 1 ? 's' : ''}`}
         </button>
       </div>
 
       <div className="ad-upgrade-info">
         <p className="ad-upgrade-info-text">
-          💡 <strong>How it works:</strong> Each time you open a new tab, embedded advertisements will appear on your new tab page. 
-          The revenue from these ads is automatically donated to Palestinian causes. The more advertisements you choose, 
-          the more money we can raise for Palestinian communities with every tab you open.
+          💡 <strong>How it works:</strong> Choose how many advertisements you want to see on your new tab page. 
+          The revenue from these ads is automatically donated to Palestinian causes. You can disable ads completely 
+          or choose 1-3 ads to raise more money for Palestinian communities with every tab you open.
         </p>
       </div>
     </div>

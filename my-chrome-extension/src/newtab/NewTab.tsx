@@ -4,8 +4,10 @@ import EthiclyAdComponent from './EthiclyAdComponent'
 import AdvertisementsUpgrade from './AdvertisementsUpgrade'
 import AboutPage from './AboutPage'
 import AuthComponent from './AuthComponent'
-import GamificationModal from './GamificationModal'
-import { auth, userProfile, donationTracker, sponsoredTracker, gamificationTracker } from '../lib/supabase'
+import LocalGamificationModal from './LocalGamificationModal'
+import { auth, userProfile, sponsoredTracker, gamificationTracker } from '../lib/supabase'
+import { supabaseAdsService } from '../lib/supabase-ads'
+import localGamification from '../lib/localGamification'
 
 import './NewTab.css'
 import './GamificationModal.css'
@@ -648,7 +650,18 @@ export const NewTab = () => {
         if (chrome?.topSites) {
           const sites = await chrome.topSites.get();
           console.log('Loaded most visited sites:', sites);
-          setMostVisitedSites(sites.slice(0, 10)); // Limit to 10 sites
+          const limitedSites = sites.slice(0, 10); // Limit to 10 sites
+          setMostVisitedSites(limitedSites);
+          
+          // Update filtered shortcuts if we're in most-visited mode
+          if (shortcutsType === 'most-visited') {
+            const newFilteredShortcuts = limitedSites.map(site => ({
+              name: site.title,
+              url: site.url,
+              icon: `https://www.google.com/s2/favicons?domain=${new URL(site.url).hostname}&sz=32`
+            }));
+            setFilteredShortcuts(newFilteredShortcuts);
+          }
         } else {
           console.warn('Chrome topSites API not available');
         }
@@ -662,35 +675,21 @@ export const NewTab = () => {
     }
   }, [shortcutsType]);
 
-  // Load favorite sites from Chrome bookmarks API
+  // Load user-added favorite sites from storage
   useEffect(() => {
     const loadFavoriteSites = async () => {
       try {
-        if (chrome?.bookmarks) {
-          const bookmarks = await chrome.bookmarks.getTree();
-          const extractBookmarks = (nodes: any[]): any[] => {
-            let result: any[] = [];
-            for (const node of nodes) {
-              if (node.url) {
-                result.push({
-                  id: node.id,
-                  title: node.title,
-                  url: node.url,
-                  favicon: `https://www.google.com/s2/favicons?domain=${new URL(node.url).hostname}&sz=32`
-                });
-              }
-              if (node.children) {
-                result = result.concat(extractBookmarks(node.children));
-              }
-            }
-            return result;
-          };
-          const favorites = extractBookmarks(bookmarks).slice(0, 10); // Limit to 10 sites
-          console.log('Loaded favorite sites:', favorites);
-          setFavoriteSites(favorites);
-        } else {
-          console.warn('Chrome bookmarks API not available');
-        }
+        // Load user-added favorites from Chrome storage
+        chrome.storage.sync.get(['userFavorites'], (result) => {
+          const userFavorites = result.userFavorites || [];
+          console.log('Loaded user favorites:', userFavorites);
+          setFavoriteSites(userFavorites);
+          
+          // Update filtered shortcuts if we're in favorites mode
+          if (shortcutsType === 'favorites') {
+            setFilteredShortcuts(userFavorites);
+          }
+        });
       } catch (error) {
         console.error('Error loading favorite sites:', error);
       }
@@ -750,35 +749,94 @@ export const NewTab = () => {
   }, []);
 
   // Function to add new shortcut
-  const addShortcut = () => {
+  const addShortcut = async () => {
     console.log('Adding shortcut:', newShortcut);
     if (!newShortcut.name || !newShortcut.url) {
       setShortcutError('Name and URL are required.');
       return;
     }
     
-    // Check if we already have 10 shortcuts
-    if (shortcuts.length >= 10) {
-      setShortcutError('Maximum of 10 shortcuts allowed.');
-      return;
-    }
+    // Get the appropriate favicon for the URL
+    const faviconUrl = `https://www.google.com/s2/favicons?domain=${new URL(newShortcut.url).hostname}&sz=32`;
     
-    // Create a default icon (you can replace this with a generic icon)
-    const defaultIcon = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMiA3VjIwSDEwVjE0SDE0VjIwSDIyVjdMMTIgMloiIGZpbGw9IiMxODgwMzgiLz4KPC9zdmc+';
-    
-    const shortcutWithIcon = { ...newShortcut, icon: defaultIcon };
+    const shortcutWithIcon = { 
+      ...newShortcut, 
+      icon: faviconUrl,
+      favicon: faviconUrl,
+      title: newShortcut.name
+    };
     console.log('Adding shortcut with icon:', shortcutWithIcon);
     
-    const newShortcuts = [...shortcuts, shortcutWithIcon];
-    setShortcuts(newShortcuts);
-    
-    // Update filtered shortcuts if we're in advertisements mode
-    if (shortcutsType === 'advertisements') {
-      const newFilteredShortcuts = newShortcuts.slice(0, sponsoredShortcutsCount);
-      setFilteredShortcuts(newFilteredShortcuts);
+    // Handle different shortcut types
+    switch (shortcutsType) {
+      case 'advertisements':
+        // Check if we already have 10 sponsored shortcuts
+        if (shortcuts.length >= 10) {
+          setShortcutError('Maximum of 10 shortcuts allowed.');
+          return;
+        }
+        
+        const newShortcuts = [...shortcuts, shortcutWithIcon];
+        setShortcuts(newShortcuts);
+        
+        // Update filtered shortcuts
+        const newFilteredShortcuts = newShortcuts.slice(0, sponsoredShortcutsCount);
+        setFilteredShortcuts(newFilteredShortcuts);
+        break;
+        
+      case 'most-visited':
+        // Check if we already have 10 most visited shortcuts
+        if (mostVisitedSites.length >= 10) {
+          setShortcutError('Maximum of 10 shortcuts allowed.');
+          return;
+        }
+        
+        const newMostVisited = [...mostVisitedSites, {
+          url: newShortcut.url,
+          title: newShortcut.name,
+          favicon: faviconUrl
+        }];
+        setMostVisitedSites(newMostVisited);
+        
+        // Update filtered shortcuts
+        const newFilteredMostVisited = newMostVisited.map(site => ({
+          name: site.title,
+          url: site.url,
+          icon: site.favicon
+        }));
+        setFilteredShortcuts(newFilteredMostVisited);
+        break;
+        
+      case 'favorites':
+        // Check if we already have 10 favorite shortcuts
+        if (favoriteSites.length >= 10) {
+          setShortcutError('Maximum of 10 shortcuts allowed.');
+          return;
+        }
+        
+        const newFavorites = [...favoriteSites, {
+          id: Date.now().toString(), // Generate a unique ID
+          title: newShortcut.name,
+          url: newShortcut.url,
+          favicon: faviconUrl
+        }];
+        setFavoriteSites(newFavorites);
+        
+        // Save to Chrome storage
+        chrome.storage.sync.set({ userFavorites: newFavorites }, () => {
+          console.log('Saved user favorites to storage');
+        });
+        
+        // Update filtered shortcuts
+        setFilteredShortcuts(newFavorites);
+        break;
+        
+      default:
+        setShortcutError('Invalid shortcut type.');
+        return;
     }
     
-    console.log('Shortcuts after adding:', newShortcuts);
+    console.log('Shortcuts after adding:', filteredShortcuts);
     setShowShortcutModal(false);
     setNewShortcut({ name: '', url: '' });
     setShortcutError('');
@@ -833,35 +891,62 @@ export const NewTab = () => {
     trackTabOpen();
   }, []);
 
-  // Load total donations from database
-  const loadTotalDonations = async () => {
-    try {
-      console.log('Loading total donations from database...');
-      const { data, error } = await donationTracker.getTotalDonations();
-      console.log('Database response:', { data, error });
-      
-      if (error) {
-        console.error('Error loading total donations:', error);
-        // Keep current value if there's an error
-        return;
+  // Load total donations from cache only (no calculation)
+  const loadTotalDonations = () => {
+    // Only load from Chrome storage - no API calls
+    chrome.storage.sync.get(['totalDonations'], (result) => {
+      if (result.totalDonations !== undefined) {
+        console.log('Loading cached total donations:', result.totalDonations);
+        setTotalDonations(result.totalDonations);
       } else {
-        const newTotal = data || 0;
-        console.log('Setting total donations to:', newTotal);
-        setTotalDonations(newTotal);
-        // Save to storage so it persists across new tabs
-        chrome.storage.sync.set({ totalDonations: newTotal }, () => {
-          console.log('Total donations saved to storage:', newTotal);
-        });
+        console.log('No cached donations found, setting to 0');
+        setTotalDonations(0);
       }
+    });
+  };
+
+  // Manual refresh function - calculates fresh total from API
+  const refreshTotalDonations = async () => {
+    try {
+      console.log('🔄 Manual refresh: Calculating fresh total donations...');
+      
+      const moneyRaised = await supabaseAdsService.getTotalMoneyRaised();
+      console.log('💰 Fresh calculation result:', moneyRaised);
+      
+      setTotalDonations(moneyRaised);
+      
+      // Save to Chrome storage for future tabs
+      chrome.storage.sync.set({ totalDonations: moneyRaised }, () => {
+        console.log('✅ Fresh total saved to storage:', moneyRaised);
+      });
     } catch (error) {
-      console.error('Error loading total donations:', error);
+      console.error('❌ Error in manual refresh:', error);
+      
+      // Fallback to old method if impression calculation fails
+      try {
+        console.log('🔄 Falling back to database calculation...');
+        const { data, error } = await donationTracker.getTotalDonations();
+        
+        if (!error && data) {
+          const newTotal = data || 0;
+          console.log('💰 Fallback calculation result:', newTotal);
+          setTotalDonations(newTotal);
+          
+          chrome.storage.sync.set({ totalDonations: newTotal }, () => {
+            console.log('✅ Fallback total saved to storage:', newTotal);
+          });
+        }
+      } catch (fallbackError) {
+        console.error('❌ Fallback calculation also failed:', fallbackError);
+      }
     }
   };
 
   // Track tab open
   const trackTabOpen = async () => {
     try {
-      await donationTracker.trackTabOpen(currentUser?.id || null, adCount);
+      // Track locally for gamification
+      await localGamification.trackTabOpen(adCount);
       
       // Update gamification stats if user is logged in
       if (currentUser?.id) {
@@ -877,7 +962,8 @@ export const NewTab = () => {
       
       // Don't automatically reload total donations - only update on refresh button click
     } catch (error) {
-      console.error('Error tracking tab open:', error);
+      console.error('Error tracking tab open:', error instanceof Error ? error.message : String(error));
+      console.error('Full error object:', error);
     }
   };
 
@@ -1089,24 +1175,8 @@ export const NewTab = () => {
     }
   }, [])
 
-  // Subscribe to real-time donation updates
-  useEffect(() => {
-    try {
-      const subscription = donationTracker.subscribeToDonationUpdates((total) => {
-        setTotalDonations(total);
-        // Save to storage so it persists across new tabs
-        chrome.storage.sync.set({ totalDonations: total }, () => {
-          console.log('Real-time donation update saved to storage:', total);
-        });
-      });
-
-      return () => {
-        subscription.unsubscribe();
-      };
-    } catch (error) {
-      console.error('Error subscribing to donation updates:', error);
-    }
-  }, []);
+  // Manual refresh only - no automatic updates
+  // The total donations will only update when user clicks the refresh button
 
   useEffect(() => {
     // Pick a random gallery image when gallery mode is selected
@@ -1223,13 +1293,16 @@ export const NewTab = () => {
   };
 
   const handleRefreshDonations = async () => {
-    // Only reload total donations, don't track tab opens
-    loadTotalDonations();
+    // Manual refresh - calculate fresh total from API
+    await refreshTotalDonations();
   };
 
   const handleSponsoredShortcutClick = async (shortcut: { name: string, url: string }) => {
     try {
       await sponsoredTracker.trackSponsoredClick(currentUser?.id || null, shortcut.name, shortcut.url);
+      
+      // Track locally for gamification
+      await localGamification.trackSponsoredClick();
       
       // Update gamification stats if user is logged in
       if (currentUser?.id) {
@@ -1338,10 +1411,9 @@ export const NewTab = () => {
       />
       
       {/* Gamification Modal */}
-      <GamificationModal
+      <LocalGamificationModal
         open={gamificationOpen}
         onClose={() => setGamificationOpen(false)}
-        currentUser={currentUser}
         refreshTrigger={gamificationRefreshTrigger}
       />
       
@@ -1722,6 +1794,7 @@ export const NewTab = () => {
               target="_blank" 
               rel="noopener noreferrer" 
               className="quick-access-item" 
+              data-shortcut-type={shortcutsType}
               onClick={() => {
                 // Only track clicks for sponsored shortcuts, not user's own sites
                 if (shortcutsType === 'advertisements') {
@@ -1740,20 +1813,19 @@ export const NewTab = () => {
               <span>{(shortcut as any).name || (shortcut as any).title}</span>
             </a>
           ))}
-           <div 
-             className="quick-access-item" 
-             onClick={() => setShowShortcutModal(true)}
-             style={{ cursor: 'pointer' }}
-           >
-             <img 
-               src="/img/8_icons/plus_sign.png" 
-               alt="Add Shortcut" 
-             />
-             <span>
-               {shortcutsType === 'favorites' ? 'Add\nFavorite' : 
-                shortcutsType === 'most-visited' ? 'Add\nShortcut' : 'Add\nShortcut'}
-             </span>
-           </div>
+           {shortcutsType === 'favorites' && (
+             <div 
+               className="quick-access-item" 
+               onClick={() => setShowShortcutModal(true)}
+               style={{ cursor: 'pointer' }}
+             >
+               <img 
+                 src="/img/8_icons/plus_sign.png" 
+                 alt="Add Shortcut" 
+               />
+               <span>Add Favorite</span>
+             </div>
+           )}
          </div>
          
         {/* 3rd Advertisement - Supabase API-driven Leaderboard Ad */}

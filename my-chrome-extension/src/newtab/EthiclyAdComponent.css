@@ -55,7 +55,7 @@
 
 .ethicly-ad-image-container {
   position: relative;
-  height: 90px;
+  height: calc(100% - 30px);
   overflow: hidden;
 }
 
@@ -126,16 +126,23 @@
 
 .ethicly-ad-sponsored {
   position: absolute;
-  bottom: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #999;
-  font-size: 10px;
-  font-style: italic;
-  font-weight: 400;
-  text-align: center;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0;
+  font-size: 10px;
+  color: #999;
+  font-style: italic;
+  text-align: center;
+  padding: 0;
   white-space: nowrap;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 10;
 }
 
 /* Loading state */
