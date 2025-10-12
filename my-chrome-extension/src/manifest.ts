@@ -56,7 +56,7 @@ export default defineManifest({
     'tabs'
   ],
   host_permissions: [
-    'https://api.ethicly.com/*',
+    'https://ethicly.ch/*',
     'https://fvmpnqaoympgmrullemj.supabase.co/*',
     'https://images.unsplash.com/*'
   ],

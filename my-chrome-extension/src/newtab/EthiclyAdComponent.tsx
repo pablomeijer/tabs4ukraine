@@ -25,7 +25,7 @@ export const EthiclyAdComponent: React.FC<EthiclyAdComponentProps> = ({
       setIsLoading(true);
       setError(null);
       
-      const ad = await supabaseAdsService.getRandomAd();
+      const ad = await supabaseAdsService.getRandomAd('leaderboard');
       
       if (ad) {
         setCurrentAd(ad);
