@@ -1,6 +1,6 @@
-# Palestine Ad Sources Guide
+# Ukraine Ad Sources Guide
 
-This document provides information about legitimate organizations and sources for Palestine-related ads that can be displayed in the Tabs4Palestine extension.
+This document provides information about legitimate organizations and sources for Ukraine-related ads that can be displayed in the Tabs4Ukraine extension.
 
 ## 🏥 Medical & Humanitarian Aid Organizations
 
@@ -10,19 +10,19 @@ This document provides information about legitimate organizations and sources fo
 - **Trust Level**: ⭐⭐⭐⭐⭐ (UN Agency)
 - **Donation Link**: https://www.unrwa.org/donate
 
-### 2. **Palestine Red Crescent Society**
-- **Website**: https://www.palestinercs.org/en/donate
+### 2. **Ukraine Red Cross Society**
+- **Website**: https://www.redcross.org.uk/about-us/what-we-do/international/ukraine-crisis
 - **Focus**: Emergency medical services, ambulance services
 - **Trust Level**: ⭐⭐⭐⭐⭐ (Red Cross/Red Crescent)
-- **Donation Link**: https://www.palestinercs.org/en/donate
+- **Donation Link**: https://www.redcross.org.uk/about-us/what-we-do/international/ukraine-crisis
 
 ### 3. **Doctors Without Borders (MSF)**
-- **Website**: https://www.doctorswithoutborders.org/what-we-do/countries/palestine
+- **Website**: https://www.doctorswithoutborders.org/what-we-do/countries/ukraine
 - **Focus**: Emergency medical care, surgical interventions
 - **Trust Level**: ⭐⭐⭐⭐⭐ (International NGO)
 - **Donation Link**: https://www.doctorswithoutborders.org/donate
 
-### 4. **Medical Aid for Palestinians (MAP)**
+### 4. **Medical Aid for Ukrainians (MAU)**
 - **Website**: https://www.map.org.uk/
 - **Focus**: Healthcare, medical training, emergency response
 - **Trust Level**: ⭐⭐⭐⭐⭐ (Specialized NGO)
@@ -31,13 +31,13 @@ This document provides information about legitimate organizations and sources fo
 ## 👶 Children & Education
 
 ### 5. **Save the Children**
-- **Website**: https://www.savethechildren.org/where-we-help/middle-east/palestine
+- **Website**: https://www.savethechildren.org/where-we-help/europe/ukraine
 - **Focus**: Child protection, education, emergency response
 - **Trust Level**: ⭐⭐⭐⭐⭐ (International NGO)
 - **Donation Link**: https://www.savethechildren.org/donate
 
 ### 6. **UNICEF**
-- **Website**: https://www.unicef.org/emergencies/occupied-palestinian-territory
+- **Website**: https://www.unicef.org/emergencies/ukraine
 - **Focus**: Child welfare, education, water and sanitation
 - **Trust Level**: ⭐⭐⭐⭐⭐ (UN Agency)
 - **Donation Link**: https://www.unicef.org/donate
@@ -45,19 +45,19 @@ This document provides information about legitimate organizations and sources fo
 ## 🏠 Humanitarian & Emergency Relief
 
 ### 7. **Oxfam**
-- **Website**: https://www.oxfam.org/en/emergencies/occupied-palestinian-territory-and-israel
+- **Website**: https://www.oxfam.org/en/emergencies/ukraine-crisis
 - **Focus**: Emergency relief, water and sanitation, food security
 - **Trust Level**: ⭐⭐⭐⭐⭐ (International NGO)
 - **Donation Link**: https://www.oxfam.org/donate
 
 ### 8. **Islamic Relief**
-- **Website**: https://www.islamic-relief.org/emergencies/palestine-emergency/
+- **Website**: https://www.islamic-relief.org/emergencies/ukraine-emergency/
 - **Focus**: Emergency aid, food distribution, shelter
 - **Trust Level**: ⭐⭐⭐⭐⭐ (International NGO)
 - **Donation Link**: https://www.islamic-relief.org/donate
 
 ### 9. **ActionAid**
-- **Website**: https://www.actionaid.org.uk/emergencies/palestine-crisis
+- **Website**: https://www.actionaid.org.uk/emergencies/ukraine-crisis
 - **Focus**: Women's rights, emergency response, community support
 - **Trust Level**: ⭐⭐⭐⭐⭐ (International NGO)
 - **Donation Link**: https://www.actionaid.org.uk/donate
@@ -65,13 +65,13 @@ This document provides information about legitimate organizations and sources fo
 ## 🍽️ Food & Basic Needs
 
 ### 10. **World Food Programme (WFP)**
-- **Website**: https://www.wfp.org/emergencies/palestine-emergency
+- **Website**: https://www.wfp.org/emergencies/ukraine-emergency
 - **Focus**: Food assistance, emergency nutrition
 - **Trust Level**: ⭐⭐⭐⭐⭐ (UN Agency)
 - **Donation Link**: https://www.wfp.org/donate
 
 ### 11. **CARE International**
-- **Website**: https://www.care.org/emergency/palestine-crisis/
+- **Website**: https://www.care.org/emergency/ukraine-crisis/
 - **Focus**: Emergency response, women and girls, food security
 - **Trust Level**: ⭐⭐⭐⭐⭐ (International NGO)
 - **Donation Link**: https://www.care.org/donate
@@ -85,7 +85,7 @@ This document provides information about legitimate organizations and sources fo
 - **Donation Link**: https://www.anera.org/donate
 
 ### 13. **Mercy Corps**
-- **Website**: https://www.mercycorps.org/emergencies/palestine-crisis
+- **Website**: https://www.mercycorps.org/emergencies/ukraine-crisis
 - **Focus**: Economic development, emergency response
 - **Trust Level**: ⭐⭐⭐⭐⭐ (International NGO)
 - **Donation Link**: https://www.mercycorps.org/donate
@@ -93,12 +93,12 @@ This document provides information about legitimate organizations and sources fo
 ## 📰 News & Information Sources
 
 ### 14. **Al Jazeera**
-- **Website**: https://www.aljazeera.com/topics/regions/palestine.html
+- **Website**: https://www.aljazeera.com/topics/regions/ukraine.html
 - **Focus**: News coverage, information dissemination
 - **Trust Level**: ⭐⭐⭐⭐ (Media Organization)
 
 ### 15. **Middle East Eye**
-- **Website**: https://www.middleeasteye.net/topics/palestine
+- **Website**: https://www.middleeasteye.net/topics/ukraine
 - **Focus**: Independent journalism, analysis
 - **Trust Level**: ⭐⭐⭐⭐ (Media Organization)
 

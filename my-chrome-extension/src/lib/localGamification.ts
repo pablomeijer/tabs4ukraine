@@ -90,7 +90,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'donation_1',
     name: 'Dollar Donor',
-    description: 'Contributed $1+ to Palestine',
+    description: 'Contributed $1+ to Ukraine',
     icon: '💵',
     condition: (stats) => stats.totalDonations >= 1,
     reward: 100
@@ -98,7 +98,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'donation_10',
     name: 'Generous Giver',
-    description: 'Contributed $10+ to Palestine',
+    description: 'Contributed $10+ to Ukraine',
     icon: '💰',
     condition: (stats) => stats.totalDonations >= 10,
     reward: 300

@@ -25,7 +25,7 @@ export const Popup = () => {
 
   return (
     <main>
-      <h3>Tabs4Palestine</h3>
+      <h3>Tabs4Ukraine</h3>
       <div className="calc">
         <button onClick={minus} disabled={count <= 0}>
           -

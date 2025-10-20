@@ -11,10 +11,10 @@ export default defineManifest({
   version: packageData.version,
   manifest_version: 3,
   icons: {
-    16: 'img/tabs4ukraine_logo.png',
-    32: 'img/tabs4ukraine_logo.png',
-    48: 'img/tabs4ukraine_logo.png',
-    128: 'img/tabs4ukraine_logo.png',
+    16: 'img/ukraine_icon.png',
+    32: 'img/ukraine_icon.png',
+    48: 'img/ukraine_icon.png',
+    128: 'img/ukraine_icon.png',
   },
   action: {
     default_popup: 'popup.html',
@@ -26,7 +26,6 @@ export default defineManifest({
     },
   },
   options_page: 'options.html',
-  devtools_page: 'devtools.html',
   background: {
     service_worker: 'src/background/index.ts',
     type: 'module',

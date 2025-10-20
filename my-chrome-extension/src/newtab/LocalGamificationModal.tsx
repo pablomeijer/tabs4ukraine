@@ -146,11 +146,11 @@ export default function LocalGamificationModal({ open, onClose, refreshTrigger }
               </div>
 
               <div className="contribution-message">
-                <h4>Thank you for supporting Palestine! 🇵🇸</h4>
+                <h4>Thank you for supporting Ukraine! 🇺🇦</h4>
                 <p>
                   Your daily use of this extension is making a real difference. 
                   Every tab you open and every sponsored link you click contributes 
-                  to Palestinian relief efforts.
+                  to Ukrainian relief efforts.
                 </p>
               </div>
 

@@ -205,7 +205,7 @@ export const Options = () => {
               label="Enable Sponsored Ads"
               checked={settings.sponsoredAdsEnabled}
               onChange={(checked) => handleSettingChange('sponsoredAdsEnabled', checked)}
-              description="Show sponsored content to support Palestinian causes"
+              description="Show sponsored content to support Ukrainian causes"
             />
             <SliderControl
               label="Ad Frequency"
@@ -222,7 +222,7 @@ export const Options = () => {
               label="Enable Notifications"
               checked={settings.notificationsEnabled}
               onChange={(checked) => handleSettingChange('notificationsEnabled', checked)}
-              description="Receive updates about Palestinian causes"
+              description="Receive updates about Ukrainian causes"
             />
             <ToggleSwitch
               label="Enable Gamification"
@@ -266,7 +266,7 @@ export const Options = () => {
           <SettingCard title="About">
             <div className="t4p-about-content">
               <p className="t4p-about-text">
-                Tabs4Palestine is a Chrome extension that helps raise awareness and support for Palestinian causes through your daily browsing habits.
+                Tabs4Ukraine is a Chrome extension that helps raise awareness and support for Ukrainian causes through your daily browsing habits.
               </p>
               <div className="t4p-about-links">
                 <a href="https://github.com/guocaoyi/create-chrome-ext" target="_blank" className="t4p-about-link">

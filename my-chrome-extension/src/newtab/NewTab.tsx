@@ -3,9 +3,8 @@ import AdComponent from './AdComponent'
 import EthiclyAdComponent from './EthiclyAdComponent'
 import AdvertisementsUpgrade from './AdvertisementsUpgrade'
 import AboutPage from './AboutPage'
-import AuthComponent from './AuthComponent'
 import LocalGamificationModal from './LocalGamificationModal'
-import { auth, userProfile, sponsoredTracker, gamificationTracker } from '../lib/supabase'
+import { sponsoredTracker, gamificationTracker } from '../lib/supabase'
 import { supabaseAdsService } from '../lib/supabase-ads'
 import localGamification from '../lib/localGamification'
 
@@ -15,20 +14,9 @@ import logoWhite from '../assets/logo_white_transparent.png'
 import logoGreen from '../assets/logo_green_transparent.png'
 import oliveIcon from '../assets/ukraine_icon.png'
 
-// Import new SVG icons
-import AppsIcon from '../assets/icons/apps_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg'
-import ProfileIcon from '../assets/icons/group_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg'
-import NotificationsIcon from '../assets/icons/notifications_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg'
-import SettingsIcon from '../assets/icons/settings_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg'
-import RefreshIcon from '../assets/icons/refresh_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg'
-import RefreshIconBlack from '../assets/icons/refresh_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg'
-import TrophyIcon from '../assets/icons/trophy_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg'
+// Using emoji icons instead of SVG files for cleaner codebase
 
-// Import new cached icons
-import CachedIconBlack from '../assets/icons/cached_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg'
-import CachedIconWhite from '../assets/icons/cached_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg'
-
-function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground, adCount, onAdUpgrade, sponsoredShortcutsCount, setSponsoredShortcutsCount, showMoneyRaised, setShowMoneyRaised, showShortcuts, setShowShortcuts, shortcutsType, setShortcutsType, onAuthChange, onShowWallpaperModal, selectedWallpaper, customWallpaperEnabled, onCustomWallpaperToggle }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void, adCount: number, onAdUpgrade: (count: number) => void, sponsoredShortcutsCount: number, setSponsoredShortcutsCount: (count: number) => void, showMoneyRaised: boolean, setShowMoneyRaised: (show: boolean) => void, showShortcuts: boolean, setShowShortcuts: (show: boolean) => void, shortcutsType: 'advertisements' | 'most-visited' | 'favorites', setShortcutsType: (type: 'advertisements' | 'most-visited' | 'favorites') => void, onAuthChange: (user: any) => void, onShowWallpaperModal: () => void, selectedWallpaper: any, customWallpaperEnabled: boolean, onCustomWallpaperToggle: (enabled: boolean) => void }) {
+function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, setBackgroundMode, onUploadBackground, adCount, onAdUpgrade, sponsoredShortcutsCount, setSponsoredShortcutsCount, showMoneyRaised, setShowMoneyRaised, showShortcuts, setShowShortcuts, shortcutsType, setShortcutsType, onShowWallpaperModal, selectedWallpaper, customWallpaperEnabled, onCustomWallpaperToggle }: { open: boolean, onClose: () => void, toggles: any, setToggles: (t: any) => void, backgroundMode: string, setBackgroundMode: (m: string) => void, onUploadBackground: (file: File) => void, adCount: number, onAdUpgrade: (count: number) => void, sponsoredShortcutsCount: number, setSponsoredShortcutsCount: (count: number) => void, showMoneyRaised: boolean, setShowMoneyRaised: (show: boolean) => void, showShortcuts: boolean, setShowShortcuts: (show: boolean) => void, shortcutsType: 'advertisements' | 'most-visited' | 'favorites', setShortcutsType: (type: 'advertisements' | 'most-visited' | 'favorites') => void, onShowWallpaperModal: () => void, selectedWallpaper: any, customWallpaperEnabled: boolean, onCustomWallpaperToggle: (enabled: boolean) => void }) {
   const [activeTab, setActiveTab] = useState('General');
   const fileInputRef = useRef<HTMLInputElement>(null);
   if (!open) return null;
@@ -37,7 +25,7 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
       <div className="t4p-modal-bubble" onClick={e => e.stopPropagation()}>
         <button className="t4p-modal-close" onClick={onClose} style={{position: 'absolute', top: 16, right: 18}}>×</button>
         <div className="t4p-modal-tabs">
-          {['General', 'Background', 'Advertisements', 'Shortcuts', 'Account', 'About'].map(tab => (
+          {['General', 'Background', 'Advertisements', 'Shortcuts', 'About'].map(tab => (
             <button
               key={tab}
               className={`t4p-modal-tab${activeTab === tab ? ' t4p-modal-tab-active' : ''}`}
@@ -171,13 +159,6 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
                 onUpgrade={onAdUpgrade} 
               />
             </div>
-          )}
-          {activeTab === 'Account' && (
-            <AuthComponent 
-              onAuthChange={onAuthChange} 
-              gamificationUser={null}
-              totalDonations={0}
-            />
           )}
           {activeTab === 'Shortcuts' && (
             <div className="t4p-shortcuts-section">
@@ -318,7 +299,7 @@ function WallpaperModal({ open, onClose, onSelectWallpaper }: { open: boolean, o
     ukraine: [
       { id: 'ukraine-1', name: 'Ukraine Landscape 1', photographer: 'Tabs4Ukraine', description: 'Landscape', image: '/img/backgrounds/background_1.jpg' },
       { id: 'ukraine-2', name: 'Ukraine Landscape 2', photographer: 'Tabs4Ukraine', description: 'Landscape', image: '/img/backgrounds/ukraine_2.jpg' },
-      { id: 'ukraine-3', name: 'Ukraine Landscape 3', photographer: 'Tabs4Ukraine', description: 'Landscape', image: '/img/backgrounds/ukraine_3.jpg' }
+      { id: 'ukraine-3', name: 'Ukraine Landscape 3', photographer: 'mmamuth / Getty Images', description: 'Landscape', image: '/img/backgrounds/ukraine_3.jpg' }
     ],
     basic: [
       {
@@ -364,10 +345,10 @@ function WallpaperModal({ open, onClose, onSelectWallpaper }: { open: boolean, o
 
         <div className="t4p-wallpaper-categories">
           <button 
-            className={`t4p-category-btn${selectedCategory === 'palestine' ? ' t4p-category-btn-active' : ''}`}
-            onClick={() => setSelectedCategory('palestine')}
+            className={`t4p-category-btn${selectedCategory === 'ukraine' ? ' t4p-category-btn-active' : ''}`}
+            onClick={() => setSelectedCategory('ukraine')}
           >
-            Palestine
+            Ukraine
           </button>
           <button 
             className={`t4p-category-btn${selectedCategory === 'basic' ? ' t4p-category-btn-active' : ''}`}
@@ -436,31 +417,24 @@ export const NewTab = () => {
   const [backgroundMode, setBackgroundMode] = useState('default');
   const [customBg, setCustomBg] = useState<string | null>(null);
   const [galleryBg, setGalleryBg] = useState('/img/backgrounds/background_1.jpg');
-  const [logoType, setLogoType] = useState<'logo' | 'clock' | 'watermelon'>('logo');
+  const [logoType, setLogoType] = useState<'logo' | 'clock' | 'ukraine'>('ukraine');
   const [appsOpen, setAppsOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [gamificationOpen, setGamificationOpen] = useState(false);
-  const [showAuthForm, setShowAuthForm] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [authEmail, setAuthEmail] = useState('');
-  const [authPassword, setAuthPassword] = useState('');
-  const [authUsername, setAuthUsername] = useState('');
-     const [currentUser, setCurrentUser] = useState<any>(null);
    const [adCount, setAdCount] = useState(1);
    const [totalDonations, setTotalDonations] = useState(0);
   const [sponsoredShortcutsCount, setSponsoredShortcutsCount] = useState(8);
   const [shortcuts, setShortcuts] = useState([
-    { name: 'Zeeks', url: '#', icon: '/img/8_icons/zeeks_logo.jpeg' },
-    { name: 'Reface', url: '#', icon: '/img/8_icons/reface-ukraine-logo.png' },
-    { name: 'Baza IT', url: '#', icon: '/img/8_icons/baza-it-logo.png' },
-    { name: 'Auto BI', url: '#', icon: '/img/8_icons/auto-bi-logo.png' },
-    { name: 'Happy Monday', url: '#', icon: '/img/8_icons/happy-monday-logo.png' },
-    { name: 'Knopka', url: '#', icon: '/img/8_icons/knopka.jpeg' },
-    { name: 'Farm Fleet', url: '#', icon: '/img/8_icons/farm-fleet-logo.png' },
-    { name: 'BUKI', url: '#', icon: '/img/8_icons/buki_logo.png' },
-    { name: 'Rozmova', url: '#', icon: '/img/8_icons/rozmova.png' },
-    { name: 'Osavul', url: '#', icon: '/img/8_icons/osavul_logo.jpeg' }
+    { name: 'Zeeks', url: 'https://zeeks.co/en/', icon: '/img/8_icons/zeeks_logo.jpeg' },
+    { name: 'Reface', url: 'https://reface.ai/', icon: '/img/8_icons/reface-ukraine-logo.png' },
+    { name: 'Baza IT', url: 'https://bazait.com/', icon: '/img/8_icons/baza-it-logo.png' },
+    { name: 'Auto BI', url: 'https://www.facebook.com/autobi.ukraine/', icon: '/img/8_icons/auto-bi-logo.png' },
+    { name: 'Happy Monday', url: 'https://happymonday.ua/en', icon: '/img/8_icons/happy-monday-logo.png' },
+    { name: 'Knopka', url: 'https://www.knopka.health/en', icon: '/img/8_icons/knopka.jpeg' },
+    { name: 'Farm Fleet', url: 'https://farmfleet.io/en', icon: '/img/8_icons/farm-fleet-logo.png' },
+    { name: 'BUKI', url: 'https://buki.com.ua/en/', icon: '/img/8_icons/buki_logo.png' },
+    { name: 'Rozmova', url: 'https://www.rozmova.me/', icon: '/img/8_icons/rozmova.png' },
+    { name: 'Osavul', url: 'https://www.osavul.cloud/', icon: '/img/8_icons/osavul_logo.jpeg' }
   ]);
   const [filteredShortcuts, setFilteredShortcuts] = useState(shortcuts.slice(0, sponsoredShortcutsCount));
   const [showShortcutModal, setShowShortcutModal] = useState(false);
@@ -486,7 +460,7 @@ export const NewTab = () => {
     basic: [
       { id: 'ukraine-1', name: 'Ukraine Landscape 1', photographer: 'Tabs4Ukraine', description: 'Landscape', image: '/img/backgrounds/background_1.jpg' },
       { id: 'ukraine-2', name: 'Ukraine Landscape 2', photographer: 'Tabs4Ukraine', description: 'Landscape', image: '/img/backgrounds/ukraine_2.jpg' },
-      { id: 'ukraine-3', name: 'Ukraine Landscape 3', photographer: 'Tabs4Ukraine', description: 'Landscape', image: '/img/backgrounds/ukraine_3.jpg' }
+      { id: 'ukraine-3', name: 'Ukraine Landscape 3', photographer: 'mmamuth / Getty Images', description: 'Landscape', image: '/img/backgrounds/ukraine_3.jpg' }
     ]
   };
 
@@ -701,7 +675,7 @@ export const NewTab = () => {
 
   // Load settings from storage on mount
   useEffect(() => {
-    chrome.storage.sync.get(['adCount', 'backgroundMode', 'sponsoredShortcutsCount', 'showMoneyRaised', 'selectedWallpaper', 'galleryBg', 'customWallpaperEnabled', 'totalDonations', 'logoType'], (result: { adCount?: number, backgroundMode?: string, sponsoredShortcutsCount?: number, showMoneyRaised?: boolean, selectedWallpaper?: any, galleryBg?: string, customWallpaperEnabled?: boolean, totalDonations?: number, logoType?: 'logo' | 'clock' | 'watermelon' }) => {
+    chrome.storage.sync.get(['adCount', 'backgroundMode', 'sponsoredShortcutsCount', 'showMoneyRaised', 'selectedWallpaper', 'galleryBg', 'customWallpaperEnabled', 'totalDonations', 'logoType'], (result: { adCount?: number, backgroundMode?: string, sponsoredShortcutsCount?: number, showMoneyRaised?: boolean, selectedWallpaper?: any, galleryBg?: string, customWallpaperEnabled?: boolean, totalDonations?: number, logoType?: 'logo' | 'clock' | 'ukraine' }) => {
       console.log('Loading settings from storage:', result);
       if (result.adCount) {
         setAdCount(result.adCount);
@@ -802,18 +776,6 @@ export const NewTab = () => {
       // Track locally for gamification
       await localGamification.trackTabOpen(adCount);
       
-      // Update gamification stats if user is logged in
-      if (currentUser?.id) {
-        await gamificationTracker.updateUserStats(currentUser.id, true, false);
-        // Reload gamification user data
-        const gamificationResult = await gamificationTracker.getUserProfile(currentUser.id);
-        if (gamificationResult.success) {
-          // setGamificationUserData(gamificationResult.data);
-        }
-        // Trigger gamification modal refresh
-        setGamificationRefreshTrigger(prev => prev + 1);
-      }
-      
       // Don't automatically reload total donations - only update on refresh button click
     } catch (error) {
       console.error('Error tracking tab open:', error instanceof Error ? error.message : String(error));
@@ -825,15 +787,6 @@ export const NewTab = () => {
   const handleAdUpgrade = async (count: number) => {
     setAdCount(count);
     chrome.storage.sync.set({ adCount: count });
-    
-    // Update user's ad count in database if logged in
-    if (currentUser?.id) {
-      try {
-        await userProfile.updateProfile(currentUser.id, { ad_count: count });
-      } catch (error) {
-        console.error('Error updating ad count in database:', error);
-      }
-    }
   };
 
   // Save sponsored shortcuts count to storage when it changes
@@ -942,69 +895,6 @@ export const NewTab = () => {
     });
   };
 
-  const handleAuthSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    try {
-      if (isSignUp) {
-        const { data, error } = await auth.signUp(authEmail, authPassword, authUsername)
-        if (error) throw error
-        
-        if (data.user && data.user.email) {
-          // Create profile manually
-          await userProfile.createProfile(
-            data.user.id,
-            data.user.email,
-            authUsername || data.user.email.split('@')[0]
-          )
-        }
-      } else {
-        const { error } = await auth.signIn(authEmail, authPassword)
-        if (error) throw error
-      }
-      
-      // Reset form and close profile bubble
-      setAuthEmail('')
-      setAuthPassword('')
-      setAuthUsername('')
-      setShowAuthForm(false)
-      setIsSignUp(false)
-      setProfileOpen(false)
-      
-      // Check for current user after auth
-      checkCurrentUser()
-      
-    } catch (error: any) {
-      console.error('Auth error:', error.message)
-      alert(error.message)
-    }
-  }
-
-  const checkCurrentUser = async () => {
-    try {
-      const { user } = await auth.getCurrentUser()
-      if (user) {
-        // Get user profile
-        const { data: profile } = await userProfile.getProfile(user.id)
-        setCurrentUser({
-          id: user.id,
-          email: user.email,
-          username: profile?.username || user.email?.split('@')[0]
-        })
-        
-        // Load gamification user data
-        const gamificationResult = await gamificationTracker.getUserProfile(user.id);
-        if (gamificationResult.success) {
-          // setGamificationUserData(gamificationResult.data);
-        }
-      } else {
-        setCurrentUser(null)
-      }
-    } catch (error) {
-      console.error('Error checking current user:', error)
-      setCurrentUser(null)
-    }
-  }
 
   
 
@@ -1020,14 +910,6 @@ export const NewTab = () => {
     return () => clearInterval(interval)
   }, [])
 
-  useEffect(() => {
-    // Check for current user on component mount
-    try {
-      checkCurrentUser()
-    } catch (error) {
-      console.error('Error checking current user:', error);
-    }
-  }, [])
 
   // Manual refresh only - no automatic updates
   // The total donations will only update when user clicks the refresh button
@@ -1153,22 +1035,10 @@ export const NewTab = () => {
 
   const handleSponsoredShortcutClick = async (shortcut: { name: string, url: string }) => {
     try {
-      await sponsoredTracker.trackSponsoredClick(currentUser?.id || null, shortcut.name, shortcut.url);
+      await sponsoredTracker.trackSponsoredClick(null, shortcut.name, shortcut.url);
       
       // Track locally for gamification
       await localGamification.trackSponsoredClick();
-      
-      // Update gamification stats if user is logged in
-      if (currentUser?.id) {
-        await gamificationTracker.updateUserStats(currentUser.id, false, true);
-        // Reload gamification user data
-        const gamificationResult = await gamificationTracker.getUserProfile(currentUser.id);
-        if (gamificationResult.success) {
-          // setGamificationUserData(gamificationResult.data);
-        }
-        // Trigger gamification modal refresh
-        setGamificationRefreshTrigger(prev => prev + 1);
-      }
       
       // Don't automatically reload total donations - only update on refresh button click
     } catch (error) {
@@ -1180,7 +1050,7 @@ export const NewTab = () => {
     setShowLogoToggle(!showLogoToggle);
   };
 
-  const handleLogoTypeChange = (type: 'logo' | 'clock' | 'watermelon') => {
+  const handleLogoTypeChange = (type: 'logo' | 'clock' | 'ukraine') => {
     setLogoType(type);
     setShowLogoToggle(false);
     // Save to storage for persistence
@@ -1197,11 +1067,8 @@ export const NewTab = () => {
     console.log('backgroundMode changed to:', backgroundMode);
   }, [backgroundMode]);
 
-  // Debug logging for background mode
-  console.log('Current background mode:', backgroundMode);
-  console.log('Gallery background:', galleryBg);
-  console.log('Custom background:', customBg);
-  console.log('Selected wallpaper:', selectedWallpaper);
+  // Debug logging for logo state
+  console.log('Logo debug - toggles.logo:', toggles.logo, 'logoType:', logoType);
   
   const sectionStyle = backgroundMode === 'default'
     ? { background: '#F8F8F0' }
@@ -1238,25 +1105,11 @@ export const NewTab = () => {
         setShowShortcuts={setShowShortcuts}
         shortcutsType={shortcutsType}
         setShortcutsType={setShortcutsType}
-        onAuthChange={(user) => {
-          console.log('User auth changed:', user);
-          setCurrentUser(user);
-          
-          if (user?.id) {
-            gamificationTracker.getUserProfile(user.id).then(result => {
-              if (result.success) {
-                // setGamificationUserData(result.data);
-              }
-            });
-          } else {
-            // setGamificationUserData(null);
-            }
-          }}
-          onShowWallpaperModal={() => setShowWallpaperModal(true)}
-          selectedWallpaper={selectedWallpaper}
-          customWallpaperEnabled={customWallpaperEnabled}
-          onCustomWallpaperToggle={handleCustomWallpaperToggle}
-        />
+        onShowWallpaperModal={() => setShowWallpaperModal(true)}
+        selectedWallpaper={selectedWallpaper}
+        customWallpaperEnabled={customWallpaperEnabled}
+        onCustomWallpaperToggle={handleCustomWallpaperToggle}
+      />
         
       <WallpaperModal
         open={showWallpaperModal}
@@ -1311,145 +1164,6 @@ export const NewTab = () => {
         </div>
       )}
       
-      {/* Profile Bubble */}
-      {profileOpen && (
-        <div className="t4p-profile-bubble">
-          <button className="t4p-modal-close" onClick={() => {
-            setProfileOpen(false)
-            setShowAuthForm(false)
-            setIsSignUp(false)
-          }}>×</button>
-          
-          {!showAuthForm ? (
-            <div className="t4p-profile-section">
-              <div className="t4p-profile-header">
-                <div className={`t4p-profile-avatar ${currentUser ? 'logged-in' : 'guest'}`}>
-                  {currentUser ? (
-                    <span className="profile-avatar-text">
-                      {currentUser.username?.charAt(0).toUpperCase() || currentUser.email?.charAt(0).toUpperCase()}
-                    </span>
-                  ) : (
-                    <svg width="40" height="40" fill="none" viewBox="0 0 24 24">
-                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#666"/>
-                    </svg>
-                  )}
-                </div>
-                <div className="t4p-profile-info">
-                  <div className="t4p-profile-name">
-                    {currentUser ? currentUser.username : 'Guest User'}
-                  </div>
-                  <div className="t4p-profile-email">
-                    {currentUser ? currentUser.email : 'Not signed in'}
-                  </div>
-                </div>
-              </div>
-              <div className="t4p-profile-actions">
-                {currentUser ? (
-                  <>
-                    <button className="t4p-profile-btn" onClick={async () => {
-                      await auth.signOut()
-                      setCurrentUser(null)
-                      setProfileOpen(false)
-                    }}>
-                      Sign Out
-                    </button>
-                    <button className="t4p-profile-btn" onClick={() => {
-                      setProfileOpen(false)
-                      setSettingsOpen(true)
-                    }}>
-                      Settings
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button className="t4p-profile-btn t4p-profile-btn-primary" onClick={() => {
-                      setShowAuthForm(true)
-                      setIsSignUp(false)
-                    }}>
-                      Sign In
-                    </button>
-                    <button className="t4p-profile-btn" onClick={() => {
-                      setShowAuthForm(true)
-                      setIsSignUp(true)
-                    }}>
-                      Create Account
-                    </button>
-                  </>
-                )}
-              </div>
-              
-              {/* Additional Profile Links */}
-              <div className="t4p-profile-links">
-                <a 
-                  href={chrome?.runtime?.getURL ? chrome.runtime.getURL('privacy.html') : '/privacy.html'} 
-                  className="t4p-profile-link" 
-                  target="_blank" 
-                  rel="noreferrer"
-                >
-                  Privacy Policy
-                </a>
-              </div>
-            </div>
-          ) : (
-            <div className="t4p-profile-section">
-              <div className="t4p-profile-header">
-                <div className="t4p-profile-avatar">
-                  <svg width="40" height="40" fill="none" viewBox="0 0 24 24">
-                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#666"/>
-                  </svg>
-                </div>
-                <div className="t4p-profile-info">
-                  <div className="t4p-profile-name">{isSignUp ? 'Create Account' : 'Sign In'}</div>
-                  <div className="t4p-profile-email">Enter your details below</div>
-                </div>
-              </div>
-              
-              <form onSubmit={handleAuthSubmit} className="t4p-profile-form">
-                {isSignUp && (
-                  <input
-                    type="text"
-                    placeholder="Username (optional)"
-                    value={authUsername}
-                    onChange={(e) => setAuthUsername(e.target.value)}
-                    className="t4p-profile-input"
-                  />
-                )}
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={authEmail}
-                  onChange={(e) => setAuthEmail(e.target.value)}
-                  required
-                  className="t4p-profile-input"
-                />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={authPassword}
-                  onChange={(e) => setAuthPassword(e.target.value)}
-                  required
-                  className="t4p-profile-input"
-                />
-                <button type="submit" className="t4p-profile-btn t4p-profile-btn-primary">
-                  {isSignUp ? 'Create Account' : 'Sign In'}
-                </button>
-                <button 
-                  type="button" 
-                  className="t4p-profile-btn t4p-profile-btn-link"
-                  onClick={() => {
-                    setIsSignUp(!isSignUp)
-                    setAuthEmail('')
-                    setAuthPassword('')
-                    setAuthUsername('')
-                  }}
-                >
-                  {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
-                </button>
-              </form>
-            </div>
-          )}
-        </div>
-      )}
       
       {/* Notifications Bubble */}
       {notificationsOpen && (
@@ -1484,7 +1198,7 @@ export const NewTab = () => {
           <button className="t4p-modal-close" onClick={() => setGamificationOpen(false)}>×</button>
           <div className="t4p-gamification-section">
             <div className="t4p-gamification-title">
-              <img src={TrophyIcon} width="24" height="24" alt="Trophy" />
+              <span style={{fontSize: '24px'}}>🏆</span>
               <span>Gamification</span>
             </div>
               <div className="t4p-gamification-content">
@@ -1511,36 +1225,20 @@ export const NewTab = () => {
       
              {/* Top right icons */}
        <div className="t4p-top-right-icons">
-         {!currentUser && (
-           <button className="t4p-signup-btn" onClick={() => setProfileOpen(true)}>
-             Sign Up
-           </button>
-         )}
          {toggles.news && (
            <button className="t4p-icon-btn" title="News" onClick={() => setNotificationsOpen(v => !v)}>
-             <img src={NotificationsIcon} width="24" height="24" alt="News" />
+             <span style={{fontSize: '24px'}}>🔔</span>
            </button>
          )}
-         <button className="t4p-icon-btn" title="Profile" onClick={() => setProfileOpen(v => !v)}>
-           <div className={`profile-avatar ${currentUser ? 'logged-in' : 'guest'}`}>
-             {currentUser ? (
-               <span className="avatar-text">
-                 {currentUser.username?.charAt(0).toUpperCase() || currentUser.email?.charAt(0).toUpperCase()}
-               </span>
-             ) : (
-               <img src={ProfileIcon} width="24" height="24" alt="Profile" />
-             )}
-           </div>
-         </button>
          <button className="t4p-icon-btn" title="Settings" onClick={() => setSettingsOpen(true)}>
-           <img src={SettingsIcon} width="24" height="24" alt="Settings" />
+           <span style={{fontSize: '24px'}}>⚙️</span>
          </button>
          <button className="t4p-icon-btn" title="Gamification" onClick={() => setGamificationOpen(v => !v)}>
-           <img src={TrophyIcon} width="24" height="24" alt="Gamification" />
+           <span style={{fontSize: '24px'}}>🏆</span>
          </button>
          {toggles.apps && (
            <button className="t4p-icon-btn" title="Apps" onClick={() => setAppsOpen(v => !v)}>
-             <img src={AppsIcon} width="24" height="24" alt="Apps" />
+             <span style={{fontSize: '24px'}}>📱</span>
            </button>
          )}
        </div>
@@ -1551,9 +1249,14 @@ export const NewTab = () => {
              {logoType === 'logo' && (
                <img 
                 src={'/img/tabs4ukraine_logo.png'} 
-                 alt="tabs4palestine logo" 
+                 alt="tabs4ukraine logo" 
                  className="t4p-logo" 
                  style={{ transform: 'scale(1.2)' }}
+                 onError={(e) => {
+                   console.error('Logo failed to load:', e);
+                   e.currentTarget.style.display = 'none';
+                 }}
+                 onLoad={() => console.log('Logo loaded successfully')}
                />
              )}
              {logoType === 'clock' && (
@@ -1562,21 +1265,16 @@ export const NewTab = () => {
                  <div className="t4p-clock-date">{new Date().toLocaleDateString()}</div>
                </div>
              )}
-             {logoType === 'watermelon' && (
+             {logoType === 'ukraine' && (
                <img 
                 src={'/img/tabs4ukraine_logo.png'} 
-                 alt="Tabs4Palestine Logo" 
+                 alt="Tabs4Ukraine Logo" 
                  className="t4p-logo" 
                  style={{ transform: 'scale(1.2)' }}
                />
              )}
              <button className="t4p-logo-toggle" title="Toggle Logo" onClick={handleLogoToggle}>
-               <img 
-                 src={backgroundMode === 'gallery' || backgroundMode === 'custom' ? CachedIconWhite : CachedIconBlack} 
-                 width="20" 
-                 height="20" 
-                 alt="Toggle" 
-               />
+               <span style={{fontSize: '20px'}}>🔄</span>
              </button>
              {showLogoToggle && (
                <div className="t4p-logo-toggle-options">
@@ -1591,11 +1289,11 @@ export const NewTab = () => {
                    </svg>
                  </button>
                  <button 
-                   className={`t4p-logo-toggle-option ${logoType === 'watermelon' ? 'active' : ''}`}
-                   onClick={() => handleLogoTypeChange('watermelon')}
-                   title="Show Watermelon"
+                   className={`t4p-logo-toggle-option ${logoType === 'ukraine' ? 'active' : ''}`}
+                   onClick={() => handleLogoTypeChange('ukraine')}
+                   title="Show Ukraine"
                  >
-                   <img src="/img/original_watermelon.png" width="16" height="16" alt="Watermelon" />
+                   <img src="/img/tabs4ukraine_logo.png" width="16" height="16" alt="Ukraine" />
                  </button>
                </div>
              )}
@@ -1634,7 +1332,7 @@ export const NewTab = () => {
                  <div className="donation-label">raised so far</div>
                </div>
                <button className="donation-refresh-btn" title="Refresh" onClick={handleRefreshDonations}>
-                 <img src={RefreshIconBlack} width="16" height="16" alt="Refresh" />
+                 <span style={{fontSize: '16px'}}>🔄</span>
                </button>
              </div>
            )}

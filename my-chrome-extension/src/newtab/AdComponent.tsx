@@ -38,8 +38,8 @@ export const AdComponent = () => {
           // Fallback to default ad if no Supabase ads available
           setCurrentAd({
             id: 'fallback',
-            title: 'Support Palestine',
-            description: 'Help support Palestinian causes',
+            title: 'Support Ukraine',
+            description: 'Help support Ukrainian causes',
             imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=300&h=200&fit=crop',
             link: 'https://www.unrwa.org/donate',
             organization: 'UNRWA'
@@ -50,8 +50,8 @@ export const AdComponent = () => {
         // Fallback ad
         setCurrentAd({
           id: 'fallback',
-          title: 'Support Palestine',
-          description: 'Help support Palestinian causes',
+          title: 'Support Ukraine',
+          description: 'Help support Ukranian causes',
           imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=300&h=200&fit=crop',
           link: 'https://www.unrwa.org/donate',
           organization: 'UNRWA'
@@ -122,7 +122,7 @@ export const AdComponent = () => {
           className="ad-image"
           onError={(e) => {
             // Fallback to a placeholder if image fails to load
-            e.currentTarget.src = 'https://via.placeholder.com/300x200/4a90e2/ffffff?text=Support+Palestine'
+            e.currentTarget.src = 'https://via.placeholder.com/300x200/4a90e2/ffffff?text=Support+Ukraine'
           }}
         />
         <div className="ad-text">

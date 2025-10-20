@@ -1,12 +1,12 @@
-# Tabs4Palestine Chrome Extension
+# Tabs4Ukraine Chrome Extension
 
-A Chrome extension to support Palestine. This extension replaces the new tab page and displays humanitarian aid ads in the bottom right corner to help raise awareness and support for Palestine.
+A Chrome extension to support Ukraine. This extension replaces the new tab page and displays humanitarian aid ads in the bottom right corner to help raise awareness and support for Ukraine.
 
 ## Features
 
-- **New Tab Replacement**: Custom new tab page with Tabs4Palestine branding
+- **New Tab Replacement**: Custom new tab page with Tabs4Ukraine branding
 - **Google Search Bar**: Fully functional search bar with Google integration
-- **Humanitarian Ads**: Rotating ads from legitimate organizations supporting Palestine
+- **Humanitarian Ads**: Rotating ads from legitimate organizations supporting Ukraine
 - **Ad Placement**: Ads appear in the bottom right corner of every new tab
 - **Clickable Ads**: Users can click ads to visit donation pages and learn more
 - **Popup Interface**: Quick access to extension features
@@ -39,7 +39,7 @@ A Chrome extension to support Palestine. This extension replaces the new tab pag
 
 ## Ad Sources
 
-The extension displays ads from legitimate humanitarian organizations supporting Palestine. See `AD_SOURCES.md` for a comprehensive list of verified organizations and how to add new ad sources.
+The extension displays ads from legitimate humanitarian organizations supporting Ukraine. See `AD_SOURCES.md` for a comprehensive list of verified organizations and how to add new ad sources.
 
 ### Current Ad Features:
 - **Random Rotation**: Ads are randomly selected for each new tab

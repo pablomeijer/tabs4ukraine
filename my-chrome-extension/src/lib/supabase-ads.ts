@@ -35,7 +35,7 @@ class SupabaseAdsService {
 
   async fetchAds(): Promise<SupabaseAd[]> {
     try {
-      console.log('🔍 Fetching approved ads from Supabase...')
+      console.log('🔍 Fetching approved ads from Supabase for tabs4ukraine...')
       
       const { data, error } = await supabase
         .from('ads')

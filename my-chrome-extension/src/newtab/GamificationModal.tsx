@@ -55,21 +55,21 @@ const ALL_ACHIEVEMENTS = [
   {
     id: 'first_dollar',
     name: 'First Dollar',
-    description: 'Raise your first dollar for Palestine',
+    description: 'Raise your first dollar for Ukraine',
     icon: '💰',
     requirement: 'Raise $1.00'
   },
   {
     id: 'ten_dollars',
     name: 'Ten Dollar Hero',
-    description: 'Raise ten dollars to support Palestinian causes',
+    description: 'Raise ten dollars to support Ukrainian causes',
     icon: '💎',
     requirement: 'Raise $10.00'
   },
   {
     id: 'hundred_dollars',
     name: 'Century Champion',
-    description: 'Raise one hundred dollars for Palestine',
+    description: 'Raise one hundred dollars for Ukraine',
     icon: '👑',
     requirement: 'Raise $100.00'
   },
@@ -322,7 +322,7 @@ export default function GamificationModal({ open, onClose, currentUser, refreshT
             <div className="leaderboard-section">
               <div className="leaderboard-header">
                 <h3>🏆 Global Leaderboard</h3>
-                <p className="leaderboard-subtitle">See who's raising the most for Palestine!</p>
+                <p className="leaderboard-subtitle">See who's raising the most for Ukraine!</p>
               </div>
 
               {currentUser && (
@@ -506,7 +506,7 @@ export default function GamificationModal({ open, onClose, currentUser, refreshT
                 <h4>Together, we're making a difference! 🌟</h4>
                 <p>
                   Every tab you open, every click you make, and every friend you invite 
-                  contributes to our mission of supporting Palestinian causes. 
+                  contributes to our mission of supporting Ukrainian causes. 
                   Thank you for being part of this incredible community!
                 </p>
               </div>

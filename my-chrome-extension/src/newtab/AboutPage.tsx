@@ -2,11 +2,11 @@ import './AboutPage.css'
 
 export const AboutPage = () => {
   const handleVisitWebsite = () => {
-    window.open('https://tabs4ukraine.com', '_blank')
+    window.open('https://tabs4ukraine.framer.website/', '_blank')
   }
 
   const handleContactEmail = () => {
-    window.open('mailto:support@tabs4ukraine.com', '_blank')
+    window.open('mailto:support@tabs4ukraine.framer.website', '_blank')
   }
 
   return (
@@ -70,7 +70,7 @@ export const AboutPage = () => {
 
       <div className="about-actions">
         <button className="about-button primary" onClick={handleVisitWebsite}>
-          🌐 Visit tabs4ukraine.com
+          🌐 Visit tabs4ukraine.framer.website
         </button>
         <button className="about-button secondary" onClick={handleContactEmail}>
           📧 Contact Us

@@ -1,9 +1,9 @@
 {
-  "name": "tabs4palestine",
-  "displayName": "Tabs4Palestine",
-  "version": "0.0.0",
+  "name": "tabs4ukraine",
+  "displayName": "Tabs4Ukraine",
+  "version": "1.0.0",
   "author": "**",
-  "description": "A Chrome extension to support Palestine",
+  "description": "A Chrome extension to support Ukraine",
   "type": "module",
   "license": "MIT",
   "keywords": [
