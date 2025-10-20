@@ -147,10 +147,10 @@ export const Options = () => {
     <div className="t4p-options-container">
       <header className="t4p-options-header">
         <div className="t4p-options-logo">
-          <img src="/img/tabs4_palestine_black_logo-removebg-preview.png" alt="Tabs4Palestine" />
+          <img src="/img/tabs4ukraine_logo.png" alt="Tabs4Ukraine" />
         </div>
         <h1 className="t4p-options-title">Settings</h1>
-        <p className="t4p-options-subtitle">Customize your Tabs4Palestine experience</p>
+        <p className="t4p-options-subtitle">Customize your Tabs4Ukraine experience</p>
       </header>
 
       <div className="t4p-options-content">

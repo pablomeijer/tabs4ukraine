@@ -20,15 +20,21 @@ export const AdComponent = () => {
     const loadAd = async () => {
       try {
         setLoading(true)
+        console.log('🔄 AdComponent: Loading new ad...')
+        
         const supabaseAd = await supabaseAdsService.getRandomAd()
+        console.log('📋 AdComponent: Got ad from service:', supabaseAd)
         
         if (supabaseAd) {
           const convertedAd = supabaseAdsService.convertToExtensionAd(supabaseAd)
+          console.log('🔄 AdComponent: Converted ad:', convertedAd)
           setCurrentAd(convertedAd)
           
           // Track impression for this ad
           await supabaseAdsService.trackImpressions([supabaseAd.id])
+          console.log('✅ AdComponent: Tracked impression for ad:', supabaseAd.id)
         } else {
+          console.log('⚠️ AdComponent: No Supabase ads available, using fallback')
           // Fallback to default ad if no Supabase ads available
           setCurrentAd({
             id: 'fallback',
@@ -40,7 +46,7 @@ export const AdComponent = () => {
           })
         }
       } catch (error) {
-        console.error('Error loading ad:', error)
+        console.error('❌ AdComponent: Error loading ad:', error)
         // Fallback ad
         setCurrentAd({
           id: 'fallback',
@@ -64,18 +70,37 @@ export const AdComponent = () => {
         console.log('🖱️ Ad clicked:', currentAd);
         
         // Track the click if it's a Supabase ad
-        if (currentAd.id.startsWith('supabase-')) {
-          const adId = parseInt(currentAd.id.replace('supabase-', ''));
+        if (currentAd.id !== 'fallback') {
+          const adId = parseInt(currentAd.id);
           await supabaseAdsService.trackClick(adId);
         }
         
         // Open the ad link
-        window.open(currentAd.link, '_blank');
+        window.open(currentAd.link, '_blank', 'noopener,noreferrer');
       } catch (error) {
         console.error('❌ Error handling ad click:', error);
         // Still open the link even if tracking fails
-        window.open(currentAd.link, '_blank');
+        window.open(currentAd.link, '_blank', 'noopener,noreferrer');
       }
+    }
+  }
+
+  const handleRefresh = async () => {
+    console.log('🔄 Manual refresh requested')
+    setLoading(true)
+    try {
+      const supabaseAd = await supabaseAdsService.getRandomAd()
+      console.log('🔄 Refresh: Got new ad:', supabaseAd)
+      
+      if (supabaseAd) {
+        const convertedAd = supabaseAdsService.convertToExtensionAd(supabaseAd)
+        setCurrentAd(convertedAd)
+        await supabaseAdsService.trackImpressions([supabaseAd.id])
+      }
+    } catch (error) {
+      console.error('❌ Refresh error:', error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -89,8 +114,8 @@ export const AdComponent = () => {
   }
 
   return (
-    <div className="ad-container" onClick={handleAdClick}>
-      <div className="ad-content">
+    <div className="ad-container">
+      <div className="ad-content" onClick={handleAdClick}>
         <img 
           src={currentAd.imageUrl} 
           alt={currentAd.title}
@@ -104,6 +129,27 @@ export const AdComponent = () => {
           <p className="ad-sponsored">Sponsored by Ethicly</p>
         </div>
       </div>
+      <button 
+        onClick={(e) => {
+          e.stopPropagation()
+          handleRefresh()
+        }}
+        style={{
+          position: 'absolute',
+          top: '5px',
+          right: '5px',
+          background: 'rgba(0,0,0,0.7)',
+          color: 'white',
+          border: 'none',
+          borderRadius: '3px',
+          padding: '2px 6px',
+          fontSize: '10px',
+          cursor: 'pointer'
+        }}
+        title="Refresh Ad"
+      >
+        🔄
+      </button>
     </div>
   )
 }

@@ -11,18 +11,18 @@ export default defineManifest({
   version: packageData.version,
   manifest_version: 3,
   icons: {
-    16: 'img/original_watermelon.png',
-    32: 'img/original_watermelon.png',
-    48: 'img/original_watermelon.png',
-    128: 'img/original_watermelon.png',
+    16: 'img/tabs4ukraine_logo.png',
+    32: 'img/tabs4ukraine_logo.png',
+    48: 'img/tabs4ukraine_logo.png',
+    128: 'img/tabs4ukraine_logo.png',
   },
   action: {
     default_popup: 'popup.html',
     default_icon: {
-      16: 'img/original_watermelon.png',
-      32: 'img/original_watermelon.png',
-      48: 'img/original_watermelon.png',
-      128: 'img/original_watermelon.png',
+      16: 'img/tabs4ukraine_logo.png',
+      32: 'img/tabs4ukraine_logo.png',
+      48: 'img/tabs4ukraine_logo.png',
+      128: 'img/tabs4ukraine_logo.png',
     },
   },
   options_page: 'options.html',
@@ -42,7 +42,7 @@ export default defineManifest({
   },
   web_accessible_resources: [
     {
-      resources: ['img/original_watermelon.png', 'img/icons/*'],
+      resources: ['img/tabs4ukraine_logo.png', 'img/icons/*'],
       matches: ['<all_urls>'],
     },
   ],

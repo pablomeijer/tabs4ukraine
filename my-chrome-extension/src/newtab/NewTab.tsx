@@ -13,7 +13,7 @@ import './NewTab.css'
 import './GamificationModal.css'
 import logoWhite from '../assets/logo_white_transparent.png'
 import logoGreen from '../assets/logo_green_transparent.png'
-import oliveIcon from '../assets/olive.png'
+import oliveIcon from '../assets/ukraine_icon.png'
 
 // Import new SVG icons
 import AppsIcon from '../assets/icons/apps_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg'
@@ -108,12 +108,7 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
                       <span>Default</span>
                     </button>
                     
-                    <button 
-                      className={`t4p-theme-btn${backgroundMode === 'gallery' ? ' t4p-theme-btn-active' : ''}`} 
-                      onClick={() => setBackgroundMode('gallery')}
-                    >
-                      <span>Gallery</span>
-                    </button>
+                    
                     
                     <button 
                       className={`t4p-theme-btn${backgroundMode === 'dark' ? ' t4p-theme-btn-active' : ''}`} 
@@ -222,7 +217,7 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
                       />
                       <div className="t4p-option-content">
                         <div className="t4p-option-title">Sponsored Advertisements</div>
-                        <div className="t4p-option-description">Show sponsored shortcuts that support Palestinian causes</div>
+                        <div className="t4p-option-description">Show sponsored shortcuts that support Ukrainian causes</div>
                       </div>
                     </label>
                     
@@ -295,12 +290,12 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
                   
                   <div className="t4p-sponsored-explanation">
                     <div className="t4p-explanation-title">💡 How Sponsored Shortcuts Work</div>
-                    <div className="t4p-explanation-text">
-                      Sponsored shortcuts are carefully selected websites that support Palestinian causes. 
-                      Each click on a sponsored shortcut generates $0.50 in donations. You can choose how many 
-                      sponsored shortcuts to display (0-10), and you can earn up to $5 per day through clicks. 
-                      These shortcuts appear alongside your regular shortcuts and help fund Palestinian relief efforts.
-                    </div>
+              <div className="t4p-explanation-text">
+                Sponsored shortcuts are selected websites that support Ukrainian causes.
+                Each click on a sponsored shortcut generates $0.50 in donations. You can choose how many
+                sponsored shortcuts to display (0-10), and you can earn up to $5 per day through clicks.
+                These shortcuts appear alongside your regular shortcuts and help fund Ukrainian relief efforts.
+              </div>
                   </div>
                 </div>
               </div>
@@ -315,76 +310,23 @@ function SettingsModal({ open, onClose, toggles, setToggles, backgroundMode, set
 
 // Wallpaper Selection Modal Component
 function WallpaperModal({ open, onClose, onSelectWallpaper }: { open: boolean, onClose: () => void, onSelectWallpaper: (wallpaper: any) => void }) {
-  const [selectedCategory, setSelectedCategory] = useState<'palestine' | 'basic'>('palestine');
+  const [selectedCategory, setSelectedCategory] = useState<'ukraine' | 'basic'>('ukraine');
   
   if (!open) return null;
 
   const wallpaperCategories = {
-    palestine: [
-      {
-        id: 'abu-adel-gaza-day',
-        name: 'Gaza at Day',
-        photographer: 'Abu Adel',
-        description: 'Gaza at Day',
-        image: '/img/backgrounds/abu-adel-gaza-at-day.jpg'
-      },
-      {
-        id: 'ala-j-graczyk-bethlehem',
-        name: 'Bethlehem, Palestine',
-        photographer: 'Ala J Graczyk',
-        description: 'Bethlehem, Palestine',
-        image: '/img/backgrounds/ala-j-graczyk-bethlehem-palestine.jpg'
-      },
-      {
-        id: 'belal-salem-gaza-night',
-        name: 'Gaza at Night',
-        photographer: 'Belal Salem',
-        description: 'Gaza at Night',
-        image: '/img/backgrounds/belal-salem-gaza-at-night.jpg'
-      },
-      {
-        id: 'haley-black-jerusalem',
-        name: 'Jerusalem',
-        photographer: 'Haley Black',
-        description: 'Jerusalem',
-        image: '/img/backgrounds/haley-black-jerusalem.jpg'
-      },
-      {
-        id: 'haley-black-jerusalem-palestine',
-        name: 'Jerusalem, Palestine',
-        photographer: 'Haley Black',
-        description: 'Jerusalem, Palestine',
-        image: '/img/backgrounds/haley-black-jerusalem-palestine.jpg'
-      },
-      {
-        id: 'haley-black-dead-sea',
-        name: 'Western Shore of the Dead Sea',
-        photographer: 'Haley Black',
-        description: 'Western Shore of the Dead Sea',
-        image: '/img/backgrounds/haley-black-western-shore-of-the-dead-sea.jpg'
-      },
-      {
-        id: 'leon-natan-jerusalem',
-        name: 'Jerusalem, Palestine',
-        photographer: 'Leon Natan',
-        description: 'Jerusalem, Palestine',
-        image: '/img/backgrounds/leon-natan-jerusalem-palestine.jpg'
-      },
-      {
-        id: 'musa-alzanoun-jerusalem',
-        name: 'Jerusalem, Palestine',
-        photographer: 'Musa Alzanoun',
-        description: 'Jerusalem, Palestine',
-        image: '/img/backgrounds/musa-alzanoun-jerusalem-palestine.jpg'
-      }
+    ukraine: [
+      { id: 'ukraine-1', name: 'Ukraine Landscape 1', photographer: 'Tabs4Ukraine', description: 'Landscape', image: '/img/backgrounds/background_1.jpg' },
+      { id: 'ukraine-2', name: 'Ukraine Landscape 2', photographer: 'Tabs4Ukraine', description: 'Landscape', image: '/img/backgrounds/ukraine_2.jpg' },
+      { id: 'ukraine-3', name: 'Ukraine Landscape 3', photographer: 'Tabs4Ukraine', description: 'Landscape', image: '/img/backgrounds/ukraine_3.jpg' }
     ],
     basic: [
       {
         id: 'default-wallpaper',
         name: 'Default Wallpaper',
-        photographer: 'Tabs4Palestine',
+        photographer: 'Tabs4Ukraine',
         description: 'Default Wallpaper',
-        image: '/img/backgrounds/background-default-wallpaper.png'
+        image: '/img/backgrounds/default_tabs4ukraine.png'
       },
       {
         id: 'samer-zeton-al-ain',
@@ -467,17 +409,9 @@ export const NewTab = () => {
   // Import all gallery images from public/img/backgrounds
   // Only include images that actually exist in the public folder
   const backgroundImageNames = [
-    'abu-adel-gaza-at-day.jpg',
-    'ala-j-graczyk-bethlehem-palestine.jpg',
-    'belal-salem-gaza-at-night.jpg',
-    'emiliano-arano-la-pampa-argentina.jpg',
-    'haley-black-jerusalem-palestine.jpg',
-    'haley-black-jerusalem.jpg',
-    'haley-black-western-shore-of-the-dead-sea.jpg',
-    'leon-natan-jerusalem-palestine.jpg',
-    'musa-alzanoun-jerusalem-palestine.jpg',
-    'Samer-Zeton-rocky-landscape-of-al-ain.jpg',
-    'white-clouds-pixabay.jpg'
+    'background_1.jpg',
+    'ukraine_2.jpg',
+    'ukraine_3.jpg'
   ]
   
   // Gallery images array using public directory
@@ -501,7 +435,7 @@ export const NewTab = () => {
   })
   const [backgroundMode, setBackgroundMode] = useState('default');
   const [customBg, setCustomBg] = useState<string | null>(null);
-  const [galleryBg, setGalleryBg] = useState('/img/backgrounds/pexels-gaza-8660631.jpg');
+  const [galleryBg, setGalleryBg] = useState('/img/backgrounds/background_1.jpg');
   const [logoType, setLogoType] = useState<'logo' | 'clock' | 'watermelon'>('logo');
   const [appsOpen, setAppsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -517,16 +451,16 @@ export const NewTab = () => {
    const [totalDonations, setTotalDonations] = useState(0);
   const [sponsoredShortcutsCount, setSponsoredShortcutsCount] = useState(8);
   const [shortcuts, setShortcuts] = useState([
-    { name: 'Huda Beauty', url: 'https://www.hudabeauty.com', icon: '/img/8_icons/huda-beauty.png' },
-    { name: 'Watan Apparel', url: 'https://www.watanapparel.com', icon: '/img/8_icons/watan.png' },
-    { name: 'Farsali', url: 'https://www.farsali.com', icon: '/img/8_icons/farsali.png' },
-    { name: 'Wear The Peace', url: 'https://www.wearthepeace.com', icon: '/img/8_icons/wear_the_peacelogo.png' },
-    { name: 'Ben & Jerry\'s', url: 'https://www.benjerry.com', icon: '/img/8_icons/white-Ben-and-Jerrys-Logo-1990s-500x281.png' },
-    { name: 'Darzah', url: 'https://www.darzah.org', icon: '/img/8_icons/white-darzah_logo.png' },
-    { name: 'NOL Collective', url: 'https://www.nolcollective.com', icon: '/img/8_icons/white-nol-collective.png' },
-    { name: 'SEP', url: 'https://www.sep.com', icon: '/img/8_icons/white-sep_icon_512x512.png' },
-    { name: 'Lush', url: 'https://www.lush.com', icon: '/img/8_icons/01-scaled-2.jpg' },
-    { name: 'Paliroots', url: 'https://www.paliroots.com', icon: '/img/8_icons/paliroots-logo.png' }
+    { name: 'Zeeks', url: '#', icon: '/img/8_icons/zeeks_logo.jpeg' },
+    { name: 'Reface', url: '#', icon: '/img/8_icons/reface-ukraine-logo.png' },
+    { name: 'Baza IT', url: '#', icon: '/img/8_icons/baza-it-logo.png' },
+    { name: 'Auto BI', url: '#', icon: '/img/8_icons/auto-bi-logo.png' },
+    { name: 'Happy Monday', url: '#', icon: '/img/8_icons/happy-monday-logo.png' },
+    { name: 'Knopka', url: '#', icon: '/img/8_icons/knopka.jpeg' },
+    { name: 'Farm Fleet', url: '#', icon: '/img/8_icons/farm-fleet-logo.png' },
+    { name: 'BUKI', url: '#', icon: '/img/8_icons/buki_logo.png' },
+    { name: 'Rozmova', url: '#', icon: '/img/8_icons/rozmova.png' },
+    { name: 'Osavul', url: '#', icon: '/img/8_icons/osavul_logo.jpeg' }
   ]);
   const [filteredShortcuts, setFilteredShortcuts] = useState(shortcuts.slice(0, sponsoredShortcutsCount));
   const [showShortcutModal, setShowShortcutModal] = useState(false);
@@ -540,102 +474,19 @@ export const NewTab = () => {
   const [showWallpaperModal, setShowWallpaperModal] = useState(false);
   const [adRotationKey, setAdRotationKey] = useState(0);
   const [selectedWallpaper, setSelectedWallpaper] = useState({
-    id: 'default-wallpaper',
-    name: 'Default Wallpaper',
-    photographer: 'Tabs4Palestine',
+    id: 'ukraine-default',
+    name: 'Ukraine Landscape',
+    photographer: 'Tabs4Ukraine',
     description: 'Default Wallpaper',
-    image: '/img/backgrounds/background-default-wallpaper.png'
+    image: '/img/backgrounds/background_1.jpg'
   });
 
   // Wallpaper data structure
   const mainWallpaperCategories = {
-    palestine: [
-      {
-        id: 'abu-adel-gaza-day',
-        name: 'Gaza at Day',
-        photographer: 'Abu Adel',
-        description: 'Gaza at Day',
-        image: '/img/backgrounds/abu-adel-gaza-at-day.jpg'
-      },
-      {
-        id: 'ala-j-graczyk-bethlehem',
-        name: 'Bethlehem, Palestine',
-        photographer: 'Ala J Graczyk',
-        description: 'Bethlehem, Palestine',
-        image: '/img/backgrounds/ala-j-graczyk-bethlehem-palestine.jpg'
-      },
-      {
-        id: 'belal-salem-gaza-night',
-        name: 'Gaza at Night',
-        photographer: 'Belal Salem',
-        description: 'Gaza at Night',
-        image: '/img/backgrounds/belal-salem-gaza-at-night.jpg'
-      },
-      {
-        id: 'haley-black-jerusalem',
-        name: 'Jerusalem',
-        photographer: 'Haley Black',
-        description: 'Jerusalem',
-        image: '/img/backgrounds/haley-black-jerusalem.jpg'
-      },
-      {
-        id: 'haley-black-jerusalem-palestine',
-        name: 'Jerusalem, Palestine',
-        photographer: 'Haley Black',
-        description: 'Jerusalem, Palestine',
-        image: '/img/backgrounds/haley-black-jerusalem-palestine.jpg'
-      },
-      {
-        id: 'haley-black-dead-sea',
-        name: 'Western Shore of the Dead Sea',
-        photographer: 'Haley Black',
-        description: 'Western Shore of the Dead Sea',
-        image: '/img/backgrounds/haley-black-western-shore-of-the-dead-sea.jpg'
-      },
-      {
-        id: 'leon-natan-jerusalem',
-        name: 'Jerusalem, Palestine',
-        photographer: 'Leon Natan',
-        description: 'Jerusalem, Palestine',
-        image: '/img/backgrounds/leon-natan-jerusalem-palestine.jpg'
-      },
-      {
-        id: 'musa-alzanoun-jerusalem',
-        name: 'Jerusalem, Palestine',
-        photographer: 'Musa Alzanoun',
-        description: 'Jerusalem, Palestine',
-        image: '/img/backgrounds/musa-alzanoun-jerusalem-palestine.jpg'
-      }
-    ],
     basic: [
-      {
-        id: 'default-wallpaper',
-        name: 'Default Wallpaper',
-        photographer: 'Tabs4Palestine',
-        description: 'Default Wallpaper',
-        image: '/img/backgrounds/background-default-wallpaper.png'
-      },
-      {
-        id: 'samer-zeton-al-ain',
-        name: 'Rocky Landscape of Al Ain',
-        photographer: 'Samer Zeton',
-        description: 'Rocky Landscape of Al Ain',
-        image: '/img/backgrounds/Samer-Zeton-rocky-landscape-of-al-ain.jpg'
-      },
-      {
-        id: 'emiliano-arano-la-pampa',
-        name: 'La Pampa, Argentina',
-        photographer: 'Emiliano Arano',
-        description: 'La Pampa, Argentina',
-        image: '/img/backgrounds/emiliano-arano-la-pampa-argentina.jpg'
-      },
-      {
-        id: 'white-clouds-pixabay',
-        name: 'White Clouds',
-        photographer: 'Pixabay',
-        description: 'White Clouds',
-        image: '/img/backgrounds/white-clouds-pixabay.jpg'
-      }
+      { id: 'ukraine-1', name: 'Ukraine Landscape 1', photographer: 'Tabs4Ukraine', description: 'Landscape', image: '/img/backgrounds/background_1.jpg' },
+      { id: 'ukraine-2', name: 'Ukraine Landscape 2', photographer: 'Tabs4Ukraine', description: 'Landscape', image: '/img/backgrounds/ukraine_2.jpg' },
+      { id: 'ukraine-3', name: 'Ukraine Landscape 3', photographer: 'Tabs4Ukraine', description: 'Landscape', image: '/img/backgrounds/ukraine_3.jpg' }
     ]
   };
 
@@ -925,7 +776,10 @@ export const NewTab = () => {
       // Fallback to old method if impression calculation fails
       try {
         console.log('🔄 Falling back to database calculation...');
-        const { data, error } = await donationTracker.getTotalDonations();
+        // Commented out - donationTracker not available
+        // const { data, error } = await donationTracker.getTotalDonations();
+        const data = 0;
+        const error = null;
         
         if (!error && data) {
           const newTotal = data || 0;
@@ -1526,15 +1380,14 @@ export const NewTab = () => {
               
               {/* Additional Profile Links */}
               <div className="t4p-profile-links">
-                <a href="#" className="t4p-profile-link">Use Tabs4Palestine</a>
-                <a href="#" className="t4p-profile-link">Tabs4Palestine Browser</a>
-                <a href="#" className="t4p-profile-link">Tabs4Palestine Search</a>
-                <a href="#" className="t4p-profile-link">Tabs4Palestine for Companies</a>
-                <a href="#" className="t4p-profile-link">Search</a>
-                <a href="#" className="t4p-profile-link">Settings</a>
-                <a href="#" className="t4p-profile-link">Privacy Policy</a>
-                <a href="#" className="t4p-profile-link">Help</a>
-                <a href="#" className="t4p-profile-link">Feedback</a>
+                <a 
+                  href={chrome?.runtime?.getURL ? chrome.runtime.getURL('privacy.html') : '/privacy.html'} 
+                  className="t4p-profile-link" 
+                  target="_blank" 
+                  rel="noreferrer"
+                >
+                  Privacy Policy
+                </a>
               </div>
             </div>
           ) : (
@@ -1603,22 +1456,22 @@ export const NewTab = () => {
         <div className="t4p-notifications-bubble t4p-notifications-bubble-half-width">
           <button className="t4p-modal-close" onClick={() => setNotificationsOpen(false)}>×</button>
           <div className="t4p-notifications-section">
-            <div className="t4p-notifications-title">Palestine News</div>
+            <div className="t4p-notifications-title">Ukraine News</div>
             <div className="t4p-notifications-list">
               <div className="t4p-notification-item">
-                <div className="t4p-notification-headline">UN Calls for Immediate Ceasefire in Gaza</div>
-                <div className="t4p-notification-summary">The United Nations Security Council has issued an urgent call for an immediate ceasefire in Gaza, citing the humanitarian crisis and civilian casualties.</div>
-                <a href="https://www.un.org" target="_blank" className="t4p-notification-link">Read More →</a>
+                <div className="t4p-notification-headline">EU Announces Additional Aid for Ukraine</div>
+                <div className="t4p-notification-summary">European leaders approved increased funding to support humanitarian relief and infrastructure repair in Ukraine.</div>
+                <a href="https://ec.europa.eu/commission/presscorner/home/en" target="_blank" className="t4p-notification-link">Read More →</a>
               </div>
               <div className="t4p-notification-item">
-                <div className="t4p-notification-headline">Humanitarian Aid Reaches Northern Gaza</div>
-                <div className="t4p-notification-summary">International aid organizations have successfully delivered critical supplies to northern Gaza, providing relief to thousands of displaced families.</div>
-                <a href="https://www.unrwa.org" target="_blank" className="t4p-notification-link">Read More →</a>
+                <div className="t4p-notification-headline">Medical NGOs Expand Operations</div>
+                <div className="t4p-notification-summary">Doctors Without Borders and partner NGOs are expanding mobile clinics to reach more communities across Ukraine.</div>
+                <a href="https://www.doctorswithoutborders.org/" target="_blank" className="t4p-notification-link">Read More →</a>
               </div>
               <div className="t4p-notification-item">
-                <div className="t4p-notification-headline">Palestinian Students Return to Rebuilt Schools</div>
-                <div className="t4p-notification-summary">Reconstruction efforts have enabled Palestinian students to return to newly rebuilt schools, marking a step toward normalcy in affected communities.</div>
-                <a href="https://www.unicef.org" target="_blank" className="t4p-notification-link">Read More →</a>
+                <div className="t4p-notification-headline">Education Support Programs Grow</div>
+                <div className="t4p-notification-summary">UNICEF and partners continue programs supporting children’s education and psychosocial care in Ukraine.</div>
+                <a href="https://www.unicef.org/ukraine/en" target="_blank" className="t4p-notification-link">Read More →</a>
               </div>
             </div>
           </div>
@@ -1634,11 +1487,11 @@ export const NewTab = () => {
               <img src={TrophyIcon} width="24" height="24" alt="Trophy" />
               <span>Gamification</span>
             </div>
-            <div className="t4p-gamification-content">
+              <div className="t4p-gamification-content">
               <div className="t4p-gamification-item">
-                <div className="t4p-gamification-headline">Add Friends</div>
-                <div className="t4p-gamification-summary">Connect with friends and see who has raised more money for Palestine.</div>
-                <div className="t4p-gamification-placeholder">Coming Soon</div>
+                <div className="t4p-gamification-headline">Thank you for supporting Ukraine! 🇺🇦</div>
+                <div className="t4p-gamification-summary">Your daily use of this extension makes a real difference. Every tab you open and every sponsored link you click contributes to humanitarian relief efforts for Ukraine.</div>
+                <div className="t4p-gamification-placeholder">More impact features coming soon</div>
               </div>
               <div className="t4p-gamification-item">
                 <div className="t4p-gamification-headline">Leaderboard</div>
@@ -1697,21 +1550,21 @@ export const NewTab = () => {
            <div className="t4p-logo-container">
              {logoType === 'logo' && (
                <img 
-                 src={backgroundMode === 'gallery' || backgroundMode === 'custom' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : backgroundMode === 'dark' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : '/img/logo_green_transparent.png'} 
+                src={'/img/tabs4ukraine_logo.png'} 
                  alt="tabs4palestine logo" 
                  className="t4p-logo" 
                  style={{ transform: 'scale(1.2)' }}
                />
              )}
              {logoType === 'clock' && (
-               <div className="t4p-digital-clock" style={{ color: backgroundMode === 'gallery' || backgroundMode === 'custom' ? 'white' : '#188038' }}>
+              <div className="t4p-digital-clock" style={{ color: backgroundMode === 'gallery' || backgroundMode === 'custom' ? 'white' : '#0057B7' }}>
                  <div className="t4p-clock-time">{time}</div>
                  <div className="t4p-clock-date">{new Date().toLocaleDateString()}</div>
                </div>
              )}
              {logoType === 'watermelon' && (
                <img 
-                 src={backgroundMode === 'gallery' || backgroundMode === 'custom' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : backgroundMode === 'dark' ? '/img/tabs4_palestine_black_logo-removebg-preview.png' : '/img/logo_green_transparent.png'} 
+                src={'/img/tabs4ukraine_logo.png'} 
                  alt="Tabs4Palestine Logo" 
                  className="t4p-logo" 
                  style={{ transform: 'scale(1.2)' }}

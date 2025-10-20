@@ -186,12 +186,12 @@ export const AuthComponent = ({ onAuthChange, gamificationUser, totalDonations }
           if (profileError) {
             console.error('Profile creation error:', profileError)
             console.error('Error details:', {
-              message: profileError.message,
-              details: profileError.details,
-              hint: profileError.hint,
-              code: profileError.code
+              message: (profileError as any).message,
+              details: (profileError as any).details,
+              hint: (profileError as any).hint,
+              code: (profileError as any).code
             })
-            setError(`Account created but profile setup failed: ${profileError.message}`)
+            setError(`Account created but profile setup failed: ${(profileError as any).message}`)
             return
           }
           
@@ -291,8 +291,8 @@ export const AuthComponent = ({ onAuthChange, gamificationUser, totalDonations }
         </h3>
         <p className="auth-subtitle">
           {isSignUp 
-            ? 'Join Tabs4Palestine to track your impact' 
-            : 'Welcome back to Tabs4Palestine'
+            ? 'Join Tabs4Ukraine to track your impact' 
+            : 'Welcome back to Tabs4Ukraine'
           }
         </p>
       </div>
@@ -388,7 +388,7 @@ export const AuthComponent = ({ onAuthChange, gamificationUser, totalDonations }
       {/* Debug section - remove in production */}
       <div style={{ marginTop: '20px', padding: '10px', background: '#f0f0f0', borderRadius: '5px' }}>
         <h4>Debug Info:</h4>
-        <p>Current user: {user ? `${user.username || 'Unknown'} (${user.email || 'No email'})` : 'Not logged in'}</p>
+        <p>Current user: {user ? `${(user as any).username || 'Unknown'} (${(user as any).email || 'No email'})` : 'Not logged in'}</p>
         <button 
           onClick={async () => {
             console.log('Testing profile creation...')

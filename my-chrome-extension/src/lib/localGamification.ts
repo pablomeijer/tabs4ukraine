@@ -120,23 +120,29 @@ class LocalGamification {
   // Initialize user stats
   async initialize(): Promise<UserStats> {
     try {
-      const result = await chrome.storage.local.get(['userStats']);
+      const result = await new Promise<any>((resolve) => {
+        chrome.storage.local.get(['userStats'], resolve);
+      });
       const today = new Date().toISOString().split('T')[0];
       
       if (result.userStats) {
         this.stats = result.userStats;
         
         // Update streak if user was active yesterday
-        if (this.stats.lastActiveDate === this.getYesterday()) {
+        if (this.stats && this.stats.lastActiveDate === this.getYesterday()) {
           // Continue streak
-        } else if (this.stats.lastActiveDate === today) {
+        } else if (this.stats && this.stats.lastActiveDate === today) {
           // Already active today
         } else {
           // Break streak
-          this.stats.currentStreak = 0;
+          if (this.stats) {
+            this.stats.currentStreak = 0;
+          }
         }
         
-        this.stats.lastActiveDate = today;
+        if (this.stats) {
+          this.stats.lastActiveDate = today;
+        }
       } else {
         // Create new user stats
         this.stats = {
@@ -163,7 +169,7 @@ class LocalGamification {
       // Check if we should sync on startup
       await this.checkAndSyncIfNeeded();
       
-      return this.stats;
+      return this.stats!;
     } catch (error) {
       console.error('Error initializing gamification:', error);
       throw error;

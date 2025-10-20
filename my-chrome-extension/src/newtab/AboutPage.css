@@ -70,7 +70,7 @@
   margin-right: 8px;
   width: 6px;
   height: 6px;
-  background: #34a853;
+  background: #1a73e8;
   border-radius: 50%;
 }
 
@@ -197,7 +197,7 @@
 
 .dark-mode .impact-level {
   background: #3a3a3a;
-  border-left-color: #188038;
+  border-left-color: #1a73e8;
 }
 
 .dark-mode .impact-text {

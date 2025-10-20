@@ -51,7 +51,7 @@ export const AdvertisementsUpgrade = ({ currentAdCount, onUpgrade }: AdUpgradePr
           🚀 Upgrade your Impact
         </h2>
         <p className="ad-upgrade-subtitle">
-          Increase the rate at which you donate to the Palestinian cause
+          Increase the rate at which you support humanitarian relief for Ukraine
         </p>
       </div>
 
@@ -92,9 +92,12 @@ export const AdvertisementsUpgrade = ({ currentAdCount, onUpgrade }: AdUpgradePr
 
       <div className="ad-upgrade-info">
         <p className="ad-upgrade-info-text">
-          💡 <strong>How it works:</strong> Choose how many advertisements you want to see on your new tab page. 
-          The revenue from these ads is automatically donated to Palestinian causes. You can disable ads completely 
-          or choose 1-3 ads to raise more money for Palestinian communities with every tab you open.
+          💡 <strong>How it works:</strong> Choose how many advertisements you want to see on your new tab page.
+          The revenue from these ads is donated to verified humanitarian organizations supporting Ukraine. You can disable ads completely,
+          or choose 1–3 ads to increase your contribution with every tab you open.
+        </p>
+        <p className="ad-upgrade-info-text" style={{ marginTop: 8 }}>
+          <em>Sponsored by <a href="https://ethicly.ch" target="_blank" rel="noreferrer">Ethicly.ch</a></em>
         </p>
       </div>
     </div>
