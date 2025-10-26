@@ -1,0 +1,546 @@
+/* Local Gamification Modal Styling */
+
+.gamification-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 3000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.gamification-modal {
+  background: #fff;
+  border-radius: 16px;
+  width: 600px;
+  max-height: 80vh;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+  overflow: hidden;
+}
+
+.gamification-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: #666;
+  cursor: pointer;
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.gamification-close:hover {
+  background: rgba(0, 87, 183, 0.1);
+  color: #0057B7;
+}
+
+.gamification-header {
+  padding: 30px 30px 20px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.gamification-header h2 {
+  margin: 0;
+  font-size: 28px;
+  color: #0057B7;
+  text-align: center;
+}
+
+.gamification-tabs {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.gamification-tab {
+  padding: 10px 24px;
+  border: 2px solid #e0e0e0;
+  background: #fff;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.gamification-tab:hover {
+  border-color: #0057B7;
+  color: #0057B7;
+}
+
+.gamification-tab.active {
+  background: #0057B7;
+  border-color: #0057B7;
+  color: #fff;
+}
+
+.gamification-content {
+  padding: 30px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+}
+
+/* Stats Section */
+.stats-section {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.user-level-card {
+  background: linear-gradient(135deg, #0057B7 0%, #00479e 100%);
+  border-radius: 12px;
+  padding: 25px;
+  color: white;
+}
+
+.level-info {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.level-number {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.level-progress {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.experience-bar {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.experience-fill {
+  height: 100%;
+  background: #FFD700;
+  border-radius: 6px;
+  transition: width 0.5s ease-out;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.stat-card {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.stat-card:hover {
+  border-color: #0057B7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 87, 183, 0.1);
+}
+
+.stat-icon {
+  font-size: 28px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+.stat-info {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0057B7;
+  margin-bottom: 4px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contribution-message {
+  background: #e8f4f8;
+  border-left: 4px solid #0057B7;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.contribution-message h4 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  color: #0057B7;
+}
+
+.contribution-message p {
+  margin: 0;
+  color: #555;
+  line-height: 1.6;
+}
+
+.sync-status {
+  background: #fff3cd;
+  border: 2px solid #ffc107;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.sync-status h4 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: #856404;
+}
+
+.sync-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.sync-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(133, 100, 4, 0.1);
+}
+
+.sync-label {
+  font-weight: 600;
+  color: #856404;
+}
+
+.sync-value {
+  color: #856404;
+}
+
+.manual-sync-btn {
+  width: 100%;
+  padding: 12px;
+  background: #0057B7;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.manual-sync-btn:hover {
+  background: #00479e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 87, 183, 0.3);
+}
+
+/* Achievements Section */
+.achievements-section h3 {
+  margin: 0 0 25px 0;
+  font-size: 24px;
+  color: #0057B7;
+  text-align: center;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.achievement-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  position: relative;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.achievement-card:hover {
+  border-color: #0057B7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 87, 183, 0.1);
+}
+
+.achievement-card.earned {
+  background: linear-gradient(135deg, #e8f4f8 0%, #d1e9f3 100%);
+  border-color: #0057B7;
+}
+
+.achievement-card.unearned {
+  opacity: 0.7;
+}
+
+.achievement-icon {
+  font-size: 40px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 12px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.achievement-card.earned .achievement-icon {
+  background: #e8f4f8;
+}
+
+.achievement-info {
+  flex: 1;
+}
+
+.achievement-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0057B7;
+  margin-bottom: 5px;
+}
+
+.achievement-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.achievement-progress {
+  margin-top: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 87, 183, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #0057B7;
+  border-radius: 3px;
+  transition: width 0.3s ease-out;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+  font-weight: 600;
+}
+
+.achievement-reward {
+  font-size: 14px;
+  color: #0057B7;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.achievement-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  background: #0057B7;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Shortcuts Section */
+.shortcuts-section h3 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  color: #0057B7;
+  text-align: center;
+}
+
+.shortcuts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shortcut-stat-item {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.shortcut-stat-item:hover {
+  border-color: #0057B7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 87, 183, 0.1);
+}
+
+.shortcut-rank {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #0057B7 0%, #00479e 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.shortcut-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.shortcut-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0057B7;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shortcut-url {
+  font-size: 12px;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shortcut-stats {
+  display: flex;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.shortcut-stat {
+  text-align: center;
+  min-width: 60px;
+}
+
+.shortcut-stat .stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0057B7;
+  margin-bottom: 4px;
+}
+
+.shortcut-stat .stat-label {
+  font-size: 11px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Scrollbar styling */
+.gamification-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.gamification-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.gamification-content::-webkit-scrollbar-thumb {
+  background: #0057B7;
+  border-radius: 4px;
+}
+
+.gamification-content::-webkit-scrollbar-thumb:hover {
+  background: #00479e;
+}
+

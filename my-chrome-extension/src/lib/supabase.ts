@@ -407,6 +407,43 @@ export const sponsoredTracker = {
     return { data: { clickData }, error: null }
   },
 
+  // Get statistics for each individual shortcut
+  async getShortcutStats() {
+    const { data, error } = await supabase
+      .from('sponsored_clicks')
+      .select('shortcut_name, shortcut_url, donation_amount, created_at')
+    
+    if (error) {
+      console.error('Error fetching shortcut stats:', error)
+      return { data: null, error }
+    }
+
+    // Group by shortcut
+    const shortcutGroups: Record<string, { name: string, url: string, clicks: number, donations: number, lastClick?: string }> = {}
+    
+    data?.forEach(click => {
+      const key = click.shortcut_url
+      if (!shortcutGroups[key]) {
+        shortcutGroups[key] = {
+          name: click.shortcut_name,
+          url: click.shortcut_url,
+          clicks: 0,
+          donations: 0
+        }
+      }
+      shortcutGroups[key].clicks++
+      shortcutGroups[key].donations += click.donation_amount
+      if (!shortcutGroups[key].lastClick || click.created_at > shortcutGroups[key].lastClick!) {
+        shortcutGroups[key].lastClick = click.created_at
+      }
+    })
+
+    return { 
+      data: Object.values(shortcutGroups).sort((a, b) => b.clicks - a.clicks), 
+      error: null 
+    }
+  },
+
   // Get user's sponsored click stats
   async getUserSponsoredStats(userId: string) {
     const today = new Date().toISOString().split('T')[0]; // Get YYYY-MM-DD format

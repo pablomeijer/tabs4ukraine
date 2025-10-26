@@ -9,7 +9,6 @@ import { supabaseAdsService } from '../lib/supabase-ads'
 import localGamification from '../lib/localGamification'
 
 import './NewTab.css'
-import './GamificationModal.css'
 import logoWhite from '../assets/logo_white_transparent.png'
 import logoGreen from '../assets/logo_green_transparent.png'
 import oliveIcon from '../assets/ukraine_icon.png'
@@ -1204,35 +1203,12 @@ export const NewTab = () => {
         </div>
       )}
       
-      {/* Gamification Bubble */}
-      {gamificationOpen && (
-        <div className="t4p-gamification-bubble">
-          <button className="t4p-modal-close" onClick={() => setGamificationOpen(false)}>×</button>
-          <div className="t4p-gamification-section">
-            <div className="t4p-gamification-title">
-              <span style={{fontSize: '24px'}}>🏆</span>
-              <span>Gamification</span>
-            </div>
-              <div className="t4p-gamification-content">
-              <div className="t4p-gamification-item">
-                <div className="t4p-gamification-headline">Thank you for supporting Ukraine! 🇺🇦</div>
-                <div className="t4p-gamification-summary">Your daily use of this extension makes a real difference. Every tab you open and every sponsored link you click contributes to humanitarian relief efforts for Ukraine.</div>
-                <div className="t4p-gamification-placeholder">More impact features coming soon</div>
-              </div>
-              <div className="t4p-gamification-item">
-                <div className="t4p-gamification-headline">Leaderboard</div>
-                <div className="t4p-gamification-summary">See your rank and compete with others in fundraising efforts.</div>
-                <div className="t4p-gamification-placeholder">Coming Soon</div>
-              </div>
-              <div className="t4p-gamification-item">
-                <div className="t4p-gamification-headline">Achievements</div>
-                <div className="t4p-gamification-summary">Unlock badges and rewards for your contributions.</div>
-                <div className="t4p-gamification-placeholder">Coming Soon</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Local Gamification Modal - Working without any sign-in! */}
+      <LocalGamificationModal
+        open={gamificationOpen}
+        onClose={() => setGamificationOpen(false)}
+        refreshTrigger={gamificationRefreshTrigger}
+      />
       
       
              {/* Top right icons */}

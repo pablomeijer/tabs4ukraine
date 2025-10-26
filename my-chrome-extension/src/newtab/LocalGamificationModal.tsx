@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import localGamification, { UserStats } from '../lib/localGamification';
+import { sponsoredTracker } from '../lib/supabase';
+import './LocalGamificationModal.css';
 
 interface LocalGamificationModalProps {
   open: boolean;
@@ -12,12 +14,25 @@ export default function LocalGamificationModal({ open, onClose, refreshTrigger }
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [achievements, setAchievements] = useState<any[]>([]);
   const [syncStatus, setSyncStatus] = useState<any>(null);
+  const [shortcutStats, setShortcutStats] = useState<any[]>([]);
 
   useEffect(() => {
     if (open) {
       loadUserStats();
+      loadShortcutStats();
     }
   }, [open, refreshTrigger]);
+  
+  const loadShortcutStats = async () => {
+    try {
+      const { data, error } = await sponsoredTracker.getShortcutStats();
+      if (!error && data) {
+        setShortcutStats(data);
+      }
+    } catch (error) {
+      console.error('Error loading shortcut stats:', error);
+    }
+  };
 
   const loadUserStats = async () => {
     try {
@@ -60,7 +75,7 @@ export default function LocalGamificationModal({ open, onClose, refreshTrigger }
         <div className="gamification-header">
           <h2>🎮 Your Progress</h2>
           <div className="gamification-tabs">
-            {['stats', 'achievements'].map(tab => (
+            {['stats', 'achievements', 'shortcuts'].map(tab => (
               <button
                 key={tab}
                 className={`gamification-tab ${activeTab === tab ? 'active' : ''}`}
@@ -186,15 +201,18 @@ export default function LocalGamificationModal({ open, onClose, refreshTrigger }
             <div className="achievements-section">
               <h3>🏅 Achievements</h3>
               <div className="achievements-grid">
-                {achievements.map(achievement => (
-                  <div key={achievement.id} className={`achievement-card ${achievement.unlocked ? 'earned' : 'unearned'}`}>
-                    <div className="achievement-icon">
-                      {achievement.icon}
-                    </div>
-                    <div className="achievement-info">
-                      <div className="achievement-name">{achievement.name}</div>
-                      <div className="achievement-description">{achievement.description}</div>
-                      {!achievement.unlocked && (
+                {achievements.map(achievement => {
+                  const isEarned = achievement.unlocked || achievement.progress >= 100;
+                  
+                  return (
+                    <div key={achievement.id} className={`achievement-card ${isEarned ? 'earned' : 'unearned'}`}>
+                      <div className="achievement-icon">
+                        {achievement.icon}
+                      </div>
+                      <div className="achievement-info">
+                        <div className="achievement-name">{achievement.name}</div>
+                        <div className="achievement-description">{achievement.description}</div>
+                        {!isEarned && (
                         <div className="achievement-progress">
                           <div className="progress-bar">
                             <div 
@@ -205,15 +223,52 @@ export default function LocalGamificationModal({ open, onClose, refreshTrigger }
                           <div className="progress-text">{achievement.progress}%</div>
                         </div>
                       )}
-                      {achievement.unlocked && (
+                      {isEarned && (
                         <div className="achievement-reward">+{achievement.reward} XP</div>
                       )}
                     </div>
-                    {achievement.unlocked && (
+                    {isEarned && (
                       <div className="achievement-badge">✓</div>
                     )}
-                  </div>
-                ))}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'shortcuts' && (
+            <div className="shortcuts-section">
+              <h3>🔗 Shortcut Performance</h3>
+              <p style={{ color: '#666', marginBottom: '20px', fontSize: '14px' }}>
+                See which sponsored shortcuts are getting the most clicks and generating the most donations
+              </p>
+              <div className="shortcuts-list">
+                {shortcutStats.length > 0 ? (
+                  shortcutStats.map((shortcut, index) => (
+                    <div key={shortcut.url} className="shortcut-stat-item">
+                      <div className="shortcut-rank">#{index + 1}</div>
+                      <div className="shortcut-info">
+                        <div className="shortcut-name">{shortcut.name}</div>
+                        <div className="shortcut-url">{shortcut.url}</div>
+                      </div>
+                      <div className="shortcut-stats">
+                        <div className="shortcut-stat">
+                          <div className="stat-value">{shortcut.clicks}</div>
+                          <div className="stat-label">Clicks</div>
+                        </div>
+                        <div className="shortcut-stat">
+                          <div className="stat-value">${shortcut.donations.toFixed(2)}</div>
+                          <div className="stat-label">Raised</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p style={{ textAlign: 'center', color: '#999', padding: '40px' }}>
+                    No shortcut statistics available yet
+                  </p>
+                )}
               </div>
             </div>
           )}
