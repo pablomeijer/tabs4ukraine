@@ -31,4 +31,14 @@ declare namespace chrome {
   namespace topSites {
     function get(): Promise<any[]>;
   }
+  
+  namespace search {
+    interface QueryInfo {
+      text: string;
+      disposition?: 'CURRENT_TAB' | 'NEW_TAB' | 'NEW_WINDOW';
+      tabId?: number;
+    }
+    
+    function query(queryInfo: QueryInfo): Promise<void>;
+  }
 }

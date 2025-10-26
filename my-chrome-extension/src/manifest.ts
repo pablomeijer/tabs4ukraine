@@ -48,11 +48,8 @@ export default defineManifest({
   permissions: [
     'sidePanel', 
     'storage', 
-    'topSites', 
-    'bookmarks',
-    'geolocation',
-    'activeTab',
-    'tabs'
+    'topSites',
+    'search'
   ],
   host_permissions: [
     'https://ethicly.ch/*',
@@ -62,4 +59,5 @@ export default defineManifest({
   chrome_url_overrides: {
     newtab: 'newtab.html',
   },
+  homepage_url: 'https://tabs4ukraine.framer.website/',
 })

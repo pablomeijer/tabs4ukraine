@@ -991,8 +991,20 @@ export const NewTab = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery.trim())}`;
-      window.open(searchUrl, '_blank');
+      // Use Chrome Search API to respect user's default search provider
+      chrome.search.query({
+        text: searchQuery.trim(),
+        disposition: 'CURRENT_TAB'
+      }).catch((error) => {
+        console.error('Search error:', error);
+        // Fallback to opening in new tab if there's an error
+        chrome.search.query({
+          text: searchQuery.trim(),
+          disposition: 'NEW_TAB'
+        }).catch((fallbackError) => {
+          console.error('Fallback search error:', fallbackError);
+        });
+      });
       setSearchQuery('');
     }
   };
