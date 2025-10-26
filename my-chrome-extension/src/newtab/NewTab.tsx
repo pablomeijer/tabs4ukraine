@@ -7,6 +7,7 @@ import LocalGamificationModal from './LocalGamificationModal'
 import { sponsoredTracker, gamificationTracker } from '../lib/supabase'
 import { supabaseAdsService } from '../lib/supabase-ads'
 import localGamification from '../lib/localGamification'
+import { rateLimiter, RATE_LIMITS } from '../lib/rateLimiter'
 
 import './NewTab.css'
 import logoWhite from '../assets/logo_white_transparent.png'
@@ -772,6 +773,14 @@ export const NewTab = () => {
   // Track tab open
   const trackTabOpen = async () => {
     try {
+      // Check rate limit first
+      const allowed = await rateLimiter.checkAndRecord(RATE_LIMITS.TAB_OPEN);
+      
+      if (!allowed) {
+        console.log('⚠️ Rate limit reached for tab opens. Please try again later.');
+        return;
+      }
+
       // Track locally for gamification
       await localGamification.trackTabOpen(adCount);
       
@@ -1046,6 +1055,14 @@ export const NewTab = () => {
 
   const handleSponsoredShortcutClick = async (shortcut: { name: string, url: string }) => {
     try {
+      // Check rate limit first
+      const allowed = await rateLimiter.checkAndRecord(RATE_LIMITS.SPONSORED);
+      
+      if (!allowed) {
+        console.log('⚠️ Rate limit reached for sponsored clicks. Please try again later.');
+        return;
+      }
+
       await sponsoredTracker.trackSponsoredClick(null, shortcut.name, shortcut.url);
       
       // Track locally for gamification

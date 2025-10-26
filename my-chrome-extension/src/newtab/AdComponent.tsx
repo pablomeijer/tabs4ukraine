@@ -30,9 +30,17 @@ export const AdComponent = () => {
           console.log('🔄 AdComponent: Converted ad:', convertedAd)
           setCurrentAd(convertedAd)
           
-          // Track impression for this ad
-          await supabaseAdsService.trackImpressions([supabaseAd.id])
-          console.log('✅ AdComponent: Tracked impression for ad:', supabaseAd.id)
+          // Check rate limit before tracking impression
+          const { rateLimiter, RATE_LIMITS } = await import('../lib/rateLimiter');
+          const allowed = await rateLimiter.checkAndRecord(RATE_LIMITS.AD_IMPRESSION);
+          
+          if (allowed) {
+            // Track impression for this ad
+            await supabaseAdsService.trackImpressions([supabaseAd.id])
+            console.log('✅ AdComponent: Tracked impression for ad:', supabaseAd.id)
+          } else {
+            console.log('⚠️ Rate limit reached for ad impressions')
+          }
         } else {
           console.log('⚠️ AdComponent: No Supabase ads available, using fallback')
           // Fallback to default ad if no Supabase ads available
@@ -68,6 +76,17 @@ export const AdComponent = () => {
     if (currentAd) {
       try {
         console.log('🖱️ Ad clicked:', currentAd);
+        
+        // Check rate limit before tracking
+        const { rateLimiter, RATE_LIMITS } = await import('../lib/rateLimiter');
+        const allowed = await rateLimiter.checkAndRecord(RATE_LIMITS.AD_CLICK);
+        
+        if (!allowed) {
+          console.log('⚠️ Rate limit reached for ad clicks');
+          // Still open the link, just don't track
+          window.open(currentAd.link, '_blank', 'noopener,noreferrer');
+          return;
+        }
         
         // Track the click if it's a Supabase ad
         if (currentAd.id !== 'fallback') {
