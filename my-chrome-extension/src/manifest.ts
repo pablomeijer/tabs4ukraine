@@ -52,7 +52,6 @@ export default defineManifest({
     'search'
   ],
   host_permissions: [
-    'https://ethicly.ch/*',
     'https://fvmpnqaoympgmrullemj.supabase.co/*',
     'https://images.unsplash.com/*'
   ],

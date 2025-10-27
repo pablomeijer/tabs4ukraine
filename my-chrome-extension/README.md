@@ -7,7 +7,7 @@ A Chrome extension to support Ukraine. This extension replaces the new tab page 
 - **New Tab Replacement**: Custom new tab page with Tabs4Ukraine branding
 - **Google Search Bar**: Fully functional search bar with Google integration
 - **Humanitarian Ads**: Rotating ads from legitimate organizations supporting Ukraine
-- **Ad Placement**: Ads appear in the bottom right corner of every new tab
+- **Ad Placement**: Ads appear in the bottom right corner of every new tab as well as one above it and one below if the user wishes
 - **Clickable Ads**: Users can click ads to visit donation pages and learn more
 - **Popup Interface**: Quick access to extension features
 - **Options Page**: Extension settings and configuration
@@ -36,6 +36,8 @@ A Chrome extension to support Ukraine. This extension replaces the new tab page 
 - `src/devtools/` - Developer tools integration
 - `src/background/` - Background service worker
 - `src/contentScript/` - Content scripts
+
+## This chrome extension hopes to be available on Chrome Store soon
 
 ## Ad Sources
 
